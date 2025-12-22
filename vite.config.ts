@@ -1,3 +1,4 @@
+import netlify from '@netlify/vite-plugin-tanstack-start';
 import { devtools } from '@tanstack/devtools-vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import viteReact from '@vitejs/plugin-react';
@@ -8,7 +9,6 @@ import { nitro } from 'nitro/vite';
 import { resolve } from 'node:path';
 import { defineConfig, loadEnv } from 'vite';
 import tsConfigPaths from 'vite-tsconfig-paths';
-
 const { nitroRetrieveServerDirHook, prismaCopyBinariesPlugin } =
   createPrismaCopyBinariesPlugin();
 
@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => {
       }),
       tsConfigPaths(),
       tanstackStart(),
+      netlify(),
       nitro({
         config: {
           hooks: {

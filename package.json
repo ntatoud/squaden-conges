@@ -49,6 +49,7 @@
     "@fontsource-variable/inter": "5.2.8",
     "@headlessui/react": "2.2.9",
     "@hookform/resolvers": "5.2.2",
+    "@netlify/vite-plugin-tanstack-start": "^1.2.6",
     "@orpc/client": "1.9.3",
     "@orpc/openapi": "1.9.3",
     "@orpc/react-query": "1.9.3",
