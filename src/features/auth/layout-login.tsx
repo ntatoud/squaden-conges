@@ -8,6 +8,7 @@ import { ThemeSwitcher } from '@/components/ui/theme-switcher';
 import { useMascotState } from '@/features/auth/mascot';
 
 import image from './layout-login-image.jpg';
+import imageError from './layout-login-image-error.png';
 import mascot from './mascot.png';
 import mascotError from './mascot-error.png';
 
@@ -38,7 +39,7 @@ export const LayoutLogin = (props: {
       </div>
       <div className="relative hidden w-full flex-1 items-center justify-center bg-muted lg:flex">
         <img
-          src={image}
+          src={mascotState === 'error' ? imageError : image}
           alt=""
           className="absolute inset-0 size-full object-cover"
         />
