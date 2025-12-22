@@ -14,6 +14,9 @@ export default defineConfig(({ mode }) => {
       port: env.VITE_PORT ? Number(env.VITE_PORT) : 3000,
       strictPort: true,
     },
+    ssr: {
+      noExternal: ['ms'],
+    },
     plugins: [
       devtools(),
       codeInspectorPlugin({
