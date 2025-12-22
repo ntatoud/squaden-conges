@@ -35,6 +35,7 @@ import { Route as ManagerUsersNewIndexRouteImport } from './routes/manager/users
 import { Route as ManagerUsersIdIndexRouteImport } from './routes/manager/users/$id.index'
 import { Route as ManagerBooksNewIndexRouteImport } from './routes/manager/books/new.index'
 import { Route as ManagerBooksIdIndexRouteImport } from './routes/manager/books/$id.index'
+import { Route as AppLeavesNewIndexRouteImport } from './routes/app/leaves/new.index'
 import { Route as AppBooksIdIndexRouteImport } from './routes/app/books/$id.index'
 import { Route as ApiOpenapiAuthSchemaRouteImport } from './routes/api/openapi/auth.schema'
 import { Route as ApiOpenapiAppSchemaRouteImport } from './routes/api/openapi/app.schema'
@@ -172,6 +173,11 @@ const ManagerBooksIdIndexRoute = ManagerBooksIdIndexRouteImport.update({
   path: '/books/$id/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
+const AppLeavesNewIndexRoute = AppLeavesNewIndexRouteImport.update({
+  id: '/leaves/new/',
+  path: '/leaves/new/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppBooksIdIndexRoute = AppBooksIdIndexRouteImport.update({
   id: '/books/$id/',
   path: '/books/$id/',
@@ -232,6 +238,7 @@ export interface FileRoutesByFullPath {
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id': typeof AppBooksIdIndexRoute
+  '/app/leaves/new': typeof AppLeavesNewIndexRoute
   '/manager/books/$id': typeof ManagerBooksIdIndexRoute
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
@@ -263,6 +270,7 @@ export interface FileRoutesByTo {
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id': typeof AppBooksIdIndexRoute
+  '/app/leaves/new': typeof AppLeavesNewIndexRoute
   '/manager/books/$id': typeof ManagerBooksIdIndexRoute
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
@@ -298,6 +306,7 @@ export interface FileRoutesById {
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id/': typeof AppBooksIdIndexRoute
+  '/app/leaves/new/': typeof AppLeavesNewIndexRoute
   '/manager/books/$id/': typeof ManagerBooksIdIndexRoute
   '/manager/books/new/': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id/': typeof ManagerUsersIdIndexRoute
@@ -334,6 +343,7 @@ export interface FileRouteTypes {
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id'
+    | '/app/leaves/new'
     | '/manager/books/$id'
     | '/manager/books/new'
     | '/manager/users/$id'
@@ -365,6 +375,7 @@ export interface FileRouteTypes {
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id'
+    | '/app/leaves/new'
     | '/manager/books/$id'
     | '/manager/books/new'
     | '/manager/users/$id'
@@ -399,6 +410,7 @@ export interface FileRouteTypes {
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id/'
+    | '/app/leaves/new/'
     | '/manager/books/$id/'
     | '/manager/books/new/'
     | '/manager/users/$id/'
@@ -605,6 +617,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerBooksIdIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
+    '/app/leaves/new/': {
+      id: '/app/leaves/new/'
+      path: '/leaves/new'
+      fullPath: '/app/leaves/new'
+      preLoaderRoute: typeof AppLeavesNewIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/books/$id/': {
       id: '/app/books/$id/'
       path: '/books/$id'
@@ -655,6 +674,7 @@ interface AppRouteRouteChildren {
   AppAccountIndexRoute: typeof AppAccountIndexRoute
   AppBooksIndexRoute: typeof AppBooksIndexRoute
   AppBooksIdIndexRoute: typeof AppBooksIdIndexRoute
+  AppLeavesNewIndexRoute: typeof AppLeavesNewIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -662,6 +682,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAccountIndexRoute: AppAccountIndexRoute,
   AppBooksIndexRoute: AppBooksIndexRoute,
   AppBooksIdIndexRoute: AppBooksIdIndexRoute,
+  AppLeavesNewIndexRoute: AppLeavesNewIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

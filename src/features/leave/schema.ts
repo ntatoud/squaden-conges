@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
-import { zUser } from '../user/schema';
+import { zUser } from '@/features/user/schema';
 
+export type LeaveStatus = z.infer<typeof zLeaveStatus>;
 const zLeaveStatus = z.enum([
   'pending',
   'pending-manager',
@@ -10,14 +11,10 @@ const zLeaveStatus = z.enum([
   'refused',
 ]);
 
-export type LeaveStatus = z.infer<typeof zLeaveStatus>;
-
+export type LeaveType = z.infer<typeof zLeaveType>;
 const zLeaveType = z.enum(['sickness', 'kids', 'vacation', 'school-review']);
 
-export type LeaveType = z.infer<typeof zLeaveType>;
-
 export type Leave = z.infer<ReturnType<typeof zLeave>>;
-
 export const zLeave = () =>
   z.object({
     id: z.string(),
@@ -34,3 +31,17 @@ export const zLeave = () =>
     createdAt: z.date(),
     updatedAt: z.date(),
   });
+
+export type FormFieldsLeave = z.infer<ReturnType<typeof zFormFieldsLeave>>;
+export const zFormFieldsLeave = () =>
+  zLeave()
+    .pick({
+      fromDate: true,
+      toDate: true,
+      projects: true,
+      projectDeadlines: true,
+      type: true,
+    })
+    .extend({
+      reviewers: z.array(z.object({ id: zUser().shape.id })),
+    });
