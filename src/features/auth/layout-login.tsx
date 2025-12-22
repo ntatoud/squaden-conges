@@ -45,7 +45,7 @@ export const LayoutLogin = (props: {
         <img
           src={mascotState === 'error' ? mascotError : mascot}
           alt=""
-          className="animate-float-in-space pointer-events-none absolute top-1/2 left-1/2 w-52 -translate-1/2"
+          className="animate-float-in-space pointer-events-none absolute top-1/2 left-1/2 w-64 -translate-1/2"
         />
       </div>
     </div>
