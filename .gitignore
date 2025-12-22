@@ -71,3 +71,6 @@ app.config.timestamp_*.js
 # zed
 /.zed/*
 !/.zed/settings.example.json
+
+# Local Netlify folder
+.netlify

@@ -18,6 +18,7 @@ import { Route as ManagerIndexRouteImport } from './routes/manager/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as ManagerUsersIndexRouteImport } from './routes/manager/users/index'
+import { Route as ManagerLeavesIndexRouteImport } from './routes/manager/leaves/index'
 import { Route as ManagerDashboardIndexRouteImport } from './routes/manager/dashboard.index'
 import { Route as ManagerBooksIndexRouteImport } from './routes/manager/books/index'
 import { Route as ManagerAccountIndexRouteImport } from './routes/manager/account.index'
@@ -84,6 +85,11 @@ const AppIndexRoute = AppIndexRouteImport.update({
 const ManagerUsersIndexRoute = ManagerUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
+  getParentRoute: () => ManagerRouteRoute,
+} as any)
+const ManagerLeavesIndexRoute = ManagerLeavesIndexRouteImport.update({
+  id: '/leaves/',
+  path: '/leaves/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
 const ManagerDashboardIndexRoute = ManagerDashboardIndexRouteImport.update({
@@ -220,6 +226,7 @@ export interface FileRoutesByFullPath {
   '/manager/account': typeof ManagerAccountIndexRoute
   '/manager/books': typeof ManagerBooksIndexRoute
   '/manager/dashboard': typeof ManagerDashboardIndexRoute
+  '/manager/leaves': typeof ManagerLeavesIndexRoute
   '/manager/users': typeof ManagerUsersIndexRoute
   '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
@@ -250,6 +257,7 @@ export interface FileRoutesByTo {
   '/manager/account': typeof ManagerAccountIndexRoute
   '/manager/books': typeof ManagerBooksIndexRoute
   '/manager/dashboard': typeof ManagerDashboardIndexRoute
+  '/manager/leaves': typeof ManagerLeavesIndexRoute
   '/manager/users': typeof ManagerUsersIndexRoute
   '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
@@ -284,6 +292,7 @@ export interface FileRoutesById {
   '/manager/account/': typeof ManagerAccountIndexRoute
   '/manager/books/': typeof ManagerBooksIndexRoute
   '/manager/dashboard/': typeof ManagerDashboardIndexRoute
+  '/manager/leaves/': typeof ManagerLeavesIndexRoute
   '/manager/users/': typeof ManagerUsersIndexRoute
   '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
@@ -319,6 +328,7 @@ export interface FileRouteTypes {
     | '/manager/account'
     | '/manager/books'
     | '/manager/dashboard'
+    | '/manager/leaves'
     | '/manager/users'
     | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
@@ -349,6 +359,7 @@ export interface FileRouteTypes {
     | '/manager/account'
     | '/manager/books'
     | '/manager/dashboard'
+    | '/manager/leaves'
     | '/manager/users'
     | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
@@ -382,6 +393,7 @@ export interface FileRouteTypes {
     | '/manager/account/'
     | '/manager/books/'
     | '/manager/dashboard/'
+    | '/manager/leaves/'
     | '/manager/users/'
     | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
@@ -472,6 +484,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/manager/users'
       preLoaderRoute: typeof ManagerUsersIndexRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
+    '/manager/leaves/': {
+      id: '/manager/leaves/'
+      path: '/leaves'
+      fullPath: '/manager/leaves'
+      preLoaderRoute: typeof ManagerLeavesIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
     '/manager/dashboard/': {
@@ -670,6 +689,7 @@ interface ManagerRouteRouteChildren {
   ManagerAccountIndexRoute: typeof ManagerAccountIndexRoute
   ManagerBooksIndexRoute: typeof ManagerBooksIndexRoute
   ManagerDashboardIndexRoute: typeof ManagerDashboardIndexRoute
+  ManagerLeavesIndexRoute: typeof ManagerLeavesIndexRoute
   ManagerUsersIndexRoute: typeof ManagerUsersIndexRoute
   ManagerBooksIdIndexRoute: typeof ManagerBooksIdIndexRoute
   ManagerBooksNewIndexRoute: typeof ManagerBooksNewIndexRoute
@@ -684,6 +704,7 @@ const ManagerRouteRouteChildren: ManagerRouteRouteChildren = {
   ManagerAccountIndexRoute: ManagerAccountIndexRoute,
   ManagerBooksIndexRoute: ManagerBooksIndexRoute,
   ManagerDashboardIndexRoute: ManagerDashboardIndexRoute,
+  ManagerLeavesIndexRoute: ManagerLeavesIndexRoute,
   ManagerUsersIndexRoute: ManagerUsersIndexRoute,
   ManagerBooksIdIndexRoute: ManagerBooksIdIndexRoute,
   ManagerBooksNewIndexRoute: ManagerBooksNewIndexRoute,
