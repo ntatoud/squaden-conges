@@ -34,6 +34,14 @@ model User {
   banExpires  DateTime?
   onboardedAt DateTime?
 
+  leaveBalance Float   @default(0)
+
+  // 1 user -> N leaves (owned)
+  leavesOwned  Leave[] @relation("UserLeaves")
+
+  // N-N reviewers
+  leavesToReview Leave[] @relation("LeavesToReview")
+
   @@unique([email])
   @@map("user")
 }
@@ -126,4 +134,28 @@ model Publisher {
   name      String   @unique
 
   @@map("publisher")
+}
+
+model Leave {
+  id               String   @id @default(cuid())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // owner of the leave request
+  userId           String
+  user             User     @relation("UserLeaves", fields: [userId], references: [id], onDelete: Cascade)
+
+  fromDate         DateTime
+  toDate           DateTime
+
+  // reviewers (N-N)
+  reviewers        User[]   @relation("LeavesToReview")
+
+  projects         String[]
+  projectDeadlines String?
+  type             String
+  status           String   @default("pending")
+  statusReason     String?
+
+  @@map("leave")
 }
