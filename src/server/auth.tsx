@@ -34,6 +34,16 @@ export const auth = betterAuth({
       onboardedAt: {
         type: 'date',
       },
+      leaveBalance: {
+        type: 'number',
+        defaultValue: 0,
+      },
+      leavesOwned: {
+        type: 'json',
+      },
+      leavesToReview: {
+        type: 'json',
+      },
     },
   },
   onAPIError: {
