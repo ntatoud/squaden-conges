@@ -240,6 +240,7 @@ export default {
               },
             },
           },
+          // TODO: Decommenter
           // {
           //   status: {
           //     equals: zLeaveStatus.enum.pending,
@@ -380,6 +381,8 @@ export default {
 
       const isAdmin = context.user.role === 'admin';
 
+      // TODO: Envoie mail si ADMIN
+
       const approvedStatus = isAdmin
         ? zLeaveStatus.enum.approved
         : zLeaveStatus.enum['pending-manager'];
@@ -448,6 +451,7 @@ export default {
           },
         });
 
+        // TODO: Envoie mail de confirmation / demande
         return zLeave().parse(leave);
       } catch (error: unknown) {
         if (
