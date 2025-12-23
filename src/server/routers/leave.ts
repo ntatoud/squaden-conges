@@ -89,6 +89,7 @@ export default {
         total,
       };
     }),
+
   getAllReview: protectedProcedure({
     permission: {
       leave: ['read'],
@@ -119,11 +120,20 @@ export default {
       context.logger.info('Getting leaves from database');
 
       const where = {
-        reviewers: {
-          some: {
-            id: context.user.id,
+        AND: [
+          {
+            reviewers: {
+              some: {
+                id: context.user.id,
+              },
+            },
           },
-        },
+          // {
+          //   status: {
+          //     equals: zLeaveStatus.enum.pending,
+          //   },
+          // },
+        ],
       } satisfies Prisma.LeaveWhereInput;
 
       const [total, items] = await Promise.all([
@@ -232,7 +242,54 @@ export default {
       }
     }),
 
-  review: {},
+  review: protectedProcedure({
+    permission: {
+      leave: ['update'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/leaves/review/{id}',
+      tags,
+    })
+    .input(
+      z.object({
+        id: z.string(),
+        isApproved: z.boolean(),
+        reason: z.string().nullish(),
+      })
+    )
+    .output(zLeave())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Update leave');
+      try {
+        const leave = await context.db.leave.update({
+          where: { id: input.id },
+          data: {
+            status: input.isApproved
+              ? zLeaveStatus.enum['pending-manager']
+              : zLeaveStatus.enum.refused,
+            statusReason: input.reason,
+          },
+          include: { reviewers: true },
+        });
+
+        return zLeave().parse(leave);
+      } catch (error: unknown) {
+        console.log(error);
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          throw new ORPCError('CONFLICT', {
+            data: {
+              target: error.meta?.target,
+            },
+          });
+        }
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
 
   reviewAsManager: {},
 
