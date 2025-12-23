@@ -1,7 +1,6 @@
 import { InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import { match, P } from 'ts-pattern';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -14,6 +13,7 @@ import {
   DataListText,
 } from '@/components/ui/datalist';
 
+import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
 import { FileRoutesByTo } from '@/routeTree.gen';
 
 import { Leave } from './schema';
@@ -96,18 +96,7 @@ export const LeavesDataList = ({
               ))}
             </DataListCell>
             <DataListCell>
-              <Badge
-                className="uppercase"
-                variant={match(item.status)
-                  .returnType<React.ComponentProps<typeof Badge>['variant']>()
-                  .with(P.union('pending', 'pending-manager'), () => 'warning')
-                  .with('approved', () => 'positive')
-                  .with('refused', () => 'negative')
-                  .with('cancelled', () => 'secondary')
-                  .exhaustive()}
-              >
-                {item.status}
-              </Badge>
+              <BadgeLeaveStatus status={item.status} />
             </DataListCell>
           </DataListRow>
         </Link>

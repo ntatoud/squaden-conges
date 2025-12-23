@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
+import dayjs from 'dayjs';
 import { CheckCircle2Icon, Copy } from 'lucide-react';
 import { useQueryStates } from 'nuqs';
 import { useForm } from 'react-hook-form';
@@ -15,6 +16,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 import { FormLeave } from '@/features/leave/app/form-leave';
 import { formNewSearchParams } from '@/features/leave/form-new-search-params';
+import { DataListLeavesForDateRange } from '@/features/leave/leaves-data-list-date-range';
 import { zFormFieldsLeave } from '@/features/leave/schema';
 import {
   PageLayout,
@@ -91,28 +93,34 @@ export const PageLeaveNew = () => {
             <PageLayoutTopBarTitle>Demande de congé</PageLayoutTopBarTitle>
           </PageLayoutTopBar>
           <PageLayoutContent>
-            <Card>
-              <CardHeader className="w-fit">
-                {isCopied ? (
-                  <span className="flex h-8 items-center gap-1 rounded-md bg-positive-100 px-3 font-medium text-positive-800 has-[>span>svg]:px-2.5 max-sm:mx-auto dark:bg-positive-600/30 dark:text-positive-100">
-                    <CheckCircle2Icon className="size-5" /> Copié
-                  </span>
-                ) : (
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => {
-                      copyToClipboard(window.location.href);
-                    }}
-                  >
-                    <Copy /> Copier
-                  </Button>
-                )}
-              </CardHeader>
-              <CardContent>
-                <FormLeave />
-              </CardContent>
-            </Card>
+            <div className="flex flex-col gap-8">
+              <Card>
+                <CardHeader className="w-fit">
+                  {isCopied ? (
+                    <span className="flex h-8 items-center gap-1 rounded-md bg-positive-100 px-3 font-medium text-positive-800 has-[>span>svg]:px-2.5 max-sm:mx-auto dark:bg-positive-600/30 dark:text-positive-100">
+                      <CheckCircle2Icon className="size-5" /> Copié
+                    </span>
+                  ) : (
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => {
+                        copyToClipboard(window.location.href);
+                      }}
+                    >
+                      <Copy /> Copier
+                    </Button>
+                  )}
+                </CardHeader>
+                <CardContent>
+                  <FormLeave />
+                </CardContent>
+              </Card>
+              <DataListLeavesForDateRange
+                fromDate={dayjs(fromDate).toDate()}
+                toDate={dayjs(toDate).toDate()}
+              />
+            </div>
           </PageLayoutContent>
         </PageLayout>
       </Form>

@@ -1,7 +1,13 @@
 import { ORPCError } from '@orpc/client';
+import dayjs from 'dayjs';
 import { z } from 'zod';
 
-import { zFormFieldsLeave, zLeave } from '@/features/leave/schema';
+import {
+  zFormFieldsLeave,
+  zLeave,
+  zLeaveFilters,
+  zLeaveStatus,
+} from '@/features/leave/schema';
 import { db } from '@/server/db';
 import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
@@ -9,8 +15,6 @@ import { protectedProcedure } from '@/server/orpc';
 const tags = ['leaves'];
 
 export default {
-  // Filtres pour gérer global / user / reviwers...
-
   getAll: protectedProcedure({
     permission: {
       leave: ['read'],
@@ -26,7 +30,7 @@ export default {
         .object({
           cursor: z.string().optional(),
           limit: z.coerce.number().int().min(1).max(100).prefault(20),
-          filters: z.any().optional(),
+          filters: zLeaveFilters().optional(),
         })
         .prefault({})
     )
@@ -40,7 +44,22 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Getting leaves from database');
 
-      const where = {} satisfies Prisma.LeaveWhereInput;
+      const from = input.filters?.fromDate;
+      const to = input.filters?.toDate;
+
+      let where: Prisma.LeaveWhereInput = {};
+
+      if (from && to) {
+        const windowStart = dayjs(from).subtract(1, 'week').toDate();
+        const windowEnd = dayjs(to).add(1, 'week').toDate();
+
+        where = {
+          AND: [
+            { fromDate: { lte: windowEnd } },
+            { toDate: { gte: windowStart } },
+          ],
+        };
+      }
 
       const [total, items] = await Promise.all([
         context.db.leave.count({
@@ -165,7 +184,7 @@ export default {
 
   updateById: protectedProcedure({
     permission: {
-      book: ['update'],
+      leave: ['update'],
     },
   })
     .route({
@@ -184,15 +203,21 @@ export default {
             fromDate: input.fromDate,
             toDate: input.toDate,
             projects: input.projects,
+            status: zLeaveStatus.enum.pending,
             projectDeadlines: input.projectDeadlines,
             reviewers: {
               set: input.reviewers.map((reviewer) => ({ id: reviewer })),
             },
           },
+          include: {
+            reviewers: true,
+            user: true,
+          },
         });
 
         return zLeave().parse(leave);
       } catch (error: unknown) {
+        console.error(error);
         if (
           error instanceof Prisma.PrismaClientKnownRequestError &&
           error.code === 'P2002'
@@ -233,7 +258,8 @@ export default {
             projects: input.projects,
             userId: context.user.id,
             reviewers: {
-              connect: input.reviewers.map((reviewer) => ({ id: reviewer })),
+              connect:
+                input.reviewers.map((reviewer) => ({ id: reviewer })) ?? [],
             },
           },
           include: {

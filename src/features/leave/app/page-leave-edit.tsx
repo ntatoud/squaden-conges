@@ -2,6 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ORPCError } from '@orpc/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
+import dayjs from 'dayjs';
+import { useQueryStates } from 'nuqs';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -10,11 +12,12 @@ import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
 import { Form } from '@/components/form';
-import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 import { FormLeave } from '@/features/leave/app/form-leave';
+import { formNewSearchParams } from '@/features/leave/form-new-search-params';
+import { DataListLeavesForDateRange } from '@/features/leave/leaves-data-list-date-range';
 import { zFormFieldsLeave } from '@/features/leave/schema';
 import {
   PageLayout,
@@ -24,6 +27,8 @@ import {
 } from '@/layout/app/page-layout';
 
 export const PageLeaveEdit = (props: { params: { id: string } }) => {
+  const [{ fromDate, toDate }] = useQueryStates(formNewSearchParams);
+
   const { t } = useTranslation(['book']);
   const router = useRouter();
   const canGoBack = useCanGoBack();
@@ -80,10 +85,9 @@ export const PageLeaveEdit = (props: { params: { id: string } }) => {
 
   return (
     <>
-      <PreventNavigation shouldBlock={form.formState.isDirty} />
       <Form
         {...form}
-        onSubmit={async (values) => {
+        onSubmit={(values) => {
           leaveUpdate.mutate({ id: props.params.id, ...values });
         }}
       >
@@ -101,19 +105,19 @@ export const PageLeaveEdit = (props: { params: { id: string } }) => {
               </Button>
             }
           >
-            <PageLayoutTopBarTitle>
-              {t('book:manager.update.title')}
-            </PageLayoutTopBarTitle>
+            <PageLayoutTopBarTitle>Modification du congé</PageLayoutTopBarTitle>
           </PageLayoutTopBar>
           <PageLayoutContent>
-            <div className="flex flex-col gap-4 xs:flex-row">
-              <div className="flex-2">
-                <Card>
-                  <CardContent>
-                    <FormLeave />
-                  </CardContent>
-                </Card>
-              </div>
+            <div className="flex flex-col gap-8">
+              <Card>
+                <CardContent>
+                  <FormLeave />
+                </CardContent>
+              </Card>
+              <DataListLeavesForDateRange
+                fromDate={dayjs(fromDate).toDate()}
+                toDate={dayjs(toDate).toDate()}
+              />
             </div>
           </PageLayoutContent>
         </PageLayout>

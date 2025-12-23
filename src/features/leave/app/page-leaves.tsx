@@ -28,10 +28,9 @@ export const PageLeaves = (props: { search: TODO }) => {
 
   const searchInputProps = {
     value: props.search.searchTerm ?? '',
-    onChange: (value: string) =>
+    onChange: () =>
       router.navigate({
         to: '.',
-        search: { searchTerm: value },
         replace: true,
       }),
   };

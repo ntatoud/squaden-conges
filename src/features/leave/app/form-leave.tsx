@@ -102,7 +102,7 @@ export function FormLeave() {
             calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
             onChange={(v) => {
               setQueryStates({
-                fromDate: dayjs(v).format(STANDARD_DATE_FORMAT),
+                toDate: dayjs(v).format(STANDARD_DATE_FORMAT),
               });
             }}
             type="date"

@@ -3,18 +3,22 @@ import { ORPCError } from '@orpc/client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import { AlertCircleIcon, PencilLineIcon } from 'lucide-react';
+import { PencilLineIcon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/errors/page-error';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
 
-import { WithPermissions } from '@/features/auth/with-permission';
+import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
+import { LEAVE_TYPES } from '@/features/leave/constants';
+import { DataListLeavesForDateRange } from '@/features/leave/leaves-data-list-date-range';
 import {
   PageLayout,
   PageLayoutContent,
@@ -22,6 +26,12 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
 import { DISPLAY_DATE_FORMAT } from '@/utils/dates';
+
+const dayCountInclusive = (from: Date, to: Date) => {
+  const start = dayjs(from).startOf('day');
+  const end = dayjs(to).startOf('day');
+  return Math.max(1, end.diff(start, 'day') + 1);
+};
 
 export const PageLeave = (props: { params: { id: string } }) => {
   const leaveQuery = useQuery(
@@ -45,96 +55,130 @@ export const PageLeave = (props: { params: { id: string } }) => {
       <PageLayoutTopBar
         leftActions={<BackButton />}
         rightActions={
-          <>
-            <WithPermissions
-              permissions={[
-                {
-                  book: ['delete'],
-                },
-              ]}
-            >
-              {/*<ConfirmResponsiveDrawer
-                onConfirm={() => deleteBook()}
-                title={t('book:manager.detail.confirmDeleteTitle', {
-                  title: leaveQuery.data?.title ?? '--',
-                })}
-                description={t('book:manager.detail.confirmDeleteDescription')}
-                confirmText={t('book:manager.detail.deleteButton.label')}
-                confirmVariant="destructive"
-              >
-                <ResponsiveIconButton
-                  variant="ghost"
-                  label={t('book:manager.detail.deleteButton.label')}
-                  size="sm"
-                >
-                  <Trash2Icon />
-                </ResponsiveIconButton>
-              </ConfirmResponsiveDrawer>*/}
-            </WithPermissions>
-            <Button asChild size="sm" variant="secondary">
-              <Link to="/app/leaves/$id/edit" params={{ id: props.params.id }}>
-                <PencilLineIcon />
-                Modifier
-              </Link>
-            </Button>
-          </>
+          <Button asChild size="sm" variant="secondary">
+            <Link to="/app/leaves/$id/edit" params={{ id: props.params.id }}>
+              <PencilLineIcon />
+              Modifier
+            </Link>
+          </Button>
         }
       >
-        <PageLayoutTopBarTitle>
-          {ui
-            .match('pending', () => <Skeleton className="h-4 w-48" />)
-            .match(['not-found', 'error'], () => (
-              <AlertCircleIcon className="size-4 text-muted-foreground" />
-            ))
-            .match('default', ({ leave }) => (
-              <>
-                {leave.user?.name} -{' '}
-                {dayjs(leave.fromDate).format(DISPLAY_DATE_FORMAT)} -{' '}
-                {dayjs(leave.toDate).format(DISPLAY_DATE_FORMAT)}
-              </>
-            ))
-            .exhaustive()}
-        </PageLayoutTopBarTitle>
+        <PageLayoutTopBarTitle>Demande de congé</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
+
       <PageLayoutContent>
         {ui
           .match('pending', () => <Spinner full />)
           .match('not-found', () => <PageError type="404" />)
           .match('error', () => <PageError type="unknown-server-error" />)
-          .match('default', ({ leave }) => (
-            <div className="flex flex-col gap-4 xs:flex-row">
-              <div className="flex-2">
-                <Card className="py-1">
-                  <CardContent>
-                    <dl className="flex flex-col divide-y text-sm">
-                      <div className="flex gap-4 py-3">
-                        <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Nom
-                        </dt>
-                        <dd className="flex-1">{leave.user?.name}</dd>
+          .match('default', ({ leave }) => {
+            const userName = leave.user?.name ?? 'Utilisateur inconnu';
+
+            const dateRangeLabel = `${dayjs(leave.fromDate).format(
+              DISPLAY_DATE_FORMAT
+            )} — ${dayjs(leave.toDate).format(DISPLAY_DATE_FORMAT)}`;
+
+            const dayCount = dayCountInclusive(leave.fromDate, leave.toDate);
+
+            const leaveTypeLabel =
+              LEAVE_TYPES.find((t) => t.id === leave.type)?.label ?? leave.type;
+
+            return (
+              <div className="flex flex-col gap-8">
+                <Card>
+                  <CardContent className="space-y-5">
+                    {/* Header */}
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-3">
+                        <Avatar>
+                          <AvatarFallback variant="boring" name={userName} />
+                        </Avatar>
+
+                        <div className="min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <div className="truncate text-base font-semibold">
+                              {userName}
+                            </div>
+                            <BadgeLeaveStatus status={leave.status} />
+                          </div>
+
+                          <div className="mt-1 text-sm text-muted-foreground">
+                            {dateRangeLabel} · {dayCount} jour(s)
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex gap-4 py-3">
-                        <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Dates
-                        </dt>
-                        <dd className="flex-1">
-                          {dayjs(leave.fromDate).format(DISPLAY_DATE_FORMAT)} -{' '}
-                          {dayjs(leave.toDate).format(DISPLAY_DATE_FORMAT)}
-                        </dd>
-                      </div>
-                      <div className="flex gap-4 py-3">
-                        <dt className="w-24 flex-none font-medium text-muted-foreground">
-                          Type
-                        </dt>
-                        <dd className="flex-1">{leave.type}</dd>
-                      </div>
-                      {/*TODO: RAjouter projects, reviewer, projectDeadlines*/}
-                    </dl>
+
+                      <Badge variant="secondary">{leaveTypeLabel}</Badge>
+                    </div>
+
+                    <Separator />
+
+                    {/* Projects */}
+                    <div className="space-y-2">
+                      <div className="text-sm font-semibold">Projets</div>
+                      {leave.projects?.length ? (
+                        <div className="flex flex-wrap gap-2">
+                          {leave.projects.map((p) => (
+                            <Badge
+                              key={p}
+                              variant="outline"
+                              className="font-normal"
+                            >
+                              {p}
+                            </Badge>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-sm text-muted-foreground">
+                          Aucun projet.
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Reviewers */}
+                    <div className="space-y-2">
+                      <div className="text-sm font-semibold">Reviewers</div>
+                      {leave.reviewers?.length ? (
+                        <div className="flex flex-wrap gap-2">
+                          {leave.reviewers.map((r) => (
+                            <Badge
+                              key={r.id}
+                              variant="outline"
+                              className="font-normal"
+                            >
+                              {r.name ?? 'Reviewer'}
+                            </Badge>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-sm text-muted-foreground">
+                          Aucun reviewer.
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Optional: keep ONLY one “extra” block if it exists */}
+                    {leave.statusReason ? (
+                      <>
+                        <Separator />
+                        <div className="space-y-1">
+                          <div className="text-sm font-semibold">Motif</div>
+                          <div className="text-sm whitespace-pre-wrap text-muted-foreground">
+                            {leave.statusReason}
+                          </div>
+                        </div>
+                      </>
+                    ) : null}
                   </CardContent>
                 </Card>
+
+                <DataListLeavesForDateRange
+                  fromDate={leave.fromDate}
+                  toDate={leave.toDate}
+                />
               </div>
-            </div>
-          ))
+            );
+          })
           .exhaustive()}
       </PageLayoutContent>
     </PageLayout>

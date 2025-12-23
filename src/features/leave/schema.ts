@@ -63,3 +63,10 @@ export const zFormFieldsLeave = () =>
         });
       }
     });
+
+export const zLeaveFilters = () =>
+  z.object({
+    fromDate: z.date().optional(),
+    toDate: z.date().optional(),
+    type: zLeaveType.optional(),
+  });
