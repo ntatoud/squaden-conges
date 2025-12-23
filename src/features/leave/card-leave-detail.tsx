@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -9,6 +8,7 @@ import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
 import { LeaveBalanceInfos } from '@/features/leave/balance/leave-balance-infos';
 import { LEAVE_TYPES } from '@/features/leave/constants';
 import { Leave } from '@/features/leave/schema';
+import { UserAvatar } from '@/features/user/avatar';
 import { DISPLAY_DATE_FORMAT } from '@/utils/dates';
 
 const dayCountInclusive = (from: Date, to: Date) => {
@@ -36,9 +36,7 @@ export function CardLeaveDetail({ leave }: { leave: Leave }) {
           {/* Header */}
           <div className="flex items-start justify-between gap-4">
             <div className="flex items-start gap-3">
-              <Avatar>
-                <AvatarFallback variant="boring" name={userName} />
-              </Avatar>
+              <UserAvatar user={leave.user} />
 
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
@@ -79,9 +77,14 @@ export function CardLeaveDetail({ leave }: { leave: Leave }) {
           <div className="space-y-2">
             <div className="text-sm font-semibold">Reviewers</div>
             {leave.reviewers?.length ? (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1">
                 {leave.reviewers.map((r) => (
-                  <Badge key={r.id} variant="outline" className="font-normal">
+                  <Badge
+                    key={r.id}
+                    variant="outline"
+                    className="p-1 font-normal"
+                  >
+                    <UserAvatar user={r} className="size-4" />
                     {r.name ?? 'Reviewer'}
                   </Badge>
                 ))}

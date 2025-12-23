@@ -6,7 +6,6 @@ import { PlusIcon } from 'lucide-react';
 import { orpc } from '@/lib/orpc/client';
 import { cn } from '@/lib/tailwind/utils';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,6 +20,7 @@ import {
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 
 import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
+import { UserAvatar } from '@/features/user/avatar';
 import {
   PageLayout,
   PageLayoutContent,
@@ -126,17 +126,13 @@ export const PageMyLeaves = () => {
                         </DataListText>
                         <DataListText className="font-medium"></DataListText>
                       </DataListCell>
-                      <DataListCell className="flex flex-row">
+                      <DataListCell className="flex flex-row items-center">
                         {item.reviewers.map((reviewer, index) => (
-                          <Avatar
+                          <UserAvatar
                             key={reviewer.id}
-                            className={cn('w-6', index !== 0 && '-ml-2')}
-                          >
-                            <AvatarFallback
-                              variant="boring"
-                              name={reviewer.name ?? ''}
-                            />
-                          </Avatar>
+                            user={reviewer}
+                            className={cn('size-6', index !== 0 && '-ml-2')}
+                          />
                         ))}
                       </DataListCell>
                       <DataListCell>

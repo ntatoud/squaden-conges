@@ -3,7 +3,6 @@ import { Link } from '@tanstack/react-router';
 
 import { cn } from '@/lib/tailwind/utils';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +13,7 @@ import {
 } from '@/components/ui/datalist';
 
 import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
+import { UserAvatar } from '@/features/user/avatar';
 import { FileRoutesByTo } from '@/routeTree.gen';
 import { DateRangeDisplay } from '@/utils/dates';
 
@@ -61,9 +61,7 @@ export const LeavesDataList = ({
         <Link to={detailLink} params={{ id: item.id }} key={item.id}>
           <DataListRow withHover>
             <DataListCell className="flex flex-row items-center justify-start gap-2">
-              <Avatar>
-                <AvatarFallback variant="boring" name={item.user?.name ?? ''} />
-              </Avatar>
+              <UserAvatar user={item.user} />
               <DataListText>{item.user?.name ?? ''}</DataListText>
             </DataListCell>
             <DataListCell className="items-center text-sm font-medium">
@@ -78,14 +76,13 @@ export const LeavesDataList = ({
                 {item.type}
               </Badge>
             </DataListCell>
-            <DataListCell className="flex flex-row">
+            <DataListCell className="flex flex-row items-center">
               {item.reviewers.map((reviewer, index) => (
-                <Avatar
+                <UserAvatar
                   key={reviewer.id}
-                  className={cn('w-6', index !== 0 && '-ml-2')}
-                >
-                  <AvatarFallback variant="boring" name={reviewer.name ?? ''} />
-                </Avatar>
+                  user={reviewer}
+                  className={cn('size-6', index !== 0 && '-ml-2')}
+                />
               ))}
             </DataListCell>
             <DataListCell>

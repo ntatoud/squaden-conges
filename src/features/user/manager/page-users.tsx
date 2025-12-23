@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { orpc } from '@/lib/orpc/client';
 import { cn } from '@/lib/tailwind/utils';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -25,6 +24,7 @@ import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { SearchButton } from '@/components/ui/search-button';
 import { SearchInput } from '@/components/ui/search-input';
 
+import { UserAvatar } from '@/features/user/avatar';
 import {
   PageLayout,
   PageLayoutContent,
@@ -137,12 +137,7 @@ export const PageUsers = (props: { search: { searchTerm?: string } }) => {
                 {items.map((item) => (
                   <DataListRow key={item.id} withHover>
                     <DataListCell className="flex-none">
-                      <Avatar>
-                        <AvatarFallback
-                          variant="boring"
-                          name={item.name ?? ''}
-                        />
-                      </Avatar>
+                      <UserAvatar user={item} />
                     </DataListCell>
                     <DataListCell>
                       <DataListText className="font-medium">

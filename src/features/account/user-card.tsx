@@ -1,7 +1,6 @@
 import { LogOutIcon, PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardAction, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,6 +9,8 @@ import { AccountCardRow } from '@/features/account/account-card-row';
 import { ChangeNameDrawer } from '@/features/account/change-name-drawer';
 import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
+import { UserAvatar } from '@/features/user/avatar';
+import { User } from '@/features/user/schema';
 
 export const UserCard = () => {
   const { t } = useTranslation(['auth', 'account']);
@@ -18,12 +19,8 @@ export const UserCard = () => {
     <Card className="gap-0 p-0">
       <CardHeader className="gap-y-0 py-4">
         <div className="flex min-w-0 items-center gap-3">
-          <Avatar>
-            <AvatarFallback
-              variant="boring"
-              name={session.data?.user.name ?? ''}
-            />
-          </Avatar>
+          <UserAvatar user={session.data?.user as User} />
+
           <div className="flex min-w-0 flex-col gap-0.5">
             <CardTitle className="truncate">
               {session.data?.user.name || session.data?.user.email || (

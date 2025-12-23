@@ -4,7 +4,6 @@ import { Link } from '@tanstack/react-router';
 
 import { orpc } from '@/lib/orpc/client';
 
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DataList,
   DataListCell,
@@ -16,6 +15,7 @@ import {
 } from '@/components/ui/datalist';
 
 import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
+import { UserAvatar } from '@/features/user/avatar';
 import { DateRangeDisplay } from '@/utils/dates';
 
 export function DataListLeavesForDateRange({
@@ -74,12 +74,7 @@ export function DataListLeavesForDateRange({
                 >
                   <DataListRow withHover>
                     <DataListCell className="flex flex-row items-center justify-start gap-2">
-                      <Avatar>
-                        <AvatarFallback
-                          variant="boring"
-                          name={item.user?.name ?? ''}
-                        />
-                      </Avatar>
+                      <UserAvatar user={item.user} />
                       <DataListText>{item.user?.name ?? ''}</DataListText>
                     </DataListCell>
                     <DataListCell className="w-full flex-1 items-center">

@@ -16,7 +16,6 @@ import { orpc } from '@/lib/orpc/client';
 
 import { BackButton } from '@/components/back-button';
 import { PageError } from '@/components/errors/page-error';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -42,6 +41,7 @@ import { Spinner } from '@/components/ui/spinner';
 
 import { authClient } from '@/features/auth/client';
 import { WithPermissions } from '@/features/auth/with-permission';
+import { UserAvatar } from '@/features/user/avatar';
 import {
   PageLayout,
   PageLayoutContent,
@@ -160,9 +160,7 @@ export const PageUser = (props: { params: { id: string } }) => {
               <Card className="relative flex-1">
                 <CardHeader>
                   <div className="flex items-center gap-3">
-                    <Avatar>
-                      <AvatarFallback variant="boring" name={user.name ?? ''} />
-                    </Avatar>
+                    <UserAvatar user={user} />
                     <div className="flex flex-1 flex-col gap-0.5">
                       <CardTitle>
                         {user.name || (

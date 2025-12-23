@@ -17,7 +17,7 @@ export async function createUsers() {
 
   // 1) Seed from JSON (idempotent by email)
   await Promise.all(
-    data.users.map(async ({ name, email }) => {
+    data.users.map(async ({ name, email, imageUrl }) => {
       const normalizedEmail = email.toLowerCase();
 
       if (existingEmails.has(normalizedEmail)) {
@@ -29,7 +29,9 @@ export async function createUsers() {
           name,
           email: normalizedEmail,
           emailVerified: true,
+          image: imageUrl,
           role: 'user',
+          leaveBalance: 25,
           onboardedAt: new Date(),
         },
       });

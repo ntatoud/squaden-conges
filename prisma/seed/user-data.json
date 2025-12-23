@@ -1,83 +1,114 @@
 {
   "users": [
-    { "name": "Rudy Baer", "email": "rudy@bearstudio.fr" },
+    {
+      "name": "Rudy Baer",
+      "email": "rudy@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-U082PMKBP-58b183bc34bc-512"
+    },
     {
       "name": "Ivan Dalmet",
-      "email": "ivan@bearstudio.fr"
+      "email": "ivan@bearstudio.fr",
+      "imageUrl": "https://cdn.bsky.app/img/avatar/plain/did:plc:g2lucoqovk2gpvge5acwri5m/bafkreibx33klmetyuiingriznox6ew4bwtzobtgmq77kjzpwabwlgbgw7a@jpeg"
     },
     {
       "name": "Nhung Duong",
-      "email": "nhung@bearstudio.fr"
+      "email": "nhung@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-ULUR4FT29-91c0989afaad-512"
     },
     {
       "name": "Yoann Fleury",
-      "email": "yoann@bearstudio.fr"
+      "email": "yoann@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-U10KCDSJC-5239406f6395-512"
     },
     {
       "name": "Renan Decamps",
-      "email": "renan@bearstudio.fr"
+      "email": "renan@bearstudio.fr",
+      "imageUrl": "https://gravatar.com/userimage/47017544/fdd36c5ba84dce77c9ad6a31a149d5f1.jpeg?size=256"
     },
     {
       "name": "Nicolas Torion",
-      "email": "nicolas@bearstudio.fr"
+      "email": "nicolas@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-U935PLZCP-79fc021526ad-512"
     },
     {
       "name": "Hugo Pérard",
-      "email": "hugo.perard@bearstudio.fr"
+      "email": "hugo.perard@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-UPC60RZ24-a89c048fe5ed-192"
     },
     {
       "name": "Zouhair Mkassmi",
-      "email": "zouhair@bearstudio.fr"
+      "email": "zouhair@bearstudio.fr",
+      "imageUrl": "https://lh3.googleusercontent.com/a-/AOh14GiF9otVU_gJKMzpd7E8vupFxLF8LslnTTFGv11Y=s96-c"
     },
-    { "name": "Hugo Perez", "email": "hugo.perez@bearstudio.fr" },
+    {
+      "name": "Hugo Perez",
+      "email": "hugo.perez@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-UHH43EUBE-74bd04747239-512"
+    },
     {
       "name": "Grégoire Protas",
-      "email": "gregoire@bearstudio.fr"
+      "email": "gregoire@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-UMXKYSL3F-2270a00a6e8e-512"
     },
     {
       "name": "Dylan Campbell",
-      "email": "dylan.campbell@bearstudio.fr"
+      "email": "dylan.campbell@bearstudio.fr",
+      "imageUrl": "https://media.licdn.com/dms/image/D4E03AQGG5Ku75LSymA/profile-displayphoto-shrink_400_400/0/1700225592164?e=2147483647&v=beta&t=3ALgqwI0AkbkGcwKxXLBAneLk-hx4o7LWlDZSepPNkI"
     },
     {
       "name": "Soraya Benchakroune",
-      "email": "soraya@bearstudio.fr"
+      "email": "soraya@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-U02DX5WRDFE-d648f3716d76-512"
     },
     {
       "name": "Dylan Flandrin",
-      "email": "dylan.flandrin@bearstudio.fr"
+      "email": "dylan.flandrin@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-U02MFCZS2SG-4aa85422845e-512"
     },
     {
       "name": "Héloïse Guillaume",
-      "email": "heloise@bearstudio.fr"
+      "email": "heloise@bearstudio.fr",
+      "imageUrl": "https://lh3.googleusercontent.com/a/ACg8ocJviASA6ka-TZbFyRPlZSXQu7nq-mV9g1tGiLX8fJpByXD8cI5-ILAsPiZ9I45okBsx86IYnvC3BktjK3Y8ze-JegimmN7H=s288-c-no"
     },
     {
       "name": "Aziz Ouertani",
-      "email": "aziz@bearstudio.fr"
+      "email": "aziz@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-U03N6JDG3J7-98ef9021598d-192"
     },
     {
       "name": "Paul SMACQUE",
-      "email": "paul@bearstudio.fr"
+      "email": "paul@bearstudio.fr",
+      "imageUrl": "https://lh3.googleusercontent.com/pw/ABLVV84MR8W7MDatCTTRXVhgaikdmgulIHJ1gne_xHdfeFgMYf0-zxhlmOiYaoF8qbpArXDKEnZmhtQ_he0odEJKCgfliWe5tLoaaj8JY1D3wl15dm-MCI9T4WZddiGrIWw2s6UxXN997bCRisRznuu6DkdM=w724-h1088-s-no?authuser=0"
     },
     {
       "name": "Hend FELLAH",
-      "email": "hend@bearstudio.fr"
+      "email": "hend@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-UKWJUME3A-e48a59a4ada0-512"
     },
     {
       "name": "Houssem Balti",
-      "email": "houssem@bearstudio.fr"
+      "email": "houssem@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-U06C0SJ4H0V-5962d05dff5a-512"
     },
     {
       "name": "Mariem Mkassmi",
-      "email": "mariem@bearstudio.fr"
+      "email": "mariem@bearstudio.fr",
+      "imageUrl": "https://lh3.googleusercontent.com/a/AAcHTtcdZgtzBaGKC1wZpT9Y-8PhK9sLMvNrOWfA50b2=s96-c"
     },
     {
       "name": "Marie Douet",
-      "email": "marie@bearstudio.fr"
+      "email": "marie@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-U05E5TFFD0S-576b998633ef-512"
     },
-    { "name": "Noé Tatoud", "email": "noe@bearstudio.fr" },
+    {
+      "name": "Noé Tatoud",
+      "email": "noe@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-U05AQHG155E-e254bc837cda-512"
+    },
     {
       "name": "Jeanne Grenet",
-      "email": "jeanne@bearstudio.fr"
+      "email": "jeanne@bearstudio.fr",
+      "imageUrl": "https://ca.slack-edge.com/T082PMC2D-U05TU2K9T52-f12e00c7ef8a-512"
     }
   ]
 }
