@@ -49,7 +49,7 @@ export default {
 
       let where: Prisma.LeaveWhereInput = {};
 
-      if (from && to) {
+      if (from || to) {
         const windowStart = dayjs(from).subtract(1, 'week').toDate();
         const windowEnd = dayjs(to).add(1, 'week').toDate();
 
@@ -60,6 +60,19 @@ export default {
           ],
         };
       }
+
+      const excludedIds = input.filters?.excludedIds;
+
+      if (excludedIds?.length) {
+        where = {
+          ...where,
+          id: {
+            notIn: excludedIds,
+          },
+        };
+      }
+
+      console.log(where);
 
       const [total, items] = await Promise.all([
         context.db.leave.count({

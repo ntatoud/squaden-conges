@@ -57,12 +57,7 @@ export const LeavesDataList = ({
         </DataListCell>
       </DataListRow>
       {items.map((item) => (
-        <Link
-          // TODO : change it to link to leave id
-          to={detailLink}
-          params={{ id: item.id }}
-          key={item.id}
-        >
+        <Link to={detailLink} params={{ id: item.id }} key={item.id}>
           <DataListRow withHover>
             <DataListCell className="flex flex-row items-center justify-start gap-2">
               <Avatar>

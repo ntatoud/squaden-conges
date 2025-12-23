@@ -21,9 +21,11 @@ import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
 export function DataListLeavesForDateRange({
   fromDate,
   toDate,
+  excludedIds,
 }: {
   fromDate: Date;
   toDate: Date;
+  excludedIds?: Array<string>;
 }) {
   const closeLeavesQuery = useQuery(
     orpc.leave.getAll.queryOptions({
@@ -31,6 +33,7 @@ export function DataListLeavesForDateRange({
         filters: {
           fromDate,
           toDate,
+          excludedIds,
         },
       },
     })

@@ -175,6 +175,7 @@ export const PageLeave = (props: { params: { id: string } }) => {
                 <DataListLeavesForDateRange
                   fromDate={leave.fromDate}
                   toDate={leave.toDate}
+                  excludedIds={[props.params.id]}
                 />
               </div>
             );

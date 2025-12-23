@@ -64,9 +64,11 @@ export const zFormFieldsLeave = () =>
       }
     });
 
+export type LeaveFilters = z.infer<ReturnType<typeof zLeaveFilters>>;
 export const zLeaveFilters = () =>
   z.object({
     fromDate: z.date().optional(),
     toDate: z.date().optional(),
     type: zLeaveType.optional(),
+    excludedIds: z.array(z.string()).optional(),
   });

@@ -117,6 +117,7 @@ export const PageLeaveEdit = (props: { params: { id: string } }) => {
               <DataListLeavesForDateRange
                 fromDate={dayjs(fromDate).toDate()}
                 toDate={dayjs(toDate).toDate()}
+                excludedIds={[props.params.id]}
               />
             </div>
           </PageLayoutContent>
