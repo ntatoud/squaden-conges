@@ -69,6 +69,9 @@ export const zLeaveFilters = () =>
   z.object({
     fromDate: z.date().optional(),
     toDate: z.date().optional(),
-    type: zLeaveType.optional(),
+    type: z.array(zLeaveType).optional(),
+    status: z.array(zLeaveStatus).optional(),
+    user: z.array(z.string()).optional(),
     excludedIds: z.array(z.string()).optional(),
+    exactDates: z.boolean().optional(),
   });

@@ -1,7 +1,9 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Link, useRouter } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
+import dayjs from 'dayjs';
 import { PlusIcon } from 'lucide-react';
+import { useQueryStates } from 'nuqs';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -13,9 +15,9 @@ import {
   DataListLoadingState,
 } from '@/components/ui/datalist';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
-import { SearchButton } from '@/components/ui/search-button';
-import { SearchInput } from '@/components/ui/search-input';
 
+import { leaveFilterSearchParams } from '@/features/leave//form-new-search-params';
+import { LeaveFilterSection } from '@/features/leave/leave-filter-section';
 import { LeavesDataList } from '@/features/leave/leaves-data-list';
 import {
   PageLayout,
@@ -23,23 +25,21 @@ import {
   PageLayoutTopBar,
 } from '@/layout/app/page-layout';
 
-export const PageLeaves = (props: { search: TODO }) => {
-  const router = useRouter();
-
-  const searchInputProps = {
-    value: props.search.searchTerm ?? '',
-    onChange: () =>
-      router.navigate({
-        to: '.',
-        replace: true,
-      }),
-  };
+export const PageLeaves = () => {
+  const [{ fromDate, toDate, types, statuses }, setQueryStates] =
+    useQueryStates(leaveFilterSearchParams);
 
   const leavesQuery = useInfiniteQuery(
     orpc.leave.getAll.infiniteOptions({
       input: (cursor: string | undefined) => ({
-        searchTerm: props.search.searchTerm,
         cursor,
+        filters: {
+          type: types ?? undefined,
+          status: statuses ?? undefined,
+          fromDate: fromDate ? dayjs(fromDate).toDate() : undefined,
+          toDate: toDate ? dayjs(toDate).toDate() : undefined,
+          exactDates: true,
+        },
       }),
       initialPageParam: undefined,
       maxPages: 10,
@@ -50,15 +50,12 @@ export const PageLeaves = (props: { search: TODO }) => {
   const ui = getUiState((set) => {
     if (leavesQuery.status === 'pending') return set('pending');
     if (leavesQuery.status === 'error') return set('error');
-    const searchTerm = props.search.searchTerm;
+
     const items = leavesQuery.data?.pages.flatMap((p) => p.items) ?? [];
-    if (!items.length && searchTerm) {
-      return set('empty-search', { searchTerm });
-    }
     if (!items.length) return set('empty');
+
     return set('default', {
       items,
-      searchTerm,
       total: leavesQuery.data.pages[0]?.total ?? 0,
     });
   });
@@ -78,22 +75,21 @@ export const PageLeaves = (props: { search: TODO }) => {
             </Link>
           </ResponsiveIconButton>
         }
-      >
-        <SearchButton
-          {...searchInputProps}
-          className="-mx-2 md:hidden"
-          size="icon-sm"
-        />
-        <SearchInput
-          {...searchInputProps}
-          size="sm"
-          className="max-w-2xs max-md:hidden"
-        />
-      </PageLayoutTopBar>
+      />
+
       <PageLayoutContent className="pb-20">
         <Button asChild variant="secondary" className="mb-4">
           <Link to="/app/leaves/review">Review congés</Link>
         </Button>
+
+        <LeaveFilterSection />
+
+        <div className="mt-2 mb-6 flex gap-2">
+          <Button variant="secondary" onClick={() => setQueryStates(null)}>
+            Réinitialiser les filtres
+          </Button>
+        </div>
+
         <DataList>
           {ui
             .match('pending', () => <DataListLoadingState />)
@@ -101,9 +97,6 @@ export const PageLeaves = (props: { search: TODO }) => {
               <DataListErrorState retry={() => leavesQuery.refetch()} />
             ))
             .match('empty', () => <DataListEmptyState />)
-            .match('empty-search', ({ searchTerm }) => (
-              <DataListEmptyState searchTerm={searchTerm} />
-            ))
             .match('default', ({ items, total }) => (
               <LeavesDataList
                 items={items}
