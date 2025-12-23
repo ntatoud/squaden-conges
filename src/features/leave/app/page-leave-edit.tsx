@@ -1,11 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ORPCError } from '@orpc/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 import { useQueryStates } from 'nuqs';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
@@ -29,7 +27,6 @@ import {
 export const PageLeaveEdit = (props: { params: { id: string } }) => {
   const [{ fromDate, toDate }] = useQueryStates(formNewSearchParams);
 
-  const { t } = useTranslation(['book']);
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
@@ -66,18 +63,7 @@ export const PageLeaveEdit = (props: { params: { id: string } }) => {
           router.navigate({ to: '..', replace: true, ignoreBlocker: true });
         }
       },
-      onError: (error) => {
-        if (
-          error instanceof ORPCError &&
-          error.code === 'CONFLICT' &&
-          error.data?.target?.includes('title')
-        ) {
-          form.setError('type', {
-            message: t('book:manager.form.titleAlreadyExist'),
-          });
-          return;
-        }
-
+      onError: () => {
         toast.error('Une erreur est survenue lors de la mise à jour du congé.');
       },
     })

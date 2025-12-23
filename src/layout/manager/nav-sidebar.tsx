@@ -1,16 +1,9 @@
 import { Link } from '@tanstack/react-router';
-import {
-  LayoutDashboardIcon,
-  PanelLeftIcon,
-  TreePalm,
-  UsersIcon,
-  XIcon,
-} from 'lucide-react';
+import { PanelLeftIcon, TreePalm, UsersIcon, XIcon } from 'lucide-react';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/brand/logo';
-import { IconBookOpen } from '@/components/icons/generated';
 import {
   Sidebar,
   SidebarContent,
@@ -64,18 +57,6 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
             <SidebarGroupLabel>{t('layout:nav.application')}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                <SidebarMenuItem>
-                  <Link to="/manager/dashboard">
-                    {({ isActive }) => (
-                      <SidebarMenuButton asChild isActive={isActive}>
-                        <span>
-                          <LayoutDashboardIcon />
-                          <span>{t('layout:nav.dashboard')}</span>
-                        </span>
-                      </SidebarMenuButton>
-                    )}
-                  </Link>
-                </SidebarMenuItem>
                 <SidebarMenuItem>
                   <Link to="/manager/leaves">
                     {({ isActive }) => (

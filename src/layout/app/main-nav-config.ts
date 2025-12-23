@@ -3,22 +3,11 @@ import { TreePalm } from 'lucide-react';
 import { FC } from 'react';
 
 import {
-  IconHouseDuotone,
-  IconHouseFill,
   IconUserCircleDuotone,
   IconUserCircleFill,
 } from '@/components/icons/generated';
 
 export const MAIN_NAV_LINKS = [
-  {
-    labelTranslationKey: 'layout:nav.home',
-    icon: IconHouseDuotone,
-    iconActive: IconHouseFill,
-    linkOptions: {
-      to: '/app',
-    },
-    exact: true,
-  } as const,
   {
     label: 'Congés',
     icon: TreePalm,

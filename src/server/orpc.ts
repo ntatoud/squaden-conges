@@ -4,7 +4,6 @@ import { getRequestHeaders } from '@tanstack/react-start/server';
 import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
 
-import { envClient } from '@/env/client';
 import { Permission } from '@/features/auth/permissions';
 import { auth } from '@/server/auth';
 import { db } from '@/server/db';
@@ -97,15 +96,6 @@ const base = os
 
       return result;
     });
-  })
-  // Demo Mode
-  .use(async ({ next, procedure }) => {
-    if (envClient.VITE_IS_DEMO && procedure['~orpc'].route.method !== 'GET') {
-      throw new ORPCError('METHOD_NOT_SUPPORTED', {
-        message: 'DEMO_MODE_ENABLED',
-      });
-    }
-    return await next();
   });
 
 export const publicProcedure = () => base;

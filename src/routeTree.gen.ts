@@ -19,13 +19,10 @@ import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as ManagerUsersIndexRouteImport } from './routes/manager/users/index'
 import { Route as ManagerLeavesIndexRouteImport } from './routes/manager/leaves/index'
-import { Route as ManagerDashboardIndexRouteImport } from './routes/manager/dashboard.index'
-import { Route as ManagerBooksIndexRouteImport } from './routes/manager/books/index'
 import { Route as ManagerAccountIndexRouteImport } from './routes/manager/account.index'
 import { Route as LoginVerifyIndexRouteImport } from './routes/login/verify.index'
 import { Route as LoginErrorIndexRouteImport } from './routes/login/error.index'
 import { Route as AppLeavesIndexRouteImport } from './routes/app/leaves/index'
-import { Route as AppBooksIndexRouteImport } from './routes/app/books/index'
 import { Route as AppAccountIndexRouteImport } from './routes/app/account.index'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 import { Route as ApiRestSplatRouteImport } from './routes/api/rest.$'
@@ -34,17 +31,13 @@ import { Route as ApiOpenapiAppRouteImport } from './routes/api/openapi/app'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as ManagerUsersNewIndexRouteImport } from './routes/manager/users/new.index'
 import { Route as ManagerUsersIdIndexRouteImport } from './routes/manager/users/$id.index'
-import { Route as ManagerBooksNewIndexRouteImport } from './routes/manager/books/new.index'
-import { Route as ManagerBooksIdIndexRouteImport } from './routes/manager/books/$id.index'
 import { Route as AppLeavesReviewIndexRouteImport } from './routes/app/leaves/review.index'
 import { Route as AppLeavesNewIndexRouteImport } from './routes/app/leaves/new.index'
 import { Route as AppLeavesIdIndexRouteImport } from './routes/app/leaves/$id.index'
-import { Route as AppBooksIdIndexRouteImport } from './routes/app/books/$id.index'
 import { Route as ApiOpenapiAuthSchemaRouteImport } from './routes/api/openapi/auth.schema'
 import { Route as ApiOpenapiAppSchemaRouteImport } from './routes/api/openapi/app.schema'
 import { Route as ApiDevEmailTemplateRouteImport } from './routes/api/dev.email.$template'
 import { Route as ManagerUsersIdUpdateIndexRouteImport } from './routes/manager/users/$id.update.index'
-import { Route as ManagerBooksIdUpdateIndexRouteImport } from './routes/manager/books/$id.update.index'
 import { Route as AppLeavesIdEditIndexRouteImport } from './routes/app/leaves/$id.edit.index'
 
 const LogoutRoute = LogoutRouteImport.update({
@@ -97,16 +90,6 @@ const ManagerLeavesIndexRoute = ManagerLeavesIndexRouteImport.update({
   path: '/leaves/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
-const ManagerDashboardIndexRoute = ManagerDashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
-  getParentRoute: () => ManagerRouteRoute,
-} as any)
-const ManagerBooksIndexRoute = ManagerBooksIndexRouteImport.update({
-  id: '/books/',
-  path: '/books/',
-  getParentRoute: () => ManagerRouteRoute,
-} as any)
 const ManagerAccountIndexRoute = ManagerAccountIndexRouteImport.update({
   id: '/account/',
   path: '/account/',
@@ -125,11 +108,6 @@ const LoginErrorIndexRoute = LoginErrorIndexRouteImport.update({
 const AppLeavesIndexRoute = AppLeavesIndexRouteImport.update({
   id: '/leaves/',
   path: '/leaves/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppBooksIndexRoute = AppBooksIndexRouteImport.update({
-  id: '/books/',
-  path: '/books/',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppAccountIndexRoute = AppAccountIndexRouteImport.update({
@@ -172,16 +150,6 @@ const ManagerUsersIdIndexRoute = ManagerUsersIdIndexRouteImport.update({
   path: '/users/$id/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
-const ManagerBooksNewIndexRoute = ManagerBooksNewIndexRouteImport.update({
-  id: '/books/new/',
-  path: '/books/new/',
-  getParentRoute: () => ManagerRouteRoute,
-} as any)
-const ManagerBooksIdIndexRoute = ManagerBooksIdIndexRouteImport.update({
-  id: '/books/$id/',
-  path: '/books/$id/',
-  getParentRoute: () => ManagerRouteRoute,
-} as any)
 const AppLeavesReviewIndexRoute = AppLeavesReviewIndexRouteImport.update({
   id: '/leaves/review/',
   path: '/leaves/review/',
@@ -195,11 +163,6 @@ const AppLeavesNewIndexRoute = AppLeavesNewIndexRouteImport.update({
 const AppLeavesIdIndexRoute = AppLeavesIdIndexRouteImport.update({
   id: '/leaves/$id/',
   path: '/leaves/$id/',
-  getParentRoute: () => AppRouteRoute,
-} as any)
-const AppBooksIdIndexRoute = AppBooksIdIndexRouteImport.update({
-  id: '/books/$id/',
-  path: '/books/$id/',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const ApiOpenapiAuthSchemaRoute = ApiOpenapiAuthSchemaRouteImport.update({
@@ -223,12 +186,6 @@ const ManagerUsersIdUpdateIndexRoute =
     path: '/users/$id/update/',
     getParentRoute: () => ManagerRouteRoute,
   } as any)
-const ManagerBooksIdUpdateIndexRoute =
-  ManagerBooksIdUpdateIndexRouteImport.update({
-    id: '/books/$id/update/',
-    path: '/books/$id/update/',
-    getParentRoute: () => ManagerRouteRoute,
-  } as any)
 const AppLeavesIdEditIndexRoute = AppLeavesIdEditIndexRouteImport.update({
   id: '/leaves/$id/edit/',
   path: '/leaves/$id/edit/',
@@ -250,28 +207,21 @@ export interface FileRoutesByFullPath {
   '/api/rest/$': typeof ApiRestSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/app/account': typeof AppAccountIndexRoute
-  '/app/books': typeof AppBooksIndexRoute
   '/app/leaves': typeof AppLeavesIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
   '/login/verify': typeof LoginVerifyIndexRoute
   '/manager/account': typeof ManagerAccountIndexRoute
-  '/manager/books': typeof ManagerBooksIndexRoute
-  '/manager/dashboard': typeof ManagerDashboardIndexRoute
   '/manager/leaves': typeof ManagerLeavesIndexRoute
   '/manager/users': typeof ManagerUsersIndexRoute
   '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
-  '/app/books/$id': typeof AppBooksIdIndexRoute
   '/app/leaves/$id': typeof AppLeavesIdIndexRoute
   '/app/leaves/new': typeof AppLeavesNewIndexRoute
   '/app/leaves/review': typeof AppLeavesReviewIndexRoute
-  '/manager/books/$id': typeof ManagerBooksIdIndexRoute
-  '/manager/books/new': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
   '/app/leaves/$id/edit': typeof AppLeavesIdEditIndexRoute
-  '/manager/books/$id/update': typeof ManagerBooksIdUpdateIndexRoute
   '/manager/users/$id/update': typeof ManagerUsersIdUpdateIndexRoute
 }
 export interface FileRoutesByTo {
@@ -286,28 +236,21 @@ export interface FileRoutesByTo {
   '/api/rest/$': typeof ApiRestSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/app/account': typeof AppAccountIndexRoute
-  '/app/books': typeof AppBooksIndexRoute
   '/app/leaves': typeof AppLeavesIndexRoute
   '/login/error': typeof LoginErrorIndexRoute
   '/login/verify': typeof LoginVerifyIndexRoute
   '/manager/account': typeof ManagerAccountIndexRoute
-  '/manager/books': typeof ManagerBooksIndexRoute
-  '/manager/dashboard': typeof ManagerDashboardIndexRoute
   '/manager/leaves': typeof ManagerLeavesIndexRoute
   '/manager/users': typeof ManagerUsersIndexRoute
   '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
-  '/app/books/$id': typeof AppBooksIdIndexRoute
   '/app/leaves/$id': typeof AppLeavesIdIndexRoute
   '/app/leaves/new': typeof AppLeavesNewIndexRoute
   '/app/leaves/review': typeof AppLeavesReviewIndexRoute
-  '/manager/books/$id': typeof ManagerBooksIdIndexRoute
-  '/manager/books/new': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
   '/app/leaves/$id/edit': typeof AppLeavesIdEditIndexRoute
-  '/manager/books/$id/update': typeof ManagerBooksIdUpdateIndexRoute
   '/manager/users/$id/update': typeof ManagerUsersIdUpdateIndexRoute
 }
 export interface FileRoutesById {
@@ -326,28 +269,21 @@ export interface FileRoutesById {
   '/api/rest/$': typeof ApiRestSplatRoute
   '/api/rpc/$': typeof ApiRpcSplatRoute
   '/app/account/': typeof AppAccountIndexRoute
-  '/app/books/': typeof AppBooksIndexRoute
   '/app/leaves/': typeof AppLeavesIndexRoute
   '/login/error/': typeof LoginErrorIndexRoute
   '/login/verify/': typeof LoginVerifyIndexRoute
   '/manager/account/': typeof ManagerAccountIndexRoute
-  '/manager/books/': typeof ManagerBooksIndexRoute
-  '/manager/dashboard/': typeof ManagerDashboardIndexRoute
   '/manager/leaves/': typeof ManagerLeavesIndexRoute
   '/manager/users/': typeof ManagerUsersIndexRoute
   '/api/dev/email/$template': typeof ApiDevEmailTemplateRoute
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
-  '/app/books/$id/': typeof AppBooksIdIndexRoute
   '/app/leaves/$id/': typeof AppLeavesIdIndexRoute
   '/app/leaves/new/': typeof AppLeavesNewIndexRoute
   '/app/leaves/review/': typeof AppLeavesReviewIndexRoute
-  '/manager/books/$id/': typeof ManagerBooksIdIndexRoute
-  '/manager/books/new/': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id/': typeof ManagerUsersIdIndexRoute
   '/manager/users/new/': typeof ManagerUsersNewIndexRoute
   '/app/leaves/$id/edit/': typeof AppLeavesIdEditIndexRoute
-  '/manager/books/$id/update/': typeof ManagerBooksIdUpdateIndexRoute
   '/manager/users/$id/update/': typeof ManagerUsersIdUpdateIndexRoute
 }
 export interface FileRouteTypes {
@@ -367,28 +303,21 @@ export interface FileRouteTypes {
     | '/api/rest/$'
     | '/api/rpc/$'
     | '/app/account'
-    | '/app/books'
     | '/app/leaves'
     | '/login/error'
     | '/login/verify'
     | '/manager/account'
-    | '/manager/books'
-    | '/manager/dashboard'
     | '/manager/leaves'
     | '/manager/users'
     | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
-    | '/app/books/$id'
     | '/app/leaves/$id'
     | '/app/leaves/new'
     | '/app/leaves/review'
-    | '/manager/books/$id'
-    | '/manager/books/new'
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/app/leaves/$id/edit'
-    | '/manager/books/$id/update'
     | '/manager/users/$id/update'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -403,28 +332,21 @@ export interface FileRouteTypes {
     | '/api/rest/$'
     | '/api/rpc/$'
     | '/app/account'
-    | '/app/books'
     | '/app/leaves'
     | '/login/error'
     | '/login/verify'
     | '/manager/account'
-    | '/manager/books'
-    | '/manager/dashboard'
     | '/manager/leaves'
     | '/manager/users'
     | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
-    | '/app/books/$id'
     | '/app/leaves/$id'
     | '/app/leaves/new'
     | '/app/leaves/review'
-    | '/manager/books/$id'
-    | '/manager/books/new'
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/app/leaves/$id/edit'
-    | '/manager/books/$id/update'
     | '/manager/users/$id/update'
   id:
     | '__root__'
@@ -442,28 +364,21 @@ export interface FileRouteTypes {
     | '/api/rest/$'
     | '/api/rpc/$'
     | '/app/account/'
-    | '/app/books/'
     | '/app/leaves/'
     | '/login/error/'
     | '/login/verify/'
     | '/manager/account/'
-    | '/manager/books/'
-    | '/manager/dashboard/'
     | '/manager/leaves/'
     | '/manager/users/'
     | '/api/dev/email/$template'
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
-    | '/app/books/$id/'
     | '/app/leaves/$id/'
     | '/app/leaves/new/'
     | '/app/leaves/review/'
-    | '/manager/books/$id/'
-    | '/manager/books/new/'
     | '/manager/users/$id/'
     | '/manager/users/new/'
     | '/app/leaves/$id/edit/'
-    | '/manager/books/$id/update/'
     | '/manager/users/$id/update/'
   fileRoutesById: FileRoutesById
 }
@@ -553,20 +468,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerLeavesIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
-    '/manager/dashboard/': {
-      id: '/manager/dashboard/'
-      path: '/dashboard'
-      fullPath: '/manager/dashboard'
-      preLoaderRoute: typeof ManagerDashboardIndexRouteImport
-      parentRoute: typeof ManagerRouteRoute
-    }
-    '/manager/books/': {
-      id: '/manager/books/'
-      path: '/books'
-      fullPath: '/manager/books'
-      preLoaderRoute: typeof ManagerBooksIndexRouteImport
-      parentRoute: typeof ManagerRouteRoute
-    }
     '/manager/account/': {
       id: '/manager/account/'
       path: '/account'
@@ -593,13 +494,6 @@ declare module '@tanstack/react-router' {
       path: '/leaves'
       fullPath: '/app/leaves'
       preLoaderRoute: typeof AppLeavesIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/books/': {
-      id: '/app/books/'
-      path: '/books'
-      fullPath: '/app/books'
-      preLoaderRoute: typeof AppBooksIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/app/account/': {
@@ -658,20 +552,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerUsersIdIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
-    '/manager/books/new/': {
-      id: '/manager/books/new/'
-      path: '/books/new'
-      fullPath: '/manager/books/new'
-      preLoaderRoute: typeof ManagerBooksNewIndexRouteImport
-      parentRoute: typeof ManagerRouteRoute
-    }
-    '/manager/books/$id/': {
-      id: '/manager/books/$id/'
-      path: '/books/$id'
-      fullPath: '/manager/books/$id'
-      preLoaderRoute: typeof ManagerBooksIdIndexRouteImport
-      parentRoute: typeof ManagerRouteRoute
-    }
     '/app/leaves/review/': {
       id: '/app/leaves/review/'
       path: '/leaves/review'
@@ -691,13 +571,6 @@ declare module '@tanstack/react-router' {
       path: '/leaves/$id'
       fullPath: '/app/leaves/$id'
       preLoaderRoute: typeof AppLeavesIdIndexRouteImport
-      parentRoute: typeof AppRouteRoute
-    }
-    '/app/books/$id/': {
-      id: '/app/books/$id/'
-      path: '/books/$id'
-      fullPath: '/app/books/$id'
-      preLoaderRoute: typeof AppBooksIdIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/api/openapi/auth/schema': {
@@ -728,13 +601,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerUsersIdUpdateIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
-    '/manager/books/$id/update/': {
-      id: '/manager/books/$id/update/'
-      path: '/books/$id/update'
-      fullPath: '/manager/books/$id/update'
-      preLoaderRoute: typeof ManagerBooksIdUpdateIndexRouteImport
-      parentRoute: typeof ManagerRouteRoute
-    }
     '/app/leaves/$id/edit/': {
       id: '/app/leaves/$id/edit/'
       path: '/leaves/$id/edit'
@@ -748,9 +614,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteRouteChildren {
   AppIndexRoute: typeof AppIndexRoute
   AppAccountIndexRoute: typeof AppAccountIndexRoute
-  AppBooksIndexRoute: typeof AppBooksIndexRoute
   AppLeavesIndexRoute: typeof AppLeavesIndexRoute
-  AppBooksIdIndexRoute: typeof AppBooksIdIndexRoute
   AppLeavesIdIndexRoute: typeof AppLeavesIdIndexRoute
   AppLeavesNewIndexRoute: typeof AppLeavesNewIndexRoute
   AppLeavesReviewIndexRoute: typeof AppLeavesReviewIndexRoute
@@ -760,9 +624,7 @@ interface AppRouteRouteChildren {
 const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppIndexRoute: AppIndexRoute,
   AppAccountIndexRoute: AppAccountIndexRoute,
-  AppBooksIndexRoute: AppBooksIndexRoute,
   AppLeavesIndexRoute: AppLeavesIndexRoute,
-  AppBooksIdIndexRoute: AppBooksIdIndexRoute,
   AppLeavesIdIndexRoute: AppLeavesIdIndexRoute,
   AppLeavesNewIndexRoute: AppLeavesNewIndexRoute,
   AppLeavesReviewIndexRoute: AppLeavesReviewIndexRoute,
@@ -792,30 +654,20 @@ const LoginRouteRouteWithChildren = LoginRouteRoute._addFileChildren(
 interface ManagerRouteRouteChildren {
   ManagerIndexRoute: typeof ManagerIndexRoute
   ManagerAccountIndexRoute: typeof ManagerAccountIndexRoute
-  ManagerBooksIndexRoute: typeof ManagerBooksIndexRoute
-  ManagerDashboardIndexRoute: typeof ManagerDashboardIndexRoute
   ManagerLeavesIndexRoute: typeof ManagerLeavesIndexRoute
   ManagerUsersIndexRoute: typeof ManagerUsersIndexRoute
-  ManagerBooksIdIndexRoute: typeof ManagerBooksIdIndexRoute
-  ManagerBooksNewIndexRoute: typeof ManagerBooksNewIndexRoute
   ManagerUsersIdIndexRoute: typeof ManagerUsersIdIndexRoute
   ManagerUsersNewIndexRoute: typeof ManagerUsersNewIndexRoute
-  ManagerBooksIdUpdateIndexRoute: typeof ManagerBooksIdUpdateIndexRoute
   ManagerUsersIdUpdateIndexRoute: typeof ManagerUsersIdUpdateIndexRoute
 }
 
 const ManagerRouteRouteChildren: ManagerRouteRouteChildren = {
   ManagerIndexRoute: ManagerIndexRoute,
   ManagerAccountIndexRoute: ManagerAccountIndexRoute,
-  ManagerBooksIndexRoute: ManagerBooksIndexRoute,
-  ManagerDashboardIndexRoute: ManagerDashboardIndexRoute,
   ManagerLeavesIndexRoute: ManagerLeavesIndexRoute,
   ManagerUsersIndexRoute: ManagerUsersIndexRoute,
-  ManagerBooksIdIndexRoute: ManagerBooksIdIndexRoute,
-  ManagerBooksNewIndexRoute: ManagerBooksNewIndexRoute,
   ManagerUsersIdIndexRoute: ManagerUsersIdIndexRoute,
   ManagerUsersNewIndexRoute: ManagerUsersNewIndexRoute,
-  ManagerBooksIdUpdateIndexRoute: ManagerBooksIdUpdateIndexRoute,
   ManagerUsersIdUpdateIndexRoute: ManagerUsersIdUpdateIndexRoute,
 }
 

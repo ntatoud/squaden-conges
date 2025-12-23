@@ -1,9 +1,11 @@
 import { Link, ValidateLinkOptions } from '@tanstack/react-router';
+import { Settings } from 'lucide-react';
 import { FC, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/brand/logo';
 
+import { WithPermissions } from '@/features/auth/with-permission';
 import { MAIN_NAV_LINKS } from '@/layout/app/main-nav-config';
 
 export const MainNavDesktop = () => {
@@ -30,6 +32,17 @@ export const MainNavDesktop = () => {
                 {labelTranslationKey ? t(labelTranslationKey) : label}
               </Item>
             ))}
+            <WithPermissions permissions={[{ apps: ['manager'] }]}>
+              <Item
+                icon={Settings}
+                iconActive={Settings}
+                linkOptions={{
+                  to: '/manager/leaves',
+                }}
+              >
+                Admin
+              </Item>
+            </WithPermissions>
           </nav>
         </div>
       </header>
