@@ -1,21 +1,31 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
-import { PlusIcon } from 'lucide-react';
+import dayjs from 'dayjs';
+import { CheckIcon, PlusIcon, XIcon } from 'lucide-react';
+import { match, P } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
+import { cn } from '@/lib/tailwind/utils';
 
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DataList,
   DataListEmptyState,
   DataListErrorState,
   DataListLoadingState,
 } from '@/components/ui/datalist';
+import {
+  DataListCell,
+  DataListRow,
+  DataListText,
+} from '@/components/ui/datalist';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { SearchButton } from '@/components/ui/search-button';
 import { SearchInput } from '@/components/ui/search-input';
 
-import { LeavesDataList } from '@/features/leave/leaves-data-list';
 import {
   PageLayout,
   PageLayoutContent,
@@ -102,11 +112,137 @@ export const PageLeavesReview = (props: { search: TODO }) => {
               <DataListEmptyState searchTerm={searchTerm} />
             ))
             .match('default', ({ items, total }) => (
-              <LeavesDataList
-                items={items}
-                leavesQuery={leavesQuery}
-                total={total}
-              />
+              <>
+                <DataListRow>
+                  <DataListCell>
+                    <DataListText>Utilisateur</DataListText>
+                  </DataListCell>
+                  <DataListCell className="items-center">
+                    <DataListText>Dates</DataListText>
+                  </DataListCell>
+                  <DataListCell className="items-center">
+                    <DataListText>Type</DataListText>
+                  </DataListCell>
+                  <DataListCell className="items-center">
+                    <DataListText>Reviewers</DataListText>
+                  </DataListCell>
+                  <DataListCell className="items-center">
+                    <DataListText>Statut</DataListText>
+                  </DataListCell>
+                  <DataListCell className="items-center">
+                    <DataListText>Action</DataListText>
+                  </DataListCell>
+                </DataListRow>
+                {items.map((item) => (
+                  <Link
+                    // TODO : change it to link to leave id
+                    to="/manager/users/$id"
+                    params={{ id: item.id }}
+                    key={item.id}
+                  >
+                    <DataListRow withHover className="group">
+                      <DataListCell className="flex flex-row items-center justify-start gap-2">
+                        <Avatar>
+                          <AvatarFallback
+                            variant="boring"
+                            name={item.user?.name ?? ''}
+                          />
+                        </Avatar>
+                        <DataListText>{item.user?.name ?? ''}</DataListText>
+                      </DataListCell>
+                      <DataListCell className="items-center">
+                        <DataListText className="font-medium">
+                          Du {dayjs(item.fromDate).format('DD MMM YYYY')}
+                          <span className="absolute inset-0" />
+                        </DataListText>
+                        <DataListText className="font-medium">
+                          au {dayjs(item.toDate).format('DD MMM YYYY')}
+                          <span className="absolute inset-0" />
+                        </DataListText>
+                      </DataListCell>
+                      <DataListCell>
+                        <Badge variant="secondary" className="uppercase">
+                          {item.type}
+                        </Badge>
+                      </DataListCell>
+                      <DataListCell className="flex flex-row">
+                        {item.reviewers.map((reviewer, index) => (
+                          <Avatar
+                            key={reviewer.id}
+                            className={cn('w-6', index !== 0 && '-ml-2')}
+                          >
+                            <AvatarFallback
+                              variant="boring"
+                              name={reviewer.name ?? ''}
+                            />
+                          </Avatar>
+                        ))}
+                      </DataListCell>
+                      <DataListCell>
+                        <Badge
+                          className="uppercase"
+                          variant={match(item.status)
+                            .returnType<
+                              React.ComponentProps<typeof Badge>['variant']
+                            >()
+                            .with(
+                              P.union('pending', 'pending-manager'),
+                              () => 'warning'
+                            )
+                            .with('approved', () => 'positive')
+                            .with('refused', () => 'negative')
+                            .with('cancelled', () => 'secondary')
+                            .exhaustive()}
+                        >
+                          {item.status}
+                        </Badge>
+                      </DataListCell>
+                      <DataListCell className="flex flex-row gap-1">
+                        <Button
+                          data-action
+                          variant="secondary"
+                          size="icon-sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                        >
+                          <CheckIcon />
+                        </Button>
+                        <Button
+                          data-action
+                          variant="destructive-secondary"
+                          size="icon-sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                          }}
+                        >
+                          <XIcon />
+                        </Button>
+                      </DataListCell>
+                    </DataListRow>
+                  </Link>
+                ))}
+                <DataListRow>
+                  <DataListCell>
+                    <Button
+                      size="xs"
+                      variant="secondary"
+                      disabled={!leavesQuery.hasNextPage}
+                      onClick={() => leavesQuery.fetchNextPage()}
+                      loading={leavesQuery.isFetchingNextPage}
+                    >
+                      Voir plus
+                    </Button>
+                  </DataListCell>
+                  <DataListCell>
+                    <DataListText className="text-xs text-muted-foreground">
+                      {items.length} / {total} éléments
+                    </DataListText>
+                  </DataListCell>
+                </DataListRow>
+              </>
             ))
             .exhaustive()}
         </DataList>

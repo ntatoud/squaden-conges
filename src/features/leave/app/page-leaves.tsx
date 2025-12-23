@@ -5,6 +5,7 @@ import { PlusIcon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
 
+import { Button } from '@/components/ui/button';
 import {
   DataList,
   DataListEmptyState,
@@ -21,7 +22,6 @@ import {
   PageLayoutContent,
   PageLayoutTopBar,
 } from '@/layout/app/page-layout';
-import { Button } from '@/components/ui/button';
 
 export const PageLeaves = (props: { search: TODO }) => {
   const router = useRouter();
