@@ -1,7 +1,7 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Link, useRouter } from '@tanstack/react-router';
-import { CheckIcon, PlusIcon, XIcon } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
+import { CheckIcon, XIcon } from 'lucide-react';
 import { match, P } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
@@ -22,9 +22,6 @@ import {
   DataListRow,
   DataListText,
 } from '@/components/ui/datalist';
-import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
-import { SearchButton } from '@/components/ui/search-button';
-import { SearchInput } from '@/components/ui/search-input';
 
 import { ReviewModal } from '@/features/leave/review-modal';
 import {
@@ -35,18 +32,6 @@ import {
 import { DateRangeDisplay } from '@/utils/dates';
 
 export const PageLeavesReview = (props: { search: TODO }) => {
-  const router = useRouter();
-
-  const searchInputProps = {
-    value: props.search.searchTerm ?? '',
-    onChange: (value: string) =>
-      router.navigate({
-        to: '.',
-        search: { searchTerm: value },
-        replace: true,
-      }),
-  };
-
   const leavesQuery = useInfiniteQuery(
     orpc.leave.getAllReview.infiniteOptions({
       input: (cursor: string | undefined) => ({
@@ -78,30 +63,17 @@ export const PageLeavesReview = (props: { search: TODO }) => {
   return (
     <PageLayout>
       <PageLayoutTopBar
-        rightActions={
-          <ResponsiveIconButton
-            asChild
-            label={'Nouveau'}
-            variant="secondary"
-            size="sm"
-          >
-            <Link to="/app/leaves/new">
-              <PlusIcon />
-            </Link>
-          </ResponsiveIconButton>
+        leftActions={
+          <div className="flex items-center gap-4">
+            <Button asChild variant="ghost">
+              <Link to="/app/leaves">Tous les congés</Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link to="/app/leaves/me">Mes congés</Link>
+            </Button>
+          </div>
         }
-      >
-        <SearchButton
-          {...searchInputProps}
-          className="-mx-2 md:hidden"
-          size="icon-sm"
-        />
-        <SearchInput
-          {...searchInputProps}
-          size="sm"
-          className="max-w-2xs max-md:hidden"
-        />
-      </PageLayoutTopBar>
+      />
       <PageLayoutContent className="pb-20">
         <DataList>
           {ui

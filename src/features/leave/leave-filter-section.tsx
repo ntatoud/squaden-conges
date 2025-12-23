@@ -16,47 +16,55 @@ export const LeaveFilterSection = () => {
   );
 
   return (
-    <div className="flex flex-col gap-3">
-      <MultiSelect
-        options={LEAVE_TYPES}
-        placeholder="Types"
-        withClearButton
-        onChange={(values) =>
-          setQueryStates({
-            types: values.map((value) => value.id as LeaveType),
-          })
-        }
-      />
-      <div className="flex gap-4">
-        <DatePicker
-          value={fromDate ? dayjs(fromDate).toDate() : null}
-          onChange={(value) =>
+    <div className="mb-8 flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <label className="text-sm">Types de congés</label>
+        <MultiSelect
+          options={LEAVE_TYPES}
+          withClearButton
+          onChange={(values) =>
             setQueryStates({
-              fromDate: dayjs(value).format(STANDARD_DATE_FORMAT),
-            })
-          }
-        />
-
-        <DatePicker
-          value={toDate ? dayjs(toDate).toDate() : null}
-          onChange={(value) =>
-            setQueryStates({
-              toDate: dayjs(value).format(STANDARD_DATE_FORMAT),
+              types: values.map((value) => value.id as LeaveType),
             })
           }
         />
       </div>
-
-      <MultiSelect
-        options={LEAVE_STATUS}
-        placeholder="Status"
-        withClearButton
-        onChange={(values) =>
-          setQueryStates({
-            statuses: values.map((value) => value.id as LeaveStatus),
-          })
-        }
-      />
+      <div className="flex gap-4">
+        <div className="flex flex-1 flex-col gap-2">
+          <label className="text-sm">Date de début</label>
+          <DatePicker
+            value={fromDate ? dayjs(fromDate).toDate() : null}
+            onChange={(value) =>
+              setQueryStates({
+                fromDate: dayjs(value).format(STANDARD_DATE_FORMAT),
+              })
+            }
+          />
+        </div>
+        <div className="flex flex-1 flex-col gap-2">
+          <label className="text-sm">Date de fin</label>
+          <DatePicker
+            value={toDate ? dayjs(toDate).toDate() : null}
+            onChange={(value) =>
+              setQueryStates({
+                toDate: dayjs(value).format(STANDARD_DATE_FORMAT),
+              })
+            }
+          />
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="text-sm">Statuts des congés</label>
+        <MultiSelect
+          options={LEAVE_STATUS}
+          withClearButton
+          onChange={(values) =>
+            setQueryStates({
+              statuses: values.map((value) => value.id as LeaveStatus),
+            })
+          }
+        />
+      </div>
     </div>
   );
 };

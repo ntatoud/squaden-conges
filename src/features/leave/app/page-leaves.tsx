@@ -75,24 +75,28 @@ export const PageLeaves = () => {
             </Link>
           </ResponsiveIconButton>
         }
+        leftActions={
+          <div className="flex items-center gap-4">
+            <Button asChild variant="ghost">
+              <Link to="/app/leaves/me">Mes congés</Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link to="/app/leaves/review">Congés à review</Link>
+            </Button>
+          </div>
+        }
       />
 
       <PageLayoutContent className="pb-20">
-        <div>
-          <Button asChild variant="secondary" className="mb-4">
-            <Link to="/app/leaves/review">Review congés</Link>
-          </Button>
-          <Button asChild variant="secondary" className="mb-4">
-            <Link to="/app/leaves/me">Mes congés</Link>
-          </Button>
-        </div>
+        <Button
+          variant="secondary"
+          onClick={() => setQueryStates(null)}
+          className="self-end"
+          size="sm"
+        >
+          Réinitialiser les filtres
+        </Button>
         <LeaveFilterSection />
-
-        <div className="mt-2 mb-6 flex gap-2">
-          <Button variant="secondary" onClick={() => setQueryStates(null)}>
-            Réinitialiser les filtres
-          </Button>
-        </div>
 
         <DataList>
           {ui
