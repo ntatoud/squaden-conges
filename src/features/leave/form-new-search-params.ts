@@ -1,7 +1,17 @@
 import dayjs from 'dayjs';
-import { createStandardSchemaV1, parseAsString, parseAsStringEnum } from 'nuqs';
+import {
+  createStandardSchemaV1,
+  parseAsArrayOf,
+  parseAsString,
+  parseAsStringEnum,
+} from 'nuqs';
 
-import { LeaveType, zLeaveType } from '@/features/leave/schema';
+import {
+  LeaveStatus,
+  LeaveType,
+  zLeaveStatus,
+  zLeaveType,
+} from '@/features/leave/schema';
 import { STANDARD_DATE_FORMAT } from '@/utils/dates';
 
 export const formNewSearchParams = {
@@ -15,3 +25,14 @@ export const formNewSearchParams = {
 export const validateSearch = createStandardSchemaV1(formNewSearchParams, {
   partialOutput: true,
 });
+
+export const leaveFilterSearchParams = {
+  fromDate: parseAsString.withDefault(dayjs().format(STANDARD_DATE_FORMAT)),
+  toDate: parseAsString.withDefault(dayjs().format(STANDARD_DATE_FORMAT)),
+  types: parseAsArrayOf<LeaveType>(
+    parseAsStringEnum<LeaveType>(zLeaveType.options)
+  ).withDefault(['sickness']),
+  statuses: parseAsArrayOf<LeaveStatus>(
+    parseAsStringEnum<LeaveStatus>(zLeaveStatus.options)
+  ).withDefault(['pending']),
+};

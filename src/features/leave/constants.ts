@@ -1,4 +1,4 @@
-import { LeaveType } from '@/features/leave/schema';
+import { LeaveStatus, LeaveType } from '@/features/leave/schema';
 
 export const LEAVE_TYPES = [
   {
@@ -18,3 +18,26 @@ export const LEAVE_TYPES = [
     label: 'Au bled',
   },
 ] as const satisfies Array<{ id: LeaveType; label: React.ReactNode }>;
+
+export const LEAVE_STATUS = [
+  {
+    id: 'approved',
+    label: 'Confirmé',
+  },
+  {
+    id: 'cancelled',
+    label: 'Annulé',
+  },
+  {
+    id: 'pending',
+    label: 'En attente',
+  },
+  {
+    id: 'pending-manager',
+    label: 'En attente du manager',
+  },
+  {
+    id: 'refused',
+    label: 'Refusé',
+  },
+] as const satisfies Array<{ id: LeaveStatus; label: React.ReactNode }>;

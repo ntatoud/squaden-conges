@@ -72,7 +72,27 @@ export default {
         };
       }
 
-      console.log(where);
+      const types = input.filters?.type;
+
+      if (types?.length) {
+        where = {
+          ...where,
+          type: {
+            in: types,
+          },
+        };
+      }
+
+      const statuses = input.filters?.status;
+
+      if (statuses?.length) {
+        where = {
+          ...where,
+          status: {
+            in: statuses,
+          },
+        };
+      }
 
       const [total, items] = await Promise.all([
         context.db.leave.count({
