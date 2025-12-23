@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 
@@ -16,6 +16,7 @@ import { Card, CardContent } from '@/components/ui/card';
 
 import { LEAVE_TYPES } from '@/features/leave/constants';
 import { zFormFieldsLeave } from '@/features/leave/schema';
+import { MOCKED_PROJECTS } from '@/features/projects/mocks';
 import {
   PageLayout,
   PageLayoutContent,
@@ -40,6 +41,7 @@ export const PageLeaveNew = () => {
     },
   });
 
+  const usersQuery = useQuery(orpc.user.getAll.queryOptions({}));
   const leaveCreate = useMutation(
     orpc.leave.create.mutationOptions({
       onSuccess: async () => {
@@ -60,6 +62,7 @@ export const PageLeaveNew = () => {
     })
   );
 
+  console.log(form.getValues('reviewers'));
   return (
     <>
       <PreventNavigation shouldBlock={form.formState.isDirty} />
@@ -104,9 +107,9 @@ export const PageLeaveNew = () => {
                       Pendant mes congés, je travaillerai sur
                     </FormFieldHelper>
                     <FormFieldController
-                      type="select"
+                      type="multi-select"
+                      options={MOCKED_PROJECTS}
                       allowCustomValue
-                      options={[]}
                       control={form.control}
                       name="projects"
                     />
@@ -120,25 +123,41 @@ export const PageLeaveNew = () => {
                     />
                   </FormField>
                   <FormField>
-                    <FormFieldLabel>Personnes à prévenir</FormFieldLabel>
-                    <FormFieldController
-                      type="select"
-                      allowCustomValue
-                      options={[]}
-                      control={form.control}
-                      name="reviewers"
-                    />
+                    <FormFieldLabel>Personnes à prévenir</FormFieldLabel>{' '}
+                    {usersQuery.data?.items && (
+                      <FormFieldController
+                        type="multi-select"
+                        options={
+                          usersQuery.data.items.map((user) => ({
+                            id: user.id,
+                            label: user.name ?? user.email,
+                          })) ?? []
+                        }
+                        control={form.control}
+                        name="reviewers"
+                      />
+                    )}
                   </FormField>
 
                   <FormField>
                     <FormFieldLabel>Dates</FormFieldLabel>
                     <div className="flex flex-row gap-8">
                       <FormFieldController
+                        calendarProps={{
+                          captionLayout: 'dropdown',
+                          startMonth: new Date(),
+                          endMonth: new Date(2027, 11),
+                        }}
                         type="date"
                         control={form.control}
                         name="fromDate"
                       />
                       <FormFieldController
+                        calendarProps={{
+                          captionLayout: 'dropdown',
+                          startMonth: new Date(),
+                          endMonth: new Date(2027, 11),
+                        }}
                         type="date"
                         control={form.control}
                         name="toDate"

@@ -1,4 +1,5 @@
 import { ORPCError } from '@orpc/client';
+import { z } from 'zod';
 
 import { zFormFieldsLeave, zLeave } from '@/features/leave/schema';
 import { db } from '@/server/db';
@@ -101,7 +102,7 @@ export default {
             projects: input.projects,
             userId: context.user.id,
             reviewers: {
-              connect: input.reviewers,
+              connect: input.reviewers.map((reviewer) => ({ id: reviewer })),
             },
           },
           include: {

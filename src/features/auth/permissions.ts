@@ -20,6 +20,7 @@ const statement = {
 const ac = createAccessControl(statement);
 
 const user = ac.newRole({
+  user: ['list'],
   account: ['update'],
   apps: ['app'],
   book: ['read'],

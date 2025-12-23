@@ -43,5 +43,5 @@ export const zFormFieldsLeave = () =>
       type: true,
     })
     .extend({
-      reviewers: z.array(z.object({ id: zUser().shape.id })),
+      reviewers: z.array(zUser().shape.id),
     });

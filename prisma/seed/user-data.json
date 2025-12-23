@@ -1,0 +1,83 @@
+{
+  "users": [
+    { "name": "Rudy Baer", "email": "rudy@bearstudio.fr" },
+    {
+      "name": "Ivan Dalmet",
+      "email": "ivan@bearstudio.fr"
+    },
+    {
+      "name": "Nhung Duong",
+      "email": "nhung@bearstudio.fr"
+    },
+    {
+      "name": "Yoann Fleury",
+      "email": "yoann@bearstudio.fr"
+    },
+    {
+      "name": "Renan Decamps",
+      "email": "renan@bearstudio.fr"
+    },
+    {
+      "name": "Nicolas Torion",
+      "email": "nicolas@bearstudio.fr"
+    },
+    {
+      "name": "Hugo Pérard",
+      "email": "hugo.perard@bearstudio.fr"
+    },
+    {
+      "name": "Zouhair Mkassmi",
+      "email": "zouhair@bearstudio.fr"
+    },
+    { "name": "Hugo Perez", "email": "hugo.perez@bearstudio.fr" },
+    {
+      "name": "Grégoire Protas",
+      "email": "gregoire@bearstudio.fr"
+    },
+    {
+      "name": "Dylan Campbell",
+      "email": "dylan.campbell@bearstudio.fr"
+    },
+    {
+      "name": "Soraya Benchakroune",
+      "email": "soraya@bearstudio.fr"
+    },
+    {
+      "name": "Dylan Flandrin",
+      "email": "dylan.flandrin@bearstudio.fr"
+    },
+    {
+      "name": "Héloïse Guillaume",
+      "email": "heloise@bearstudio.fr"
+    },
+    {
+      "name": "Aziz Ouertani",
+      "email": "aziz@bearstudio.fr"
+    },
+    {
+      "name": "Paul SMACQUE",
+      "email": "paul@bearstudio.fr"
+    },
+    {
+      "name": "Hend FELLAH",
+      "email": "hend@bearstudio.fr"
+    },
+    {
+      "name": "Houssem Balti",
+      "email": "houssem@bearstudio.fr"
+    },
+    {
+      "name": "Mariem Mkassmi",
+      "email": "mariem@bearstudio.fr"
+    },
+    {
+      "name": "Marie Douet",
+      "email": "marie@bearstudio.fr"
+    },
+    { "name": "Noé Tatoud", "email": "noe@bearstudio.fr" },
+    {
+      "name": "Jeanne Grenet",
+      "email": "jeanne@bearstudio.fr"
+    }
+  ]
+}
