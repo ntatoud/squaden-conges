@@ -12,8 +12,6 @@ const statement = {
   ...defaultStatements,
   account: ['read', 'update'],
   apps: ['app', 'manager'],
-  book: ['read', 'create', 'update', 'delete'],
-  genre: ['read'],
   leave: ['create', 'update', 'read', 'approve'],
 } as const;
 
@@ -23,8 +21,6 @@ const user = ac.newRole({
   user: ['list'],
   account: ['update'],
   apps: ['app'],
-  book: ['read'],
-  genre: ['read'],
   leave: ['create', 'update', 'read'],
 });
 
@@ -32,8 +28,6 @@ const admin = ac.newRole({
   ...adminAc.statements,
   account: ['update'],
   apps: ['app', 'manager'],
-  book: ['read', 'create', 'update', 'delete'],
-  genre: ['read'],
   leave: ['create', 'update', 'read', 'approve'],
 });
 
