@@ -14,20 +14,16 @@ import {
   DataListErrorState,
   DataListLoadingState,
 } from '@/components/ui/datalist';
-import { Input } from '@/components/ui/input';
-import { MultiSelect } from '@/components/ui/multi-select';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 
 import { leaveFilterSearchParams } from '@/features/leave//form-new-search-params';
-import type { LeaveStatus, LeaveType } from '@/features/leave//schema';
-import { LEAVE_STATUS, LEAVE_TYPES } from '@/features/leave/constants';
+import { LeaveFilterSection } from '@/features/leave/leave-filter-section';
 import { LeavesDataList } from '@/features/leave/leaves-data-list';
 import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
 } from '@/layout/app/page-layout';
-import { DISPLAY_DATE_FORMAT } from '@/utils/dates';
 
 export const PageLeaves = () => {
   const [{ fromDate, toDate, types, statuses }, setQueryStates] =
@@ -42,6 +38,7 @@ export const PageLeaves = () => {
           status: statuses ?? undefined,
           fromDate: fromDate ? dayjs(fromDate).toDate() : undefined,
           toDate: toDate ? dayjs(toDate).toDate() : undefined,
+          exactDates: true,
         },
       }),
       initialPageParam: undefined,
@@ -85,42 +82,7 @@ export const PageLeaves = () => {
           <Link to="/app/leaves/review">Review congés</Link>
         </Button>
 
-        <div className="flex flex-col gap-3">
-          <MultiSelect
-            options={LEAVE_TYPES}
-            placeholder="Types"
-            withClearButton
-            onChange={(values) =>
-              setQueryStates({
-                types: values.map((value) => value.id as LeaveType),
-              })
-            }
-          />
-          <div className="flex gap-4">
-            <Input
-              type="date"
-              value={dayjs(fromDate).format(DISPLAY_DATE_FORMAT)}
-              onChange={(e) => setQueryStates({ fromDate: e.target.value })}
-            />
-
-            <Input
-              type="date"
-              value={dayjs(toDate).format(DISPLAY_DATE_FORMAT)}
-              onChange={(e) => setQueryStates({ toDate: e.target.value })}
-            />
-          </div>
-
-          <MultiSelect
-            options={LEAVE_STATUS}
-            placeholder="Status"
-            withClearButton
-            onChange={(values) =>
-              setQueryStates({
-                statuses: values.map((value) => value.id as LeaveStatus),
-              })
-            }
-          />
-        </div>
+        <LeaveFilterSection />
 
         <div className="mt-2 mb-6 flex gap-2">
           <Button variant="secondary" onClick={() => setQueryStates(null)}>

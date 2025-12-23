@@ -73,4 +73,5 @@ export const zLeaveFilters = () =>
     status: z.array(zLeaveStatus).optional(),
     user: z.array(z.string()).optional(),
     excludedIds: z.array(z.string()).optional(),
+    exactDates: z.boolean().optional(),
   });

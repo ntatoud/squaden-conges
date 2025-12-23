@@ -50,9 +50,16 @@ export default {
       let where: Prisma.LeaveWhereInput = {};
 
       if (from || to) {
-        const windowStart = dayjs(from).subtract(1, 'week').toDate();
-        const windowEnd = dayjs(to).add(1, 'week').toDate();
+        let windowStart: Date | undefined;
+        let windowEnd: Date | undefined;
 
+        if (input.filters?.exactDates) {
+          windowStart = dayjs(from).toDate();
+          windowEnd = dayjs(to).toDate();
+        } else {
+          windowStart = dayjs(from).subtract(1, 'week').toDate();
+          windowEnd = dayjs(to).add(1, 'week').toDate();
+        }
         where = {
           AND: [
             { fromDate: { lte: windowEnd } },
