@@ -35,7 +35,10 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                 <SidebarMenuButton asChild className="h-auto">
                   <Link to="/manager">
                     <span>
-                      <Logo className="w-24 group-data-[collapsible=icon]:w-18" />
+                      <Logo className="w-12 group-data-[collapsible=icon]:w-18" />
+                    </span>
+                    <span className="-ml-1.5 font-mono text-lg font-semibold text-primary">
+                      Congés
                     </span>
                   </Link>
                 </SidebarMenuButton>
