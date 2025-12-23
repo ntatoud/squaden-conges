@@ -12,6 +12,7 @@ import {
   FormFieldLabel,
 } from '@/components/form';
 
+import { authClient } from '@/features/auth/client';
 import { LEAVE_TYPES } from '@/features/leave/constants';
 import { formNewSearchParams } from '@/features/leave/form-new-search-params';
 import { FormFieldsLeave, LeaveType } from '@/features/leave/schema';
@@ -29,6 +30,8 @@ export function FormLeave() {
   const usersQuery = useQuery(orpc.user.getAll.queryOptions({}));
 
   const form = useFormContext<FormFieldsLeave>();
+
+  const { data: currentUser } = authClient.useSession();
   return (
     <div className="flex flex-col gap-4">
       <FormField>
@@ -72,10 +75,12 @@ export function FormLeave() {
           <FormFieldController
             type="multi-select"
             options={
-              usersQuery.data.items.map((user) => ({
-                id: user.id,
-                label: user.name ?? user.email,
-              })) ?? []
+              usersQuery.data.items
+                .filter((item) => item.id !== currentUser?.user.id)
+                .map((user) => ({
+                  id: user.id,
+                  label: user.name ?? user.email,
+                })) ?? []
             }
             control={form.control}
             name="reviewers"

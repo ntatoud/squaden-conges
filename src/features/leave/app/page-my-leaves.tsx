@@ -25,7 +25,6 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
-  PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
 import { DateRangeDisplay } from '@/utils/dates';
 
@@ -68,18 +67,18 @@ export const PageMyLeaves = () => {
             </Link>
           </ResponsiveIconButton>
         }
-      >
-        <PageLayoutTopBarTitle>Mes congés</PageLayoutTopBarTitle>
-      </PageLayoutTopBar>
+        leftActions={
+          <div className="flex items-center gap-4">
+            <Button asChild variant="ghost">
+              <Link to="/app/leaves">Tous les congés</Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link to="/app/leaves/review">Review congés</Link>
+            </Button>
+          </div>
+        }
+      ></PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
-        <div>
-          <Button asChild variant="secondary" className="mb-4">
-            <Link to="/app/leaves/review">Review congés</Link>
-          </Button>
-          <Button asChild variant="secondary" className="mb-4">
-            <Link to="/app/leaves">Consultation</Link>
-          </Button>
-        </div>
         <DataList>
           {ui
             .match('pending', () => <DataListLoadingState />)

@@ -438,7 +438,9 @@ export default {
             userId: context.user.id,
             reviewers: {
               connect:
-                input.reviewers.map((reviewer) => ({ id: reviewer })) ?? [],
+                input.reviewers
+                  .filter((reviewer) => reviewer !== context.user.id)
+                  .map((reviewer) => ({ id: reviewer })) ?? [],
             },
           },
           include: {
