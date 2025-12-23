@@ -77,18 +77,6 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
                   </Link>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                  <Link to="/manager/books">
-                    {({ isActive }) => (
-                      <SidebarMenuButton asChild isActive={isActive}>
-                        <span>
-                          <IconBookOpen />
-                          <span>{t('layout:nav.books')}</span>
-                        </span>
-                      </SidebarMenuButton>
-                    )}
-                  </Link>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
                   <Link to="/manager/leaves">
                     {({ isActive }) => (
                       <SidebarMenuButton asChild isActive={isActive}>
