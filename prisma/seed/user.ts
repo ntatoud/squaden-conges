@@ -1,30 +1,46 @@
-import { faker } from '@faker-js/faker';
-
 import { db } from '@/server/db';
 
 import { emphasis } from './_utils';
+import data from './user-data.json';
 
 export async function createUsers() {
   console.log(`⏳ Seeding users`);
 
-  let createdCounter = 0;
-  const existingCount = await db.user.count();
+  const existingUsers = await db.user.findMany({
+    select: { email: true },
+  });
+  const existingEmails = new Set(
+    existingUsers.map((u) => u.email.toLowerCase())
+  );
 
+  let createdCounter = 0;
+
+  // 1) Seed from JSON (idempotent by email)
   await Promise.all(
-    Array.from({ length: Math.max(0, 98 - existingCount) }, async () => {
+    data.users.map(async ({ name, email }) => {
+      const normalizedEmail = email.toLowerCase();
+
+      if (existingEmails.has(normalizedEmail)) {
+        return;
+      }
+
       await db.user.create({
         data: {
-          name: faker.person.fullName(),
-          email: faker.internet.email().toLowerCase(),
+          name,
+          email: normalizedEmail,
           emailVerified: true,
           role: 'user',
+          onboardedAt: new Date(),
         },
       });
+
+      existingEmails.add(normalizedEmail);
       createdCounter += 1;
     })
   );
 
-  if (!(await db.user.findUnique({ where: { email: 'user@user.com' } }))) {
+  // 3) Ensure special accounts exist (idempotent)
+  if (!existingEmails.has('user@user.com')) {
     await db.user.create({
       data: {
         name: 'User',
@@ -35,9 +51,10 @@ export async function createUsers() {
       },
     });
     createdCounter += 1;
+    existingEmails.add('user@user.com');
   }
 
-  if (!(await db.user.findUnique({ where: { email: 'admin@admin.com' } }))) {
+  if (!existingEmails.has('admin@admin.com')) {
     await db.user.create({
       data: {
         name: 'Admin',
@@ -48,10 +65,11 @@ export async function createUsers() {
       },
     });
     createdCounter += 1;
+    existingEmails.add('admin@admin.com');
   }
 
   console.log(
-    `✅ ${existingCount} existing user 👉 ${createdCounter} users created`
+    `✅ ${existingUsers.length} existing users 👉 ${createdCounter} users created`
   );
   console.log(`👉 Admin connect with: ${emphasis('admin@admin.com')}`);
   console.log(`👉 User connect with: ${emphasis('user@user.com')}`);

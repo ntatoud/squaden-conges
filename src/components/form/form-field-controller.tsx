@@ -14,7 +14,14 @@ import {
   FieldCheckboxGroup,
   FieldCheckboxGroupProps,
 } from '@/components/form/field-checkbox-group';
+import FieldMultiSelect, {
+  FieldMultiSelectProps,
+} from '@/components/form/field-multi-select';
 import { FieldNumber, FieldNumberProps } from '@/components/form/field-number';
+import {
+  FieldTextarea,
+  FieldTextareaProps,
+} from '@/components/form/field-textarea';
 
 import { FieldDate, FieldDateProps } from './field-date';
 import { FieldOtp, FieldOtpProps } from './field-otp';
@@ -67,7 +74,9 @@ export type FormFieldControllerProps<
   | FieldOtpProps<TFieldValues, TName, TTransformedValues>
   | FieldRadioGroupProps<TFieldValues, TName, TTransformedValues>
   | FieldCheckboxProps<TFieldValues, TName, TTransformedValues>
-  | FieldCheckboxGroupProps<TFieldValues, TName, TTransformedValues>;
+  | FieldCheckboxGroupProps<TFieldValues, TName, TTransformedValues>
+  | FieldMultiSelectProps<TFieldValues, TName, TTransformedValues>
+  | FieldTextareaProps<TFieldValues, TName, TTransformedValues>;
 
 export const FormFieldController = <
   TFieldValues extends FieldValues = FieldValues,
@@ -93,6 +102,9 @@ export const FormFieldController = <
       case 'tel':
         return <FieldText {...props} />;
 
+      case 'textarea':
+        return <FieldTextarea {...props} />;
+
       case 'otp':
         return <FieldOtp {...props} />;
 
@@ -113,6 +125,9 @@ export const FormFieldController = <
 
       case 'checkbox-group':
         return <FieldCheckboxGroup {...props} />;
+
+      case 'multi-select':
+        return <FieldMultiSelect {...props} />;
       // -- ADD NEW FIELD COMPONENT HERE --
     }
   };

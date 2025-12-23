@@ -1,6 +1,8 @@
+import { ORPCError } from '@orpc/client';
 import { z } from 'zod';
 
-import { zLeave } from '@/features/leave/schema';
+import { zFormFieldsLeave, zLeave } from '@/features/leave/schema';
+import { db } from '@/server/db';
 import { Prisma } from '@/server/db/generated/client';
 import { protectedProcedure } from '@/server/orpc';
 
@@ -77,4 +79,50 @@ export default {
   review: {},
 
   reviewAsManager: {},
+
+  create: protectedProcedure({
+    permission: {
+      leave: ['create'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/leaves',
+      tags,
+    })
+    .input(zFormFieldsLeave())
+    .output(zLeave())
+    .handler(async ({ input, context }) => {
+      try {
+        const leave = await db.leave.create({
+          data: {
+            fromDate: input.fromDate,
+            toDate: input.toDate,
+            type: input.type,
+            projects: input.projects,
+            userId: context.user.id,
+            reviewers: {
+              connect: input.reviewers.map((reviewer) => ({ id: reviewer })),
+            },
+          },
+          include: {
+            reviewers: true,
+          },
+        });
+
+        return zLeave().parse(leave);
+      } catch (error: unknown) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          throw new ORPCError('CONFLICT', {
+            data: {
+              target: error.meta?.target,
+            },
+          });
+        }
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
 };

@@ -83,10 +83,7 @@ export const PageLeaves = (props: { search: TODO }) => {
             variant="secondary"
             size="sm"
           >
-            <Link
-              // TODO : change it to link to leave creation
-              to="/manager/books/new"
-            >
+            <Link to="/app/leaves/new">
               <PlusIcon />
             </Link>
           </ResponsiveIconButton>
