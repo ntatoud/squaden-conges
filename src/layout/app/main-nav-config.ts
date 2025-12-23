@@ -30,19 +30,19 @@ export const MAIN_NAV_LINKS = [
     },
   } as const,
   {
-    labelTranslationKey: 'layout:nav.account',
-    icon: IconUserCircleDuotone,
-    iconActive: IconUserCircleFill,
-    linkOptions: {
-      to: '/app/account',
-    },
-  } as const,
-  {
     label: 'Congés',
     icon: TreePalm,
     iconActive: TreePalm,
     linkOptions: {
       to: '/app/leaves',
+    },
+  } as const,
+  {
+    labelTranslationKey: 'layout:nav.account',
+    icon: IconUserCircleDuotone,
+    iconActive: IconUserCircleFill,
+    linkOptions: {
+      to: '/app/account',
     },
   } as const,
 ] satisfies Array<{
