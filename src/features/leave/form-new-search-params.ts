@@ -27,12 +27,12 @@ export const validateSearch = createStandardSchemaV1(formNewSearchParams, {
 });
 
 export const leaveFilterSearchParams = {
-  fromDate: parseAsString.withDefault(dayjs().format(STANDARD_DATE_FORMAT)),
-  toDate: parseAsString.withDefault(dayjs().format(STANDARD_DATE_FORMAT)),
+  fromDate: parseAsString,
+  toDate: parseAsString,
   types: parseAsArrayOf<LeaveType>(
     parseAsStringEnum<LeaveType>(zLeaveType.options)
-  ).withDefault(['sickness']),
+  ),
   statuses: parseAsArrayOf<LeaveStatus>(
     parseAsStringEnum<LeaveStatus>(zLeaveStatus.options)
-  ).withDefault(['pending']),
+  ),
 };

@@ -38,10 +38,10 @@ export const PageLeaves = () => {
       input: (cursor: string | undefined) => ({
         cursor,
         filters: {
-          type: types,
-          status: statuses,
-          fromDate: dayjs(fromDate).toDate(),
-          toDate: dayjs(toDate).toDate(),
+          type: types ?? undefined,
+          status: statuses ?? undefined,
+          fromDate: fromDate ? dayjs(fromDate).toDate() : undefined,
+          toDate: toDate ? dayjs(toDate).toDate() : undefined,
         },
       }),
       initialPageParam: undefined,
