@@ -9,8 +9,10 @@ import { LeaveStatus } from '@/features/leave/schema';
 export function BadgeLeaveStatus({
   status,
   className,
+  statusLabel,
 }: {
   status: LeaveStatus;
+  statusLabel: string;
   className?: string;
 }) {
   return (
@@ -24,7 +26,7 @@ export function BadgeLeaveStatus({
         .with('cancelled', () => 'secondary')
         .exhaustive()}
     >
-      {status}
+      {statusLabel}
     </Badge>
   );
 }

@@ -13,7 +13,7 @@ import {
 } from '@/components/form';
 
 import { authClient } from '@/features/auth/client';
-import { LEAVE_TYPES } from '@/features/leave/constants';
+import { LEAVE_TYPES, TIME_SLOTS } from '@/features/leave/constants';
 import { formNewSearchParams } from '@/features/leave/form-new-search-params';
 import { FormFieldsLeave, LeaveType } from '@/features/leave/schema';
 import { MOCKED_PROJECTS } from '@/features/projects/mocks';
@@ -93,60 +93,99 @@ export function FormLeave() {
         <div className="flex flex-row gap-8">
           <Watch
             control={form.control}
-            names={['fromDate', 'toDate']}
-            render={([fromDateForm, toDateForm]) => {
+            names={['fromDate', 'toDate', 'timeSlot']}
+            render={([fromDateForm, toDateForm, timeSlot]) => {
+              const isSingleDay =
+                !!fromDateForm &&
+                !!toDateForm &&
+                dayjs(fromDateForm).isSame(toDateForm, 'day');
+
+              if (isSingleDay && (!timeSlot || timeSlot === undefined)) {
+                form.setValue('timeSlot', 'full-day', {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }
+
+              if (!isSingleDay && timeSlot && timeSlot !== 'full-day') {
+                form.setValue('timeSlot', 'full-day', {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+              }
+
               return (
-                <>
-                  <FormFieldController
-                    calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
-                    type="date"
-                    onChange={(v) => {
-                      if (!v) {
-                        setQueryStates({
-                          fromDate: null,
-                        });
-                        return;
-                      }
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-row gap-8">
+                    <FormFieldController
+                      calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
+                      type="date"
+                      onChange={(v) => {
+                        if (!v) {
+                          setQueryStates({ fromDate: null });
+                          return;
+                        }
 
-                      if (dayjs(v).isAfter(toDateForm)) {
-                        setQueryStates({
-                          toDate: dayjs(v).format(STANDARD_DATE_FORMAT),
-                        });
-                        form.setValue('toDate', v);
-                      }
-                      setQueryStates({
-                        fromDate: dayjs(v).format(STANDARD_DATE_FORMAT),
-                      });
-                    }}
-                    control={form.control}
-                    name="fromDate"
-                    displayError={false}
-                  />
-                  <FormFieldController
-                    calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
-                    onChange={(v) => {
-                      if (!v) {
-                        setQueryStates({
-                          toDate: null,
-                        });
-                        return;
-                      }
+                        if (dayjs(v).isAfter(toDateForm)) {
+                          setQueryStates({
+                            toDate: dayjs(v).format(STANDARD_DATE_FORMAT),
+                          });
+                          form.setValue('toDate', v);
+                        }
 
-                      if (dayjs(v).isBefore(fromDateForm)) {
                         setQueryStates({
                           fromDate: dayjs(v).format(STANDARD_DATE_FORMAT),
                         });
-                        form.setValue('fromDate', v);
-                      }
-                      setQueryStates({
-                        toDate: dayjs(v).format(STANDARD_DATE_FORMAT),
-                      });
-                    }}
-                    type="date"
-                    control={form.control}
-                    name="toDate"
-                  />
-                </>
+                      }}
+                      control={form.control}
+                      name="fromDate"
+                      displayError={false}
+                    />
+
+                    <FormFieldController
+                      calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
+                      type="date"
+                      onChange={(v) => {
+                        if (!v) {
+                          setQueryStates({ toDate: null });
+                          return;
+                        }
+
+                        if (dayjs(v).isBefore(fromDateForm)) {
+                          setQueryStates({
+                            fromDate: dayjs(v).format(STANDARD_DATE_FORMAT),
+                          });
+                          form.setValue('fromDate', v);
+                        }
+
+                        setQueryStates({
+                          toDate: dayjs(v).format(STANDARD_DATE_FORMAT),
+                        });
+                      }}
+                      control={form.control}
+                      name="toDate"
+                    />
+                  </div>
+
+                  {isSingleDay && (
+                    <FormField className="mt-2">
+                      <FormFieldLabel>Plage horaire</FormFieldLabel>
+                      <FormFieldController
+                        type="radio-group"
+                        control={form.control}
+                        name="timeSlot"
+                        options={TIME_SLOTS.map(({ id, label }) => ({
+                          id,
+                          label,
+                          value: id,
+                        }))}
+                        defaultValue="full-day"
+                        className="flex flex-row gap-3"
+                        size="sm"
+                      />
+                    </FormField>
+                  )}
+                </div>
               );
             }}
           />

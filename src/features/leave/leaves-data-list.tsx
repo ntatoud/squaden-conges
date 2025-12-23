@@ -17,6 +17,7 @@ import { UserAvatar } from '@/features/user/avatar';
 import { FileRoutesByTo } from '@/routeTree.gen';
 import { DateRangeDisplay } from '@/utils/dates';
 
+import { LEAVE_STATUS, LEAVE_TYPES } from './constants';
 import { Leave } from './schema';
 
 type LeavesDataListProps = {
@@ -57,40 +58,51 @@ export const LeavesDataList = ({
           <DataListTextHeader>Statut</DataListTextHeader>
         </DataListCell>
       </DataListRow>
-      {items.map((item) => (
-        <Link to={detailLink} params={{ id: item.id }} key={item.id}>
-          <DataListRow withHover>
-            <DataListCell className="flex flex-row items-center justify-start gap-2">
-              <UserAvatar user={item.user} />
-              <DataListText>{item.user?.name ?? ''}</DataListText>
-            </DataListCell>
-            <DataListCell className="items-center text-sm font-medium">
-              <DateRangeDisplay
-                fromDate={item.fromDate}
-                toDate={item.toDate}
-                shouldBreak
-              />
-            </DataListCell>
-            <DataListCell>
-              <Badge variant="secondary" className="uppercase">
-                {item.type}
-              </Badge>
-            </DataListCell>
-            <DataListCell className="flex flex-row items-center">
-              {item.reviewers.map((reviewer, index) => (
-                <UserAvatar
-                  key={reviewer.id}
-                  user={reviewer}
-                  className={cn('size-6', index !== 0 && '-ml-2')}
+      {items.map((item) => {
+        const leaveStatusLabel =
+          LEAVE_STATUS.find((s) => s.id === item.status)?.label ?? item.status;
+
+        const leaveTypeLabel =
+          LEAVE_TYPES.find((t) => t.id === item.type)?.label ?? item.type;
+
+        return (
+          <Link to={detailLink} params={{ id: item.id }} key={item.id}>
+            <DataListRow withHover>
+              <DataListCell className="flex flex-row items-center justify-start gap-2">
+                <UserAvatar user={item.user} />
+                <DataListText>{item.user?.name ?? ''}</DataListText>
+              </DataListCell>
+              <DataListCell className="items-center text-sm font-medium">
+                <DateRangeDisplay
+                  fromDate={item.fromDate}
+                  toDate={item.toDate}
+                  shouldBreak
                 />
-              ))}
-            </DataListCell>
-            <DataListCell>
-              <BadgeLeaveStatus status={item.status} />
-            </DataListCell>
-          </DataListRow>
-        </Link>
-      ))}
+              </DataListCell>
+              <DataListCell>
+                <Badge variant="secondary" className="uppercase">
+                  {leaveTypeLabel}
+                </Badge>
+              </DataListCell>
+              <DataListCell className="flex flex-row items-center">
+                {item.reviewers.map((reviewer, index) => (
+                  <UserAvatar
+                    key={reviewer.id}
+                    user={reviewer}
+                    className={cn('size-6', index !== 0 && '-ml-2')}
+                  />
+                ))}
+              </DataListCell>
+              <DataListCell>
+                <BadgeLeaveStatus
+                  status={item.status}
+                  statusLabel={leaveStatusLabel}
+                />
+              </DataListCell>
+            </DataListRow>
+          </Link>
+        );
+      })}
       <DataListRow>
         <DataListCell>
           <Button

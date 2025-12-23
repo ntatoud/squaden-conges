@@ -6,7 +6,11 @@ import { Separator } from '@/components/ui/separator';
 
 import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
 import { LeaveBalanceInfos } from '@/features/leave/balance/leave-balance-infos';
-import { LEAVE_TYPES } from '@/features/leave/constants';
+import {
+  LEAVE_STATUS,
+  LEAVE_TYPES,
+  TIME_SLOTS,
+} from '@/features/leave/constants';
 import { Leave } from '@/features/leave/schema';
 import { UserAvatar } from '@/features/user/avatar';
 import { DISPLAY_DATE_FORMAT } from '@/utils/dates';
@@ -29,6 +33,12 @@ export function CardLeaveDetail({ leave }: { leave: Leave }) {
   const leaveTypeLabel =
     LEAVE_TYPES.find((t) => t.id === leave.type)?.label ?? leave.type;
 
+  const leaveStatusLabel =
+    LEAVE_STATUS.find((s) => s.id === leave.status)?.label ?? leave.status;
+
+  const leaveTimeSlotLabel =
+    TIME_SLOTS.find((s) => s.id === leave.timeSlot)?.label ?? leave.timeSlot;
+
   return (
     <>
       <Card>
@@ -43,11 +53,20 @@ export function CardLeaveDetail({ leave }: { leave: Leave }) {
                   <div className="truncate text-base font-semibold">
                     {userName}
                   </div>
-                  <BadgeLeaveStatus status={leave.status} />
+                  <BadgeLeaveStatus
+                    status={leave.status}
+                    statusLabel={leaveStatusLabel}
+                  />
                 </div>
-
-                <div className="mt-1 text-sm text-muted-foreground">
-                  {dateRangeLabel} · {dayCount} jour(s)
+                <div className="flex gap-1">
+                  <div className="mt-1 text-sm text-muted-foreground">
+                    {dateRangeLabel} · {dayCount} jour(s)
+                  </div>
+                  {dayCount === 1 && (
+                    <div className="mt-1 text-sm text-muted-foreground">
+                      {leaveTimeSlotLabel}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

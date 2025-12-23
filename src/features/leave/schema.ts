@@ -19,6 +19,9 @@ export const zLeaveType = z.enum([
   'school-review',
 ]);
 
+export type LeaveTimeSlot = z.infer<typeof zLeaveTimeSlot>;
+export const zLeaveTimeSlot = z.enum(['morning', 'afternoon', 'full-day']);
+
 export type Leave = z.infer<ReturnType<typeof zLeave>>;
 export const zLeave = () =>
   z.object({
@@ -27,6 +30,7 @@ export const zLeave = () =>
     user: zUser().nullish(),
     fromDate: z.date(),
     toDate: z.date(),
+    timeSlot: zLeaveTimeSlot.nullish(),
     reviewers: z.array(zUser()),
     projects: z.array(z.string()),
     projectDeadlines: z.string().nullish(),
@@ -43,6 +47,7 @@ export const zFormFieldsLeave = () =>
     .pick({
       fromDate: true,
       toDate: true,
+      timeSlot: true,
       projects: true,
       projectDeadlines: true,
       type: true,

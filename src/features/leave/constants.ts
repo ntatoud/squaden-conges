@@ -1,4 +1,4 @@
-import { LeaveStatus, LeaveType } from '@/features/leave/schema';
+import { LeaveStatus, LeaveTimeSlot, LeaveType } from '@/features/leave/schema';
 
 export const LEAVE_TYPES = [
   {
@@ -41,3 +41,9 @@ export const LEAVE_STATUS = [
     label: 'Refusé',
   },
 ] as const satisfies Array<{ id: LeaveStatus; label: React.ReactNode }>;
+
+export const TIME_SLOTS = [
+  { id: 'full-day', label: 'Jour entier' },
+  { id: 'morning', label: 'Matin seulement' },
+  { id: 'afternoon', label: 'Après-midi seulement' },
+] as const satisfies Array<{ id: LeaveTimeSlot; label: React.ReactNode }>;

@@ -436,8 +436,10 @@ export default {
           data: {
             fromDate: input.fromDate,
             toDate: input.toDate,
+            timeSlot: input.timeSlot,
             type: input.type,
             projects: input.projects,
+            projectDeadlines: input.projectDeadlines,
             userId: context.user.id,
             reviewers: {
               connect:

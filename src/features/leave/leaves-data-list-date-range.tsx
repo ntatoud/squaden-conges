@@ -18,6 +18,8 @@ import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
 import { UserAvatar } from '@/features/user/avatar';
 import { DateRangeDisplay } from '@/utils/dates';
 
+import { LEAVE_STATUS } from './constants';
+
 export function DataListLeavesForDateRange({
   fromDate,
   toDate,
@@ -66,31 +68,40 @@ export function DataListLeavesForDateRange({
           ))
           .match('default', ({ items }) => (
             <>
-              {items.map((item) => (
-                <Link
-                  to="/app/leaves/$id"
-                  params={{ id: item.id }}
-                  key={item.id}
-                >
-                  <DataListRow withHover>
-                    <DataListCell className="flex flex-row items-center justify-start gap-2">
-                      <UserAvatar user={item.user} />
-                      <DataListText>{item.user?.name ?? ''}</DataListText>
-                    </DataListCell>
-                    <DataListCell className="w-full flex-1 items-center">
-                      <DataListText className="font-medium">
-                        <DateRangeDisplay
-                          fromDate={item.fromDate}
-                          toDate={item.toDate}
+              {items.map((item) => {
+                const leaveStatusLabel =
+                  LEAVE_STATUS.find((s) => s.id === item.status)?.label ??
+                  item.status;
+
+                return (
+                  <Link
+                    to="/app/leaves/$id"
+                    params={{ id: item.id }}
+                    key={item.id}
+                  >
+                    <DataListRow withHover>
+                      <DataListCell className="flex flex-row items-center justify-start gap-2">
+                        <UserAvatar user={item.user} />
+                        <DataListText>{item.user?.name ?? ''}</DataListText>
+                      </DataListCell>
+                      <DataListCell className="w-full flex-1 items-center">
+                        <DataListText className="font-medium">
+                          <DateRangeDisplay
+                            fromDate={item.fromDate}
+                            toDate={item.toDate}
+                          />
+                        </DataListText>
+                      </DataListCell>
+                      <DataListCell>
+                        <BadgeLeaveStatus
+                          status={item.status}
+                          statusLabel={leaveStatusLabel}
                         />
-                      </DataListText>
-                    </DataListCell>
-                    <DataListCell className="">
-                      <BadgeLeaveStatus status={item.status} />
-                    </DataListCell>
-                  </DataListRow>
-                </Link>
-              ))}
+                      </DataListCell>
+                    </DataListRow>
+                  </Link>
+                );
+              })}
             </>
           ))
           .exhaustive()}
