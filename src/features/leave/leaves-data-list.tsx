@@ -52,7 +52,7 @@ export const LeavesDataList = ({
         <DataListCell className="items-center">
           <DataListText>Reviewers</DataListText>
         </DataListCell>
-        <DataListCell className="items-center">
+        <DataListCell className="items-end">
           <DataListText>Statut</DataListText>
         </DataListCell>
       </DataListRow>

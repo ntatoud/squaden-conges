@@ -130,8 +130,8 @@ export const PageLeavesReview = (props: { search: TODO }) => {
                   <DataListCell className="items-center">
                     <DataListText>Statut</DataListText>
                   </DataListCell>
-                  <DataListCell className="items-center">
-                    <DataListText>Action</DataListText>
+                  <DataListCell className="max-w-20">
+                    <DataListText></DataListText>
                   </DataListCell>
                 </DataListRow>
                 {items.map((item) => (
@@ -203,7 +203,7 @@ export const PageLeavesReview = (props: { search: TODO }) => {
                         {item.status}
                       </Badge>
                     </DataListCell>
-                    <DataListCell className="z-10 flex flex-row gap-1">
+                    <DataListCell className="z-10 flex max-w-20 flex-row items-center gap-1">
                       <ReviewModal
                         data-action
                         title="Accepter le congé"
