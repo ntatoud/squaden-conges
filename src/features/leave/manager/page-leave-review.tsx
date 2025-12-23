@@ -2,7 +2,7 @@ import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import { CheckIcon, PlusIcon, XIcon } from 'lucide-react';
+import { CheckIcon, XIcon } from 'lucide-react';
 import { match, P } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
@@ -22,7 +22,6 @@ import {
   DataListRow,
   DataListText,
 } from '@/components/ui/datalist';
-import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 
 import { ReviewModal } from '@/features/leave/review-modal';
 import {
@@ -57,22 +56,7 @@ export const PageLeavesReview = () => {
 
   return (
     <PageLayout>
-      <PageLayoutTopBar
-        actions={
-          <ResponsiveIconButton
-            asChild
-            label={'Nouveau'}
-            variant="secondary"
-            size="sm"
-          >
-            <Link to="/app/leaves/new">
-              <PlusIcon />
-            </Link>
-          </ResponsiveIconButton>
-        }
-      >
-        Demandes de congé à review
-      </PageLayoutTopBar>
+      <PageLayoutTopBar>Demandes de congé à review</PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
         <DataList>
           {ui
@@ -111,7 +95,7 @@ export const PageLeavesReview = () => {
                   >
                     <span className="absolute inset-0 left-0 isolate z-1 flex">
                       <Link
-                        to="/app/leaves/$id"
+                        to="/manager/leaves/$id"
                         params={{ id: item.id }}
                         className="flex-1"
                       />

@@ -24,6 +24,7 @@ export const zUser = () =>
     createdAt: z.date(),
     updatedAt: z.date(),
     onboardedAt: z.date().nullish(),
+    leaveBalance: z.number(),
   });
 
 export type Session = z.infer<ReturnType<typeof zSession>>;

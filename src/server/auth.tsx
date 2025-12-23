@@ -35,7 +35,7 @@ export const auth = betterAuth({
       },
       leaveBalance: {
         type: 'number',
-        defaultValue: 0,
+        defaultValue: 25,
       },
       leavesOwned: {
         type: 'json',

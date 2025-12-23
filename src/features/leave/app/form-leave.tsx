@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useQueryStates } from 'nuqs';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, Watch } from 'react-hook-form';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -86,28 +86,64 @@ export function FormLeave() {
       <FormField>
         <FormFieldLabel>Dates</FormFieldLabel>
         <div className="flex flex-row gap-8">
-          <FormFieldController
-            calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
-            type="date"
-            onChange={(v) => {
-              setQueryStates({
-                fromDate: dayjs(v).format(STANDARD_DATE_FORMAT),
-              });
-            }}
+          <Watch
             control={form.control}
-            name="fromDate"
-            displayError={false}
-          />
-          <FormFieldController
-            calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
-            onChange={(v) => {
-              setQueryStates({
-                toDate: dayjs(v).format(STANDARD_DATE_FORMAT),
-              });
+            names={['fromDate', 'toDate']}
+            render={([fromDateForm, toDateForm]) => {
+              return (
+                <>
+                  <FormFieldController
+                    calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
+                    type="date"
+                    onChange={(v) => {
+                      if (!v) {
+                        setQueryStates({
+                          fromDate: null,
+                        });
+                        return;
+                      }
+
+                      if (dayjs(v).isAfter(toDateForm)) {
+                        setQueryStates({
+                          toDate: dayjs(v).format(STANDARD_DATE_FORMAT),
+                        });
+                        form.setValue('toDate', v);
+                      }
+                      setQueryStates({
+                        fromDate: dayjs(v).format(STANDARD_DATE_FORMAT),
+                      });
+                    }}
+                    control={form.control}
+                    name="fromDate"
+                    displayError={false}
+                  />
+                  <FormFieldController
+                    calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
+                    onChange={(v) => {
+                      if (!v) {
+                        setQueryStates({
+                          toDate: null,
+                        });
+                        return;
+                      }
+
+                      if (dayjs(v).isBefore(fromDateForm)) {
+                        setQueryStates({
+                          fromDate: dayjs(v).format(STANDARD_DATE_FORMAT),
+                        });
+                        form.setValue('fromDate', v);
+                      }
+                      setQueryStates({
+                        toDate: dayjs(v).format(STANDARD_DATE_FORMAT),
+                      });
+                    }}
+                    type="date"
+                    control={form.control}
+                    name="toDate"
+                  />
+                </>
+              );
             }}
-            type="date"
-            control={form.control}
-            name="toDate"
           />
         </div>
       </FormField>

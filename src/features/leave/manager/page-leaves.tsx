@@ -1,7 +1,6 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
-import { PlusIcon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -12,7 +11,6 @@ import {
   DataListErrorState,
   DataListLoadingState,
 } from '@/components/ui/datalist';
-import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 import { SearchButton } from '@/components/ui/search-button';
 import { SearchInput } from '@/components/ui/search-input';
 
@@ -67,20 +65,7 @@ export const PageLeaves = (props: { search: TODO }) => {
 
   return (
     <PageLayout>
-      <PageLayoutTopBar
-        actions={
-          <ResponsiveIconButton
-            asChild
-            label={'Nouveau'}
-            variant="secondary"
-            size="sm"
-          >
-            <Link to="/app/leaves/new">
-              <PlusIcon />
-            </Link>
-          </ResponsiveIconButton>
-        }
-      >
+      <PageLayoutTopBar>
         <PageLayoutTopBarTitle>Congés</PageLayoutTopBarTitle>
         <SearchButton
           {...searchInputProps}

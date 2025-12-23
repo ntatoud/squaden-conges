@@ -4,22 +4,30 @@ import { Link } from '@tanstack/react-router';
 import { PlusIcon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
+import { cn } from '@/lib/tailwind/utils';
 
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DataList,
+  DataListCell,
   DataListEmptyState,
   DataListErrorState,
   DataListLoadingState,
+  DataListRow,
+  DataListText,
 } from '@/components/ui/datalist';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 
-import { LeavesDataList } from '@/features/leave/leaves-data-list';
+import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
 import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
   PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
+import { DateRangeDisplay } from '@/utils/dates';
 
 export const PageMyLeaves = () => {
   const leavesQuery = useInfiniteQuery(
@@ -64,6 +72,14 @@ export const PageMyLeaves = () => {
         <PageLayoutTopBarTitle>Mes congés</PageLayoutTopBarTitle>
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
+        <div>
+          <Button asChild variant="secondary" className="mb-4">
+            <Link to="/app/leaves/review">Review congés</Link>
+          </Button>
+          <Button asChild variant="secondary" className="mb-4">
+            <Link to="/app/leaves">Consultation</Link>
+          </Button>
+        </div>
         <DataList>
           {ui
             .match('pending', () => <DataListLoadingState />)
@@ -72,12 +88,83 @@ export const PageMyLeaves = () => {
             ))
             .match('empty', () => <DataListEmptyState />)
             .match('default', ({ items, total }) => (
-              <LeavesDataList
-                items={items}
-                leavesQuery={leavesQuery}
-                total={total}
-                detailLink="/app/leaves/$id"
-              />
+              <>
+                <DataListRow>
+                  <DataListCell className="max-w-20 items-center">
+                    <DataListText>Type</DataListText>
+                  </DataListCell>
+                  <DataListCell className="items-center">
+                    <DataListText>Dates</DataListText>
+                  </DataListCell>
+                  <DataListCell className="items-center">
+                    <DataListText>Reviewers</DataListText>
+                  </DataListCell>
+                  <DataListCell className="items-end">
+                    <DataListText>Statut</DataListText>
+                  </DataListCell>
+                </DataListRow>
+                {items.map((item) => (
+                  <Link
+                    to="/app/leaves/$id"
+                    params={{ id: item.id }}
+                    key={item.id}
+                  >
+                    <DataListRow withHover className="min-h-12">
+                      <DataListCell className="max-w-20">
+                        <Badge
+                          variant="secondary"
+                          className="mr-auto uppercase"
+                        >
+                          {item.type}
+                        </Badge>
+                      </DataListCell>
+                      <DataListCell className="items-center">
+                        <DataListText className="font-medium">
+                          <DateRangeDisplay
+                            fromDate={item.fromDate}
+                            toDate={item.toDate}
+                          />
+                        </DataListText>
+                        <DataListText className="font-medium"></DataListText>
+                      </DataListCell>
+                      <DataListCell className="flex flex-row">
+                        {item.reviewers.map((reviewer, index) => (
+                          <Avatar
+                            key={reviewer.id}
+                            className={cn('w-6', index !== 0 && '-ml-2')}
+                          >
+                            <AvatarFallback
+                              variant="boring"
+                              name={reviewer.name ?? ''}
+                            />
+                          </Avatar>
+                        ))}
+                      </DataListCell>
+                      <DataListCell>
+                        <BadgeLeaveStatus status={item.status} />
+                      </DataListCell>
+                    </DataListRow>
+                  </Link>
+                ))}
+                <DataListRow>
+                  <DataListCell>
+                    <Button
+                      size="xs"
+                      variant="secondary"
+                      disabled={!leavesQuery.hasNextPage}
+                      onClick={() => leavesQuery.fetchNextPage()}
+                      loading={leavesQuery.isFetchingNextPage}
+                    >
+                      Voir plus
+                    </Button>
+                  </DataListCell>
+                  <DataListCell>
+                    <DataListText className="text-xs text-muted-foreground">
+                      {items.length} / {total} éléments
+                    </DataListText>
+                  </DataListCell>
+                </DataListRow>
+              </>
             ))
             .exhaustive()}
         </DataList>

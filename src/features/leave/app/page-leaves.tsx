@@ -78,10 +78,14 @@ export const PageLeaves = () => {
       />
 
       <PageLayoutContent className="pb-20">
-        <Button asChild variant="secondary" className="mb-4">
-          <Link to="/app/leaves/review">Review congés</Link>
-        </Button>
-
+        <div>
+          <Button asChild variant="secondary" className="mb-4">
+            <Link to="/app/leaves/review">Review congés</Link>
+          </Button>
+          <Button asChild variant="secondary" className="mb-4">
+            <Link to="/app/leaves/me">Mes congés</Link>
+          </Button>
+        </div>
         <LeaveFilterSection />
 
         <div className="mt-2 mb-6 flex gap-2">
@@ -90,9 +94,6 @@ export const PageLeaves = () => {
           </Button>
         </div>
 
-        <Button asChild variant="secondary" className="mb-4">
-          <Link to="/app/leaves/me">Mes congés</Link>
-        </Button>
         <DataList>
           {ui
             .match('pending', () => <DataListLoadingState />)

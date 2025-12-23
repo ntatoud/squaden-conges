@@ -13,7 +13,9 @@ import { Form } from '@/components/form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
+import { authClient } from '@/features/auth/client';
 import { FormLeave } from '@/features/leave/app/form-leave';
+import { LeaveBalanceInfos } from '@/features/leave/balance/leave-balance-infos';
 import { formNewSearchParams } from '@/features/leave/form-new-search-params';
 import { DataListLeavesForDateRange } from '@/features/leave/leaves-data-list-date-range';
 import { zFormFieldsLeave } from '@/features/leave/schema';
@@ -27,6 +29,7 @@ import {
 export const PageLeaveEdit = (props: { params: { id: string } }) => {
   const [{ fromDate, toDate }] = useQueryStates(formNewSearchParams);
 
+  const session = authClient.useSession();
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
@@ -69,6 +72,8 @@ export const PageLeaveEdit = (props: { params: { id: string } }) => {
     })
   );
 
+  const fromDateAsDate = dayjs(fromDate).toDate();
+  const toDateAsDate = dayjs(toDate).toDate();
   return (
     <>
       <Form
@@ -100,9 +105,16 @@ export const PageLeaveEdit = (props: { params: { id: string } }) => {
                   <FormLeave />
                 </CardContent>
               </Card>
+              {!!session.data?.user && (
+                <LeaveBalanceInfos
+                  fromDate={fromDateAsDate}
+                  toDate={toDateAsDate}
+                  balance={session.data?.user.leaveBalance ?? ''}
+                />
+              )}
               <DataListLeavesForDateRange
-                fromDate={dayjs(fromDate).toDate()}
-                toDate={dayjs(toDate).toDate()}
+                fromDate={fromDateAsDate}
+                toDate={toDateAsDate}
                 excludedIds={[props.params.id]}
               />
             </div>

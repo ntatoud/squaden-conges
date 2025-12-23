@@ -1,2 +1,0 @@
-export const DISPLAY_DATE_FORMAT = 'DD MMM YYYY';
-export const STANDARD_DATE_FORMAT = 'YYYY-MM-DD';

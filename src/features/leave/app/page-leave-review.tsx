@@ -1,7 +1,6 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, useRouter } from '@tanstack/react-router';
-import dayjs from 'dayjs';
 import { CheckIcon, PlusIcon, XIcon } from 'lucide-react';
 import { match, P } from 'ts-pattern';
 
@@ -16,6 +15,7 @@ import {
   DataListEmptyState,
   DataListErrorState,
   DataListLoadingState,
+  DataListTextHeader,
 } from '@/components/ui/datalist';
 import {
   DataListCell,
@@ -32,6 +32,7 @@ import {
   PageLayoutContent,
   PageLayoutTopBar,
 } from '@/layout/app/page-layout';
+import { DateRangeDisplay } from '@/utils/dates';
 
 export const PageLeavesReview = (props: { search: TODO }) => {
   const router = useRouter();
@@ -116,23 +117,21 @@ export const PageLeavesReview = (props: { search: TODO }) => {
               <>
                 <DataListRow>
                   <DataListCell>
-                    <DataListText>Utilisateur</DataListText>
+                    <DataListTextHeader>Utilisateur</DataListTextHeader>
                   </DataListCell>
                   <DataListCell className="items-center">
-                    <DataListText>Dates</DataListText>
+                    <DataListTextHeader>Dates</DataListTextHeader>
                   </DataListCell>
                   <DataListCell className="items-center">
-                    <DataListText>Type</DataListText>
+                    <DataListTextHeader>Type</DataListTextHeader>
                   </DataListCell>
                   <DataListCell className="items-center">
-                    <DataListText>Reviewers</DataListText>
+                    <DataListTextHeader>Reviewers</DataListTextHeader>
                   </DataListCell>
                   <DataListCell className="items-center">
-                    <DataListText>Statut</DataListText>
+                    <DataListTextHeader>Statut</DataListTextHeader>
                   </DataListCell>
-                  <DataListCell className="max-w-20">
-                    <DataListText></DataListText>
-                  </DataListCell>
+                  <DataListCell className="max-w-20"></DataListCell>
                 </DataListRow>
                 {items.map((item) => (
                   <DataListRow
@@ -156,15 +155,12 @@ export const PageLeavesReview = (props: { search: TODO }) => {
                       </Avatar>
                       <DataListText>{item.user?.name ?? ''}</DataListText>
                     </DataListCell>
-                    <DataListCell className="items-center">
-                      <DataListText className="font-medium">
-                        Du {dayjs(item.fromDate).format('DD MMM YYYY')}
-                        <span className="absolute inset-0" />
-                      </DataListText>
-                      <DataListText className="font-medium">
-                        au {dayjs(item.toDate).format('DD MMM YYYY')}
-                        <span className="absolute inset-0" />
-                      </DataListText>
+                    <DataListCell className="items-center text-sm font-medium">
+                      <DateRangeDisplay
+                        fromDate={item.fromDate}
+                        toDate={item.toDate}
+                        shouldBreak
+                      />
                     </DataListCell>
                     <DataListCell>
                       <Badge variant="secondary" className="uppercase">

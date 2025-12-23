@@ -1,6 +1,5 @@
 import { InfiniteData, UseInfiniteQueryResult } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import dayjs from 'dayjs';
 
 import { cn } from '@/lib/tailwind/utils';
 
@@ -11,10 +10,12 @@ import {
   DataListCell,
   DataListRow,
   DataListText,
+  DataListTextHeader,
 } from '@/components/ui/datalist';
 
 import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
 import { FileRoutesByTo } from '@/routeTree.gen';
+import { DateRangeDisplay } from '@/utils/dates';
 
 import { Leave } from './schema';
 
@@ -41,19 +42,19 @@ export const LeavesDataList = ({
     <>
       <DataListRow>
         <DataListCell>
-          <DataListText>Utilisateur</DataListText>
+          <DataListTextHeader>Utilisateur</DataListTextHeader>
         </DataListCell>
         <DataListCell className="items-center">
-          <DataListText>Dates</DataListText>
+          <DataListTextHeader>Dates</DataListTextHeader>
         </DataListCell>
         <DataListCell className="items-center">
-          <DataListText>Type</DataListText>
+          <DataListTextHeader>Type</DataListTextHeader>
         </DataListCell>
         <DataListCell className="items-center">
-          <DataListText>Reviewers</DataListText>
+          <DataListTextHeader>Reviewers</DataListTextHeader>
         </DataListCell>
         <DataListCell className="items-end">
-          <DataListText>Statut</DataListText>
+          <DataListTextHeader>Statut</DataListTextHeader>
         </DataListCell>
       </DataListRow>
       {items.map((item) => (
@@ -65,15 +66,12 @@ export const LeavesDataList = ({
               </Avatar>
               <DataListText>{item.user?.name ?? ''}</DataListText>
             </DataListCell>
-            <DataListCell className="items-center">
-              <DataListText className="font-medium">
-                Du {dayjs(item.fromDate).format('DD MMM YYYY')}
-                <span className="absolute inset-0" />
-              </DataListText>
-              <DataListText className="font-medium">
-                au {dayjs(item.toDate).format('DD MMM YYYY')}
-                <span className="absolute inset-0" />
-              </DataListText>
+            <DataListCell className="items-center text-sm font-medium">
+              <DateRangeDisplay
+                fromDate={item.fromDate}
+                toDate={item.toDate}
+                shouldBreak
+              />
             </DataListCell>
             <DataListCell>
               <Badge variant="secondary" className="uppercase">

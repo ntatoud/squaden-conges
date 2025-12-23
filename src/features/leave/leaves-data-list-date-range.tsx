@@ -1,7 +1,6 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import dayjs from 'dayjs';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -17,6 +16,7 @@ import {
 } from '@/components/ui/datalist';
 
 import { BadgeLeaveStatus } from '@/features/leave/badge-leave-status';
+import { DateRangeDisplay } from '@/utils/dates';
 
 export function DataListLeavesForDateRange({
   fromDate,
@@ -84,9 +84,10 @@ export function DataListLeavesForDateRange({
                     </DataListCell>
                     <DataListCell className="w-full flex-1 items-center">
                       <DataListText className="font-medium">
-                        Du {dayjs(item.fromDate).format('DD MMM YYYY')}
-                        &nbsp;au&nbsp;
-                        {dayjs(item.toDate).format('DD MMM YYYY')}
+                        <DateRangeDisplay
+                          fromDate={item.fromDate}
+                          toDate={item.toDate}
+                        />
                       </DataListText>
                     </DataListCell>
                     <DataListCell className="">
