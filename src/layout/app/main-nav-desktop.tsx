@@ -25,9 +25,9 @@ export const MainNavDesktop = () => {
             <Logo className="w-24" />
           </Link>
           <nav className="flex gap-0.5">
-            {MAIN_NAV_LINKS.map(({ labelTranslationKey, ...item }) => (
+            {MAIN_NAV_LINKS.map(({ labelTranslationKey, label, ...item }) => (
               <Item key={item.linkOptions.to} {...item}>
-                {t(labelTranslationKey)}
+                {labelTranslationKey ? t(labelTranslationKey) : label}
               </Item>
             ))}
           </nav>

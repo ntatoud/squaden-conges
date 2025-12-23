@@ -20,8 +20,7 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
-  PageLayoutTopBarTitle,
-} from '@/layout/manager/page-layout';
+} from '@/layout/app/page-layout';
 
 export const PageLeaves = (props: { search: TODO }) => {
   const router = useRouter();
@@ -67,7 +66,7 @@ export const PageLeaves = (props: { search: TODO }) => {
   return (
     <PageLayout>
       <PageLayoutTopBar
-        actions={
+        rightActions={
           <ResponsiveIconButton
             asChild
             label={'Nouveau'}
@@ -80,7 +79,6 @@ export const PageLeaves = (props: { search: TODO }) => {
           </ResponsiveIconButton>
         }
       >
-        <PageLayoutTopBarTitle>Congés</PageLayoutTopBarTitle>
         <SearchButton
           {...searchInputProps}
           className="-mx-2 md:hidden"

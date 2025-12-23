@@ -10,9 +10,8 @@ const tags = ['leaves'];
 
 export default {
   // Filtres pour gérer global / user / reviwers...
-  getAll: {},
 
-  getAllAsManager: protectedProcedure({
+  getAll: protectedProcedure({
     permission: {
       leave: ['read'],
     },
