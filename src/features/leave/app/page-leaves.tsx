@@ -20,8 +20,8 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
-  PageLayoutTopBarTitle,
-} from '@/layout/manager/page-layout';
+} from '@/layout/app/page-layout';
+import { Button } from '@/components/ui/button';
 
 export const PageLeaves = (props: { search: TODO }) => {
   const router = useRouter();
@@ -67,7 +67,7 @@ export const PageLeaves = (props: { search: TODO }) => {
   return (
     <PageLayout>
       <PageLayoutTopBar
-        actions={
+        rightActions={
           <ResponsiveIconButton
             asChild
             label={'Nouveau'}
@@ -80,7 +80,6 @@ export const PageLeaves = (props: { search: TODO }) => {
           </ResponsiveIconButton>
         }
       >
-        <PageLayoutTopBarTitle>Congés</PageLayoutTopBarTitle>
         <SearchButton
           {...searchInputProps}
           className="-mx-2 md:hidden"
@@ -93,6 +92,9 @@ export const PageLeaves = (props: { search: TODO }) => {
         />
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
+        <Button asChild variant="secondary" className="mb-4">
+          <Link to="/app/leaves/review">Review congés</Link>
+        </Button>
         <DataList>
           {ui
             .match('pending', () => <DataListLoadingState />)

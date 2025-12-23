@@ -1,4 +1,5 @@
 import { ValidateLinkOptions } from '@tanstack/react-router';
+import { TreePalm } from 'lucide-react';
 import { FC } from 'react';
 
 import {
@@ -29,6 +30,14 @@ export const MAIN_NAV_LINKS = [
     },
   } as const,
   {
+    label: 'Congés',
+    icon: TreePalm,
+    iconActive: TreePalm,
+    linkOptions: {
+      to: '/app/leaves',
+    },
+  } as const,
+  {
     labelTranslationKey: 'layout:nav.account',
     icon: IconUserCircleDuotone,
     iconActive: IconUserCircleFill,
@@ -37,7 +46,8 @@ export const MAIN_NAV_LINKS = [
     },
   } as const,
 ] satisfies Array<{
-  labelTranslationKey: string;
+  labelTranslationKey?: string;
+  label?: string;
   icon: FC<{ className?: string }>;
   iconActive?: FC<{ className?: string }>;
   linkOptions: ValidateLinkOptions;
