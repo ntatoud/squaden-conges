@@ -35,6 +35,7 @@ import { Route as ManagerLeavesReviewIndexRouteImport } from './routes/manager/l
 import { Route as ManagerLeavesIdIndexRouteImport } from './routes/manager/leaves/$id.index'
 import { Route as AppLeavesReviewIndexRouteImport } from './routes/app/leaves/review.index'
 import { Route as AppLeavesNewIndexRouteImport } from './routes/app/leaves/new.index'
+import { Route as AppLeavesMeIndexRouteImport } from './routes/app/leaves/me.index'
 import { Route as AppLeavesIdIndexRouteImport } from './routes/app/leaves/$id.index'
 import { Route as ApiOpenapiAuthSchemaRouteImport } from './routes/api/openapi/auth.schema'
 import { Route as ApiOpenapiAppSchemaRouteImport } from './routes/api/openapi/app.schema'
@@ -173,6 +174,11 @@ const AppLeavesNewIndexRoute = AppLeavesNewIndexRouteImport.update({
   path: '/leaves/new/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppLeavesMeIndexRoute = AppLeavesMeIndexRouteImport.update({
+  id: '/leaves/me/',
+  path: '/leaves/me/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppLeavesIdIndexRoute = AppLeavesIdIndexRouteImport.update({
   id: '/leaves/$id/',
   path: '/leaves/$id/',
@@ -230,6 +236,7 @@ export interface FileRoutesByFullPath {
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/leaves/$id': typeof AppLeavesIdIndexRoute
+  '/app/leaves/me': typeof AppLeavesMeIndexRoute
   '/app/leaves/new': typeof AppLeavesNewIndexRoute
   '/app/leaves/review': typeof AppLeavesReviewIndexRoute
   '/manager/leaves/$id': typeof ManagerLeavesIdIndexRoute
@@ -261,6 +268,7 @@ export interface FileRoutesByTo {
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/leaves/$id': typeof AppLeavesIdIndexRoute
+  '/app/leaves/me': typeof AppLeavesMeIndexRoute
   '/app/leaves/new': typeof AppLeavesNewIndexRoute
   '/app/leaves/review': typeof AppLeavesReviewIndexRoute
   '/manager/leaves/$id': typeof ManagerLeavesIdIndexRoute
@@ -296,6 +304,7 @@ export interface FileRoutesById {
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/leaves/$id/': typeof AppLeavesIdIndexRoute
+  '/app/leaves/me/': typeof AppLeavesMeIndexRoute
   '/app/leaves/new/': typeof AppLeavesNewIndexRoute
   '/app/leaves/review/': typeof AppLeavesReviewIndexRoute
   '/manager/leaves/$id/': typeof ManagerLeavesIdIndexRoute
@@ -332,6 +341,7 @@ export interface FileRouteTypes {
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/leaves/$id'
+    | '/app/leaves/me'
     | '/app/leaves/new'
     | '/app/leaves/review'
     | '/manager/leaves/$id'
@@ -363,6 +373,7 @@ export interface FileRouteTypes {
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/leaves/$id'
+    | '/app/leaves/me'
     | '/app/leaves/new'
     | '/app/leaves/review'
     | '/manager/leaves/$id'
@@ -397,6 +408,7 @@ export interface FileRouteTypes {
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/leaves/$id/'
+    | '/app/leaves/me/'
     | '/app/leaves/new/'
     | '/app/leaves/review/'
     | '/manager/leaves/$id/'
@@ -605,6 +617,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeavesNewIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/leaves/me/': {
+      id: '/app/leaves/me/'
+      path: '/leaves/me'
+      fullPath: '/app/leaves/me'
+      preLoaderRoute: typeof AppLeavesMeIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/leaves/$id/': {
       id: '/app/leaves/$id/'
       path: '/leaves/$id'
@@ -655,6 +674,7 @@ interface AppRouteRouteChildren {
   AppAccountIndexRoute: typeof AppAccountIndexRoute
   AppLeavesIndexRoute: typeof AppLeavesIndexRoute
   AppLeavesIdIndexRoute: typeof AppLeavesIdIndexRoute
+  AppLeavesMeIndexRoute: typeof AppLeavesMeIndexRoute
   AppLeavesNewIndexRoute: typeof AppLeavesNewIndexRoute
   AppLeavesReviewIndexRoute: typeof AppLeavesReviewIndexRoute
   AppLeavesIdEditIndexRoute: typeof AppLeavesIdEditIndexRoute
@@ -665,6 +685,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppAccountIndexRoute: AppAccountIndexRoute,
   AppLeavesIndexRoute: AppLeavesIndexRoute,
   AppLeavesIdIndexRoute: AppLeavesIdIndexRoute,
+  AppLeavesMeIndexRoute: AppLeavesMeIndexRoute,
   AppLeavesNewIndexRoute: AppLeavesNewIndexRoute,
   AppLeavesReviewIndexRoute: AppLeavesReviewIndexRoute,
   AppLeavesIdEditIndexRoute: AppLeavesIdEditIndexRoute,

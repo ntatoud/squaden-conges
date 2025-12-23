@@ -1,13 +1,10 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import dayjs from 'dayjs';
 import { PlusIcon } from 'lucide-react';
-import { useQueryStates } from 'nuqs';
 
 import { orpc } from '@/lib/orpc/client';
 
-import { Button } from '@/components/ui/button';
 import {
   DataList,
   DataListEmptyState,
@@ -16,30 +13,19 @@ import {
 } from '@/components/ui/datalist';
 import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 
-import { leaveFilterSearchParams } from '@/features/leave//form-new-search-params';
-import { LeaveFilterSection } from '@/features/leave/leave-filter-section';
 import { LeavesDataList } from '@/features/leave/leaves-data-list';
 import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
+  PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
 
-export const PageLeaves = () => {
-  const [{ fromDate, toDate, types, statuses }, setQueryStates] =
-    useQueryStates(leaveFilterSearchParams);
-
+export const PageMyLeaves = () => {
   const leavesQuery = useInfiniteQuery(
-    orpc.leave.getAll.infiniteOptions({
+    orpc.leave.getAllForUser.infiniteOptions({
       input: (cursor: string | undefined) => ({
         cursor,
-        filters: {
-          type: types ?? undefined,
-          status: statuses ?? undefined,
-          fromDate: fromDate ? dayjs(fromDate).toDate() : undefined,
-          toDate: toDate ? dayjs(toDate).toDate() : undefined,
-          exactDates: true,
-        },
       }),
       initialPageParam: undefined,
       maxPages: 10,
@@ -53,7 +39,6 @@ export const PageLeaves = () => {
 
     const items = leavesQuery.data?.pages.flatMap((p) => p.items) ?? [];
     if (!items.length) return set('empty');
-
     return set('default', {
       items,
       total: leavesQuery.data.pages[0]?.total ?? 0,
@@ -75,24 +60,10 @@ export const PageLeaves = () => {
             </Link>
           </ResponsiveIconButton>
         }
-      />
-
+      >
+        <PageLayoutTopBarTitle>Mes congés</PageLayoutTopBarTitle>
+      </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
-        <Button asChild variant="secondary" className="mb-4">
-          <Link to="/app/leaves/review">Review congés</Link>
-        </Button>
-
-        <LeaveFilterSection />
-
-        <div className="mt-2 mb-6 flex gap-2">
-          <Button variant="secondary" onClick={() => setQueryStates(null)}>
-            Réinitialiser les filtres
-          </Button>
-        </div>
-
-        <Button asChild variant="secondary" className="mb-4">
-          <Link to="/app/leaves/me">Mes congés</Link>
-        </Button>
         <DataList>
           {ui
             .match('pending', () => <DataListLoadingState />)
