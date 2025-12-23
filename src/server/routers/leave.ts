@@ -233,9 +233,10 @@ export default {
     .output(zLeave())
     .handler(async ({ context, input }) => {
       context.logger.info('Update leave');
+
       try {
         const leave = await context.db.leave.update({
-          where: { id: input.id },
+          where: { id: input.id, userId: context.user.id },
           data: {
             fromDate: input.fromDate,
             toDate: input.toDate,

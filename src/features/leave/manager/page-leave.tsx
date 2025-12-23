@@ -1,8 +1,7 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { ORPCError } from '@orpc/client';
 import { useQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
-import { PencilLineIcon } from 'lucide-react';
+import { CheckIcon, XIcon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -11,10 +10,9 @@ import { PageError } from '@/components/errors/page-error';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 
-import { authClient } from '@/features/auth/client';
-import { Role } from '@/features/auth/permissions';
 import { CardLeaveDetail } from '@/features/leave/card-leave-detail';
 import { DataListLeavesForDateRange } from '@/features/leave/leaves-data-list-date-range';
+import { ReviewModal } from '@/features/leave/review-modal';
 import {
   PageLayout,
   PageLayoutContent,
@@ -23,8 +21,6 @@ import {
 } from '@/layout/app/page-layout';
 
 export const PageLeave = (props: { params: { id: string } }) => {
-  const session = authClient.useSession();
-
   const leaveQuery = useQuery(
     orpc.leave.getById.queryOptions({ input: { id: props.params.id } })
   );
@@ -41,28 +37,33 @@ export const PageLeave = (props: { params: { id: string } }) => {
     return set('default', { leave: leaveQuery.data });
   });
 
-  const canEditLeave =
-    session.data?.user.id === leaveQuery.data?.user?.id ||
-    authClient.admin.checkRolePermission({
-      role: session.data?.user.role as Role,
-      permissions: {
-        apps: ['manager'],
-      },
-    });
-
   return (
     <PageLayout>
       <PageLayoutTopBar
         leftActions={<BackButton />}
         rightActions={
-          canEditLeave && (
-            <Button asChild size="sm" variant="secondary">
-              <Link to="/app/leaves/$id/edit" params={{ id: props.params.id }}>
-                <PencilLineIcon />
-                Modifier
-              </Link>
-            </Button>
-          )
+          <>
+            <ReviewModal
+              data-action
+              title="Accepter le congé"
+              leaveId={leaveQuery.data?.id ?? ''}
+              isApproved={true}
+            >
+              <Button data-action variant="secondary" size="sm">
+                <CheckIcon /> Accepter
+              </Button>
+            </ReviewModal>
+            <ReviewModal
+              data-action
+              title="Refuser le congé"
+              leaveId={leaveQuery.data?.id ?? ''}
+              isApproved={false}
+            >
+              <Button data-action variant="destructive-secondary" size="sm">
+                <XIcon /> Refuser
+              </Button>
+            </ReviewModal>
+          </>
         }
       >
         <PageLayoutTopBarTitle>Demande de congé</PageLayoutTopBarTitle>
