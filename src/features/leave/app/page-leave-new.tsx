@@ -1,21 +1,25 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
+import dayjs from 'dayjs';
+import { CheckCircle2Icon, Copy } from 'lucide-react';
+import { useQueryStates } from 'nuqs';
 import { useForm } from 'react-hook-form';
 
 import { orpc } from '@/lib/orpc/client';
+import { useClipboard } from '@/hooks/use-clipboard';
 
 import { BackButton } from '@/components/back-button';
 import { Form, FormFieldHelper } from '@/components/form';
 import { FormField } from '@/components/form/form-field';
 import { FormFieldController } from '@/components/form/form-field-controller';
 import { FormFieldLabel } from '@/components/form/form-field-label';
-import { PreventNavigation } from '@/components/prevent-navigation';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 import { LEAVE_TYPES } from '@/features/leave/constants';
-import { zFormFieldsLeave } from '@/features/leave/schema';
+import { formNewSearchParams } from '@/features/leave/form-new-search-params';
+import { LeaveType, zFormFieldsLeave } from '@/features/leave/schema';
 import { MOCKED_PROJECTS } from '@/features/projects/mocks';
 import {
   PageLayout,
@@ -24,7 +28,18 @@ import {
   PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
 
+const ALLOWED_LEAVE_DATES_OPTIONS = {
+  captionLayout: 'dropdown',
+  startMonth: dayjs().subtract(1, 'month').toDate(),
+  endMonth: dayjs().add(2, 'years').toDate(),
+} as const;
+
 export const PageLeaveNew = () => {
+  const [{ fromDate, toDate, type }, setQueryStates] =
+    useQueryStates(formNewSearchParams);
+
+  const { copyToClipboard, isCopied } = useClipboard();
+
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const queryClient = useQueryClient();
@@ -32,11 +47,11 @@ export const PageLeaveNew = () => {
   const form = useForm({
     resolver: zodResolver(zFormFieldsLeave()),
     defaultValues: {
-      fromDate: new Date(),
-      toDate: new Date(),
+      fromDate: new Date(fromDate),
+      toDate: new Date(toDate),
       projects: [],
       reviewers: [],
-      type: 'sickness',
+      type: type,
       projectDeadlines: '',
     },
   });
@@ -62,10 +77,8 @@ export const PageLeaveNew = () => {
     })
   );
 
-  console.log(form.getValues('reviewers'));
   return (
     <>
-      <PreventNavigation shouldBlock={form.formState.isDirty} />
       <Form
         {...form}
         onSubmit={async (values) => {
@@ -76,20 +89,39 @@ export const PageLeaveNew = () => {
           <PageLayoutTopBar
             leftActions={<BackButton />}
             rightActions={
-              <Button
-                size="sm"
-                type="submit"
-                className="min-w-20"
-                loading={leaveCreate.isPending}
-              >
-                Valider
-              </Button>
+              <>
+                <Button
+                  size="sm"
+                  type="submit"
+                  className="min-w-20"
+                  loading={leaveCreate.isPending}
+                >
+                  Valider
+                </Button>
+              </>
             }
           >
             <PageLayoutTopBarTitle>Demande de congé</PageLayoutTopBarTitle>
           </PageLayoutTopBar>
           <PageLayoutContent>
             <Card>
+              <CardHeader className="w-fit">
+                {isCopied ? (
+                  <span className="flex h-8 items-center gap-1 rounded-md bg-positive-100 px-3 font-medium text-positive-800 has-[>span>svg]:px-2.5 max-sm:mx-auto dark:bg-positive-600/30 dark:text-positive-100">
+                    <CheckCircle2Icon className="size-5" /> Copié
+                  </span>
+                ) : (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => {
+                      copyToClipboard(window.location.href);
+                    }}
+                  >
+                    <Copy /> Copier
+                  </Button>
+                )}
+              </CardHeader>
               <CardContent>
                 <div className="flex flex-col gap-4">
                   <FormField>
@@ -98,6 +130,11 @@ export const PageLeaveNew = () => {
                       type="select"
                       control={form.control}
                       options={LEAVE_TYPES}
+                      onChange={(type) => {
+                        setQueryStates({
+                          type: (type?.id as LeaveType) ?? 'sickness',
+                        });
+                      }}
                       name="type"
                     />
                   </FormField>
@@ -143,20 +180,23 @@ export const PageLeaveNew = () => {
                     <FormFieldLabel>Dates</FormFieldLabel>
                     <div className="flex flex-row gap-8">
                       <FormFieldController
-                        calendarProps={{
-                          captionLayout: 'dropdown',
-                          startMonth: new Date(),
-                          endMonth: new Date(2027, 11),
-                        }}
+                        calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
                         type="date"
+                        onChange={(v) => {
+                          setQueryStates({
+                            fromDate: dayjs(v).format('YYYY-MM-DD'),
+                          });
+                        }}
                         control={form.control}
                         name="fromDate"
+                        displayError={false}
                       />
                       <FormFieldController
-                        calendarProps={{
-                          captionLayout: 'dropdown',
-                          startMonth: new Date(),
-                          endMonth: new Date(2027, 11),
+                        calendarProps={ALLOWED_LEAVE_DATES_OPTIONS}
+                        onChange={(v) => {
+                          setQueryStates({
+                            fromDate: dayjs(v).format('YYYY-MM-DD'),
+                          });
                         }}
                         type="date"
                         control={form.control}

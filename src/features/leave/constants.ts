@@ -17,4 +17,4 @@ export const LEAVE_TYPES = [
     id: 'vacation',
     label: 'Au bled',
   },
-] satisfies Array<{ id: LeaveType; label: React.ReactNode }>;
+] as const satisfies Array<{ id: LeaveType; label: React.ReactNode }>;

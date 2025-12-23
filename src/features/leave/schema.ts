@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { zUser } from '@/features/user/schema';
 
 export type LeaveStatus = z.infer<typeof zLeaveStatus>;
-const zLeaveStatus = z.enum([
+export const zLeaveStatus = z.enum([
   'pending',
   'pending-manager',
   'cancelled',
@@ -12,7 +12,12 @@ const zLeaveStatus = z.enum([
 ]);
 
 export type LeaveType = z.infer<typeof zLeaveType>;
-const zLeaveType = z.enum(['sickness', 'kids', 'vacation', 'school-review']);
+export const zLeaveType = z.enum([
+  'sickness',
+  'kids',
+  'vacation',
+  'school-review',
+]);
 
 export type Leave = z.infer<ReturnType<typeof zLeave>>;
 export const zLeave = () =>
@@ -44,4 +49,17 @@ export const zFormFieldsLeave = () =>
     })
     .extend({
       reviewers: z.array(zUser().shape.id),
+    })
+    .superRefine((value, context) => {
+      if (value.fromDate > value.toDate) {
+        context.addIssue({
+          path: ['fromDate'],
+          code: 'custom',
+        });
+        context.addIssue({
+          path: ['toDate'],
+          code: 'custom',
+          message: 'La date de fin des congés ne peut pas être avant le début',
+        });
+      }
     });

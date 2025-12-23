@@ -38,7 +38,7 @@ export const LayoutLogin = (props: {
         {props.footer}
       </div>
       <div className="relative hidden w-full flex-1 items-center justify-center bg-muted lg:flex">
-        <img
+        {/*<img
           src={mascotState === 'error' ? imageError : image}
           alt=""
           className="absolute inset-0 size-full object-cover"
@@ -47,7 +47,7 @@ export const LayoutLogin = (props: {
           src={mascotState === 'error' ? mascotError : mascot}
           alt=""
           className="animate-float-in-space pointer-events-none absolute top-1/2 left-1/2 w-64 -translate-1/2"
-        />
+        />*/}
       </div>
     </div>
   );
