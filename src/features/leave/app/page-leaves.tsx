@@ -110,6 +110,7 @@ export const PageLeaves = (props: { search: TODO }) => {
                 items={items}
                 leavesQuery={leavesQuery}
                 total={total}
+                detailLink="/app/leaves/$id"
               />
             ))
             .exhaustive()}

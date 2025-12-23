@@ -38,12 +38,14 @@ import { Route as ManagerBooksNewIndexRouteImport } from './routes/manager/books
 import { Route as ManagerBooksIdIndexRouteImport } from './routes/manager/books/$id.index'
 import { Route as AppLeavesReviewIndexRouteImport } from './routes/app/leaves/review.index'
 import { Route as AppLeavesNewIndexRouteImport } from './routes/app/leaves/new.index'
+import { Route as AppLeavesIdIndexRouteImport } from './routes/app/leaves/$id.index'
 import { Route as AppBooksIdIndexRouteImport } from './routes/app/books/$id.index'
 import { Route as ApiOpenapiAuthSchemaRouteImport } from './routes/api/openapi/auth.schema'
 import { Route as ApiOpenapiAppSchemaRouteImport } from './routes/api/openapi/app.schema'
 import { Route as ApiDevEmailTemplateRouteImport } from './routes/api/dev.email.$template'
 import { Route as ManagerUsersIdUpdateIndexRouteImport } from './routes/manager/users/$id.update.index'
 import { Route as ManagerBooksIdUpdateIndexRouteImport } from './routes/manager/books/$id.update.index'
+import { Route as AppLeavesIdEditIndexRouteImport } from './routes/app/leaves/$id.edit.index'
 
 const LogoutRoute = LogoutRouteImport.update({
   id: '/logout',
@@ -190,6 +192,11 @@ const AppLeavesNewIndexRoute = AppLeavesNewIndexRouteImport.update({
   path: '/leaves/new/',
   getParentRoute: () => AppRouteRoute,
 } as any)
+const AppLeavesIdIndexRoute = AppLeavesIdIndexRouteImport.update({
+  id: '/leaves/$id/',
+  path: '/leaves/$id/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 const AppBooksIdIndexRoute = AppBooksIdIndexRouteImport.update({
   id: '/books/$id/',
   path: '/books/$id/',
@@ -222,6 +229,11 @@ const ManagerBooksIdUpdateIndexRoute =
     path: '/books/$id/update/',
     getParentRoute: () => ManagerRouteRoute,
   } as any)
+const AppLeavesIdEditIndexRoute = AppLeavesIdEditIndexRouteImport.update({
+  id: '/leaves/$id/edit/',
+  path: '/leaves/$id/edit/',
+  getParentRoute: () => AppRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -251,12 +263,14 @@ export interface FileRoutesByFullPath {
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id': typeof AppBooksIdIndexRoute
+  '/app/leaves/$id': typeof AppLeavesIdIndexRoute
   '/app/leaves/new': typeof AppLeavesNewIndexRoute
   '/app/leaves/review': typeof AppLeavesReviewIndexRoute
   '/manager/books/$id': typeof ManagerBooksIdIndexRoute
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
+  '/app/leaves/$id/edit': typeof AppLeavesIdEditIndexRoute
   '/manager/books/$id/update': typeof ManagerBooksIdUpdateIndexRoute
   '/manager/users/$id/update': typeof ManagerUsersIdUpdateIndexRoute
 }
@@ -285,12 +299,14 @@ export interface FileRoutesByTo {
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id': typeof AppBooksIdIndexRoute
+  '/app/leaves/$id': typeof AppLeavesIdIndexRoute
   '/app/leaves/new': typeof AppLeavesNewIndexRoute
   '/app/leaves/review': typeof AppLeavesReviewIndexRoute
   '/manager/books/$id': typeof ManagerBooksIdIndexRoute
   '/manager/books/new': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
+  '/app/leaves/$id/edit': typeof AppLeavesIdEditIndexRoute
   '/manager/books/$id/update': typeof ManagerBooksIdUpdateIndexRoute
   '/manager/users/$id/update': typeof ManagerUsersIdUpdateIndexRoute
 }
@@ -323,12 +339,14 @@ export interface FileRoutesById {
   '/api/openapi/app/schema': typeof ApiOpenapiAppSchemaRoute
   '/api/openapi/auth/schema': typeof ApiOpenapiAuthSchemaRoute
   '/app/books/$id/': typeof AppBooksIdIndexRoute
+  '/app/leaves/$id/': typeof AppLeavesIdIndexRoute
   '/app/leaves/new/': typeof AppLeavesNewIndexRoute
   '/app/leaves/review/': typeof AppLeavesReviewIndexRoute
   '/manager/books/$id/': typeof ManagerBooksIdIndexRoute
   '/manager/books/new/': typeof ManagerBooksNewIndexRoute
   '/manager/users/$id/': typeof ManagerUsersIdIndexRoute
   '/manager/users/new/': typeof ManagerUsersNewIndexRoute
+  '/app/leaves/$id/edit/': typeof AppLeavesIdEditIndexRoute
   '/manager/books/$id/update/': typeof ManagerBooksIdUpdateIndexRoute
   '/manager/users/$id/update/': typeof ManagerUsersIdUpdateIndexRoute
 }
@@ -362,12 +380,14 @@ export interface FileRouteTypes {
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id'
+    | '/app/leaves/$id'
     | '/app/leaves/new'
     | '/app/leaves/review'
     | '/manager/books/$id'
     | '/manager/books/new'
     | '/manager/users/$id'
     | '/manager/users/new'
+    | '/app/leaves/$id/edit'
     | '/manager/books/$id/update'
     | '/manager/users/$id/update'
   fileRoutesByTo: FileRoutesByTo
@@ -396,12 +416,14 @@ export interface FileRouteTypes {
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id'
+    | '/app/leaves/$id'
     | '/app/leaves/new'
     | '/app/leaves/review'
     | '/manager/books/$id'
     | '/manager/books/new'
     | '/manager/users/$id'
     | '/manager/users/new'
+    | '/app/leaves/$id/edit'
     | '/manager/books/$id/update'
     | '/manager/users/$id/update'
   id:
@@ -433,12 +455,14 @@ export interface FileRouteTypes {
     | '/api/openapi/app/schema'
     | '/api/openapi/auth/schema'
     | '/app/books/$id/'
+    | '/app/leaves/$id/'
     | '/app/leaves/new/'
     | '/app/leaves/review/'
     | '/manager/books/$id/'
     | '/manager/books/new/'
     | '/manager/users/$id/'
     | '/manager/users/new/'
+    | '/app/leaves/$id/edit/'
     | '/manager/books/$id/update/'
     | '/manager/users/$id/update/'
   fileRoutesById: FileRoutesById
@@ -662,6 +686,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppLeavesNewIndexRouteImport
       parentRoute: typeof AppRouteRoute
     }
+    '/app/leaves/$id/': {
+      id: '/app/leaves/$id/'
+      path: '/leaves/$id'
+      fullPath: '/app/leaves/$id'
+      preLoaderRoute: typeof AppLeavesIdIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
     '/app/books/$id/': {
       id: '/app/books/$id/'
       path: '/books/$id'
@@ -704,6 +735,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerBooksIdUpdateIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
+    '/app/leaves/$id/edit/': {
+      id: '/app/leaves/$id/edit/'
+      path: '/leaves/$id/edit'
+      fullPath: '/app/leaves/$id/edit'
+      preLoaderRoute: typeof AppLeavesIdEditIndexRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
   }
 }
 
@@ -713,8 +751,10 @@ interface AppRouteRouteChildren {
   AppBooksIndexRoute: typeof AppBooksIndexRoute
   AppLeavesIndexRoute: typeof AppLeavesIndexRoute
   AppBooksIdIndexRoute: typeof AppBooksIdIndexRoute
+  AppLeavesIdIndexRoute: typeof AppLeavesIdIndexRoute
   AppLeavesNewIndexRoute: typeof AppLeavesNewIndexRoute
   AppLeavesReviewIndexRoute: typeof AppLeavesReviewIndexRoute
+  AppLeavesIdEditIndexRoute: typeof AppLeavesIdEditIndexRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
@@ -723,8 +763,10 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppBooksIndexRoute: AppBooksIndexRoute,
   AppLeavesIndexRoute: AppLeavesIndexRoute,
   AppBooksIdIndexRoute: AppBooksIdIndexRoute,
+  AppLeavesIdIndexRoute: AppLeavesIdIndexRoute,
   AppLeavesNewIndexRoute: AppLeavesNewIndexRoute,
   AppLeavesReviewIndexRoute: AppLeavesReviewIndexRoute,
+  AppLeavesIdEditIndexRoute: AppLeavesIdEditIndexRoute,
 }
 
 const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(

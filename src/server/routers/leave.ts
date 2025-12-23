@@ -136,9 +136,76 @@ export default {
       };
     }),
 
-  getById: {},
+  getById: protectedProcedure({
+    permission: {
+      leave: ['read'],
+    },
+  })
+    .route({
+      method: 'GET',
+      path: '/leaves/{id}',
+      tags,
+    })
+    .input(zLeave().pick({ id: true }))
+    .output(zLeave())
+    .handler(async ({ input, context }) => {
+      context.logger.info('Getting leave');
+      const leave = await context.db.leave.findUnique({
+        where: { id: input.id },
+        include: { user: true, reviewers: true },
+      });
 
-  update: {},
+      if (!leave) {
+        context.logger.warn('Unable to find leave with the provided input');
+        throw new ORPCError('NOT_FOUND');
+      }
+
+      return zLeave().parse(leave);
+    }),
+
+  updateById: protectedProcedure({
+    permission: {
+      book: ['update'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/leaves/{id}',
+      tags,
+    })
+    .input(zFormFieldsLeave().and(z.object({ id: z.string() })))
+    .output(zLeave())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Update leave');
+      try {
+        const leave = await context.db.leave.update({
+          where: { id: input.id },
+          data: {
+            fromDate: input.fromDate,
+            toDate: input.toDate,
+            projects: input.projects,
+            projectDeadlines: input.projectDeadlines,
+            reviewers: {
+              set: input.reviewers.map((reviewer) => ({ id: reviewer })),
+            },
+          },
+        });
+
+        return zLeave().parse(leave);
+      } catch (error: unknown) {
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          throw new ORPCError('CONFLICT', {
+            data: {
+              target: error.meta?.target,
+            },
+          });
+        }
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
 
   review: {},
 

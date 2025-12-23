@@ -14,6 +14,8 @@ import {
   DataListText,
 } from '@/components/ui/datalist';
 
+import { FileRoutesByTo } from '@/routeTree.gen';
+
 import { Leave } from './schema';
 
 type LeavesDataListProps = {
@@ -26,12 +28,14 @@ type LeavesDataListProps = {
     }>
   >;
   total: number;
+  detailLink: keyof FileRoutesByTo;
 };
 
 export const LeavesDataList = ({
   items,
   leavesQuery,
   total,
+  detailLink,
 }: LeavesDataListProps) => {
   return (
     <>
@@ -55,7 +59,7 @@ export const LeavesDataList = ({
       {items.map((item) => (
         <Link
           // TODO : change it to link to leave id
-          to="/manager/users/$id"
+          to={detailLink}
           params={{ id: item.id }}
           key={item.id}
         >

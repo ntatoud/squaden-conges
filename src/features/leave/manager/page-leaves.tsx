@@ -108,6 +108,8 @@ export const PageLeaves = (props: { search: TODO }) => {
                 items={items}
                 leavesQuery={leavesQuery}
                 total={total}
+                // TODO modifier vers
+                detailLink="/app/leaves/$id"
               />
             ))
             .exhaustive()}
