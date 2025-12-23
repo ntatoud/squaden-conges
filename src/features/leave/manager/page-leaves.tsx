@@ -5,6 +5,7 @@ import { PlusIcon } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
 
+import { Button } from '@/components/ui/button';
 import {
   DataList,
   DataListEmptyState,
@@ -93,6 +94,9 @@ export const PageLeaves = (props: { search: TODO }) => {
         />
       </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
+        <Button asChild>
+          <Link to="/manager/leaves/review">Reviews</Link>
+        </Button>
         <DataList>
           {ui
             .match('pending', () => <DataListLoadingState />)
@@ -108,8 +112,7 @@ export const PageLeaves = (props: { search: TODO }) => {
                 items={items}
                 leavesQuery={leavesQuery}
                 total={total}
-                // TODO modifier vers
-                detailLink="/app/leaves/$id"
+                detailLink="/manager/leaves/$id"
               />
             ))
             .exhaustive()}

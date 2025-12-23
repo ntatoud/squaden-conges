@@ -132,7 +132,19 @@ export default {
     .handler(async ({ context, input }) => {
       context.logger.info('Getting leaves from database');
 
-      const where = {
+      const isAdmin = context.user.role === 'admin';
+
+      const whereForAdmin = {
+        status: {
+          notIn: [
+            zLeaveStatus.enum.approved,
+            zLeaveStatus.enum.cancelled,
+            zLeaveStatus.enum.refused,
+          ],
+        },
+      } satisfies Prisma.LeaveWhereInput;
+
+      const whereForUser = {
         AND: [
           {
             reviewers: {
@@ -148,6 +160,8 @@ export default {
           // },
         ],
       } satisfies Prisma.LeaveWhereInput;
+
+      const where = isAdmin ? whereForAdmin : whereForUser;
 
       const [total, items] = await Promise.all([
         context.db.leave.count({
@@ -275,12 +289,19 @@ export default {
     .output(zLeave())
     .handler(async ({ context, input }) => {
       context.logger.info('Update leave');
+
+      const isAdmin = context.user.role === 'admin';
+
+      const approvedStatus = isAdmin
+        ? zLeaveStatus.enum.approved
+        : zLeaveStatus.enum['pending-manager'];
+
       try {
         const leave = await context.db.leave.update({
           where: { id: input.id },
           data: {
             status: input.isApproved
-              ? zLeaveStatus.enum['pending-manager']
+              ? approvedStatus
               : zLeaveStatus.enum.refused,
             statusReason: input.reason,
           },

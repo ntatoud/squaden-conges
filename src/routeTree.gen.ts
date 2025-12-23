@@ -31,6 +31,8 @@ import { Route as ApiOpenapiAppRouteImport } from './routes/api/openapi/app'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth.$'
 import { Route as ManagerUsersNewIndexRouteImport } from './routes/manager/users/new.index'
 import { Route as ManagerUsersIdIndexRouteImport } from './routes/manager/users/$id.index'
+import { Route as ManagerLeavesReviewIndexRouteImport } from './routes/manager/leaves/review.index'
+import { Route as ManagerLeavesIdIndexRouteImport } from './routes/manager/leaves/$id.index'
 import { Route as AppLeavesReviewIndexRouteImport } from './routes/app/leaves/review.index'
 import { Route as AppLeavesNewIndexRouteImport } from './routes/app/leaves/new.index'
 import { Route as AppLeavesIdIndexRouteImport } from './routes/app/leaves/$id.index'
@@ -150,6 +152,17 @@ const ManagerUsersIdIndexRoute = ManagerUsersIdIndexRouteImport.update({
   path: '/users/$id/',
   getParentRoute: () => ManagerRouteRoute,
 } as any)
+const ManagerLeavesReviewIndexRoute =
+  ManagerLeavesReviewIndexRouteImport.update({
+    id: '/leaves/review/',
+    path: '/leaves/review/',
+    getParentRoute: () => ManagerRouteRoute,
+  } as any)
+const ManagerLeavesIdIndexRoute = ManagerLeavesIdIndexRouteImport.update({
+  id: '/leaves/$id/',
+  path: '/leaves/$id/',
+  getParentRoute: () => ManagerRouteRoute,
+} as any)
 const AppLeavesReviewIndexRoute = AppLeavesReviewIndexRouteImport.update({
   id: '/leaves/review/',
   path: '/leaves/review/',
@@ -219,6 +232,8 @@ export interface FileRoutesByFullPath {
   '/app/leaves/$id': typeof AppLeavesIdIndexRoute
   '/app/leaves/new': typeof AppLeavesNewIndexRoute
   '/app/leaves/review': typeof AppLeavesReviewIndexRoute
+  '/manager/leaves/$id': typeof ManagerLeavesIdIndexRoute
+  '/manager/leaves/review': typeof ManagerLeavesReviewIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
   '/app/leaves/$id/edit': typeof AppLeavesIdEditIndexRoute
@@ -248,6 +263,8 @@ export interface FileRoutesByTo {
   '/app/leaves/$id': typeof AppLeavesIdIndexRoute
   '/app/leaves/new': typeof AppLeavesNewIndexRoute
   '/app/leaves/review': typeof AppLeavesReviewIndexRoute
+  '/manager/leaves/$id': typeof ManagerLeavesIdIndexRoute
+  '/manager/leaves/review': typeof ManagerLeavesReviewIndexRoute
   '/manager/users/$id': typeof ManagerUsersIdIndexRoute
   '/manager/users/new': typeof ManagerUsersNewIndexRoute
   '/app/leaves/$id/edit': typeof AppLeavesIdEditIndexRoute
@@ -281,6 +298,8 @@ export interface FileRoutesById {
   '/app/leaves/$id/': typeof AppLeavesIdIndexRoute
   '/app/leaves/new/': typeof AppLeavesNewIndexRoute
   '/app/leaves/review/': typeof AppLeavesReviewIndexRoute
+  '/manager/leaves/$id/': typeof ManagerLeavesIdIndexRoute
+  '/manager/leaves/review/': typeof ManagerLeavesReviewIndexRoute
   '/manager/users/$id/': typeof ManagerUsersIdIndexRoute
   '/manager/users/new/': typeof ManagerUsersNewIndexRoute
   '/app/leaves/$id/edit/': typeof AppLeavesIdEditIndexRoute
@@ -315,6 +334,8 @@ export interface FileRouteTypes {
     | '/app/leaves/$id'
     | '/app/leaves/new'
     | '/app/leaves/review'
+    | '/manager/leaves/$id'
+    | '/manager/leaves/review'
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/app/leaves/$id/edit'
@@ -344,6 +365,8 @@ export interface FileRouteTypes {
     | '/app/leaves/$id'
     | '/app/leaves/new'
     | '/app/leaves/review'
+    | '/manager/leaves/$id'
+    | '/manager/leaves/review'
     | '/manager/users/$id'
     | '/manager/users/new'
     | '/app/leaves/$id/edit'
@@ -376,6 +399,8 @@ export interface FileRouteTypes {
     | '/app/leaves/$id/'
     | '/app/leaves/new/'
     | '/app/leaves/review/'
+    | '/manager/leaves/$id/'
+    | '/manager/leaves/review/'
     | '/manager/users/$id/'
     | '/manager/users/new/'
     | '/app/leaves/$id/edit/'
@@ -552,6 +577,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ManagerUsersIdIndexRouteImport
       parentRoute: typeof ManagerRouteRoute
     }
+    '/manager/leaves/review/': {
+      id: '/manager/leaves/review/'
+      path: '/leaves/review'
+      fullPath: '/manager/leaves/review'
+      preLoaderRoute: typeof ManagerLeavesReviewIndexRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
+    '/manager/leaves/$id/': {
+      id: '/manager/leaves/$id/'
+      path: '/leaves/$id'
+      fullPath: '/manager/leaves/$id'
+      preLoaderRoute: typeof ManagerLeavesIdIndexRouteImport
+      parentRoute: typeof ManagerRouteRoute
+    }
     '/app/leaves/review/': {
       id: '/app/leaves/review/'
       path: '/leaves/review'
@@ -656,6 +695,8 @@ interface ManagerRouteRouteChildren {
   ManagerAccountIndexRoute: typeof ManagerAccountIndexRoute
   ManagerLeavesIndexRoute: typeof ManagerLeavesIndexRoute
   ManagerUsersIndexRoute: typeof ManagerUsersIndexRoute
+  ManagerLeavesIdIndexRoute: typeof ManagerLeavesIdIndexRoute
+  ManagerLeavesReviewIndexRoute: typeof ManagerLeavesReviewIndexRoute
   ManagerUsersIdIndexRoute: typeof ManagerUsersIdIndexRoute
   ManagerUsersNewIndexRoute: typeof ManagerUsersNewIndexRoute
   ManagerUsersIdUpdateIndexRoute: typeof ManagerUsersIdUpdateIndexRoute
@@ -666,6 +707,8 @@ const ManagerRouteRouteChildren: ManagerRouteRouteChildren = {
   ManagerAccountIndexRoute: ManagerAccountIndexRoute,
   ManagerLeavesIndexRoute: ManagerLeavesIndexRoute,
   ManagerUsersIndexRoute: ManagerUsersIndexRoute,
+  ManagerLeavesIdIndexRoute: ManagerLeavesIdIndexRoute,
+  ManagerLeavesReviewIndexRoute: ManagerLeavesReviewIndexRoute,
   ManagerUsersIdIndexRoute: ManagerUsersIdIndexRoute,
   ManagerUsersNewIndexRoute: ManagerUsersNewIndexRoute,
   ManagerUsersIdUpdateIndexRoute: ManagerUsersIdUpdateIndexRoute,
