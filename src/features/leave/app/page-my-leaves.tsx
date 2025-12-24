@@ -172,7 +172,7 @@ export const PageMyLeaves = () => {
                       </DataListCell>
                       <DataListCell className="z-10 max-w-10">
                         {dayjs(item.toDate).isAfter(dayjs()) ||
-                          (item.status === zLeaveStatus.enum.cancelled && (
+                          (item.status !== zLeaveStatus.enum.cancelled && (
                             <ConfirmResponsiveDrawer
                               onConfirm={() =>
                                 cancelLeave.mutate({ id: item.id })
