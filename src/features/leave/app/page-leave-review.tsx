@@ -1,7 +1,7 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { CheckIcon, XIcon } from 'lucide-react';
+import { CheckIcon, ThumbsDown, ThumbsUp } from 'lucide-react';
 import { match, P } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';
@@ -28,6 +28,7 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
+  PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
 import { DateRangeDisplay } from '@/utils/dates';
 
@@ -64,18 +65,11 @@ export const PageLeavesReview = (props: { search: TODO }) => {
 
   return (
     <PageLayout>
-      <PageLayoutTopBar
-        backButton={
-          <div className="flex items-center gap-4">
-            <Button asChild variant="ghost">
-              <Link to="/app/leaves">Tous les congés</Link>
-            </Button>
-            <Button asChild variant="ghost">
-              <Link to="/app/leaves/me">Mes congés</Link>
-            </Button>
-          </div>
-        }
-      />
+      <PageLayoutTopBar>
+        <PageLayoutTopBarTitle>
+          Demandes de congé à review
+        </PageLayoutTopBarTitle>
+      </PageLayoutTopBar>
       <PageLayoutContent className="pb-20">
         <DataList>
           {ui
@@ -177,7 +171,7 @@ export const PageLeavesReview = (props: { search: TODO }) => {
                       <DataListCell className="z-10 flex max-w-20 flex-row items-center gap-1">
                         <ReviewModal
                           data-action
-                          title="Accepter le congé"
+                          title="Donner son accord pour le congé"
                           leaveId={item.id}
                           isApproved={true}
                         >
@@ -186,7 +180,7 @@ export const PageLeavesReview = (props: { search: TODO }) => {
                             variant="secondary"
                             size="icon-sm"
                           >
-                            <CheckIcon />
+                            <ThumbsUp />
                           </Button>
                         </ReviewModal>
                         <ReviewModal
@@ -200,7 +194,7 @@ export const PageLeavesReview = (props: { search: TODO }) => {
                             variant="destructive-secondary"
                             size="icon-sm"
                           >
-                            <XIcon />
+                            <ThumbsDown />
                           </Button>
                         </ReviewModal>
                       </DataListCell>

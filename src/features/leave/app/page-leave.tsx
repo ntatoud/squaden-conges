@@ -2,7 +2,7 @@ import { getUiState } from '@bearstudio/ui-state';
 import { ORPCError } from '@orpc/client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { CheckIcon, PencilLineIcon, XIcon } from 'lucide-react';
+import { CheckIcon, PencilLineIcon, ThumbsDown, ThumbsUp } from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -44,40 +44,55 @@ export const PageLeave = (props: { params: { id: string } }) => {
     return set('default', { leave: leaveQuery.data });
   });
 
-  const canEditLeave =
-    session.data?.user.id === leaveQuery.data?.user?.id ||
-    authClient.admin.checkRolePermission({
-      role: session.data?.user.role as Role,
-      permissions: {
-        apps: ['manager'],
-      },
-    });
+  const canEditLeave = session.data?.user.id === leaveQuery.data?.user?.id;
 
+  const isReviewer = leaveQuery?.data?.reviewers.find(
+    (reviewer) => reviewer.id === session.data?.user.id
+  );
   return (
     <PageLayout>
       <PageLayoutTopBar
         backButton={<BackButton />}
         actions={
           <>
+            {isReviewer && (
+              <>
+                <ReviewModal
+                  data-action
+                  title="Donner son accord pour le congé"
+                  leaveId={leaveQuery.data?.id ?? ''}
+                  isApproved={true}
+                >
+                  <Button data-action variant="secondary" size="icon-sm">
+                    <ThumbsUp />
+                  </Button>
+                </ReviewModal>
+                <ReviewModal
+                  data-action
+                  title="Refuser le congé"
+                  leaveId={leaveQuery.data?.id ?? ''}
+                  isApproved={false}
+                >
+                  <Button
+                    data-action
+                    variant="destructive-secondary"
+                    size="icon-sm"
+                  >
+                    <ThumbsDown />
+                  </Button>
+                </ReviewModal>
+              </>
+            )}
             <WithPermissions permissions={[{ apps: ['manager'] }]}>
               <ReviewModal
                 data-action
                 title="Accepter le congé"
                 leaveId={leaveQuery.data?.id ?? ''}
-                isApproved={true}
+                isApproved
+                isFinal
               >
-                <Button data-action variant="secondary" size="sm">
-                  <CheckIcon /> Accepter
-                </Button>
-              </ReviewModal>
-              <ReviewModal
-                data-action
-                title="Refuser le congé"
-                leaveId={leaveQuery.data?.id ?? ''}
-                isApproved={false}
-              >
-                <Button data-action variant="destructive-secondary" size="sm">
-                  <XIcon /> Refuser
+                <Button data-action variant="default" size="sm">
+                  <CheckIcon /> Valider
                 </Button>
               </ReviewModal>
               <Separator orientation="vertical" className="h-4" />

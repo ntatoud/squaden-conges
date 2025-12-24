@@ -216,7 +216,11 @@ export default {
         .object({
           cursor: z.string().optional(),
           limit: z.coerce.number().int().min(1).max(100).prefault(20),
-          filters: z.any().optional(),
+          filters: z
+            .object({
+              onlyAsReviewer: z.boolean(),
+            })
+            .optional(),
         })
         .prefault({})
     )
@@ -384,6 +388,7 @@ export default {
       z.object({
         id: z.string(),
         isApproved: z.boolean(),
+        isFinal: z.boolean().optional(),
         reason: z.string().nullish(),
       })
     )
@@ -394,10 +399,10 @@ export default {
       const isAdmin = context.user.role === 'admin';
 
       // TODO: Envoie mail si ADMIN
-
-      const approvedStatus = isAdmin
-        ? zLeaveStatus.enum.approved
-        : zLeaveStatus.enum['pending-manager'];
+      const approvedStatus =
+        isAdmin && input.isFinal
+          ? zLeaveStatus.enum.approved
+          : zLeaveStatus.enum['pending-manager'];
 
       try {
         const leave = await context.db.leave.update({

@@ -19,7 +19,7 @@ export const Providers = (props: { children: ReactNode }) => {
       <NuqsAdapter>
         <QueryClientProvider>
           {props.children}
-          <Sonner />
+          <Sonner richColors />
         </QueryClientProvider>
       </NuqsAdapter>
     </ThemeProvider>

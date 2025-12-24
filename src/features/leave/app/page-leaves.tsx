@@ -1,8 +1,6 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Link } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import { PlusIcon } from 'lucide-react';
 import { useQueryStates } from 'nuqs';
 
 import { orpc } from '@/lib/orpc/client';
@@ -14,7 +12,6 @@ import {
   DataListErrorState,
   DataListLoadingState,
 } from '@/components/ui/datalist';
-import { ResponsiveIconButton } from '@/components/ui/responsive-icon-button';
 
 import { leaveFilterSearchParams } from '@/features/leave//form-new-search-params';
 import { LeaveFilterSection } from '@/features/leave/leave-filter-section';
@@ -23,6 +20,7 @@ import {
   PageLayout,
   PageLayoutContent,
   PageLayoutTopBar,
+  PageLayoutTopBarTitle,
 } from '@/layout/app/page-layout';
 
 export const PageLeaves = () => {
@@ -63,30 +61,9 @@ export const PageLeaves = () => {
 
   return (
     <PageLayout>
-      <PageLayoutTopBar
-        actions={
-          <ResponsiveIconButton
-            asChild
-            label={'Nouveau'}
-            variant="secondary"
-            size="sm"
-          >
-            <Link to="/app/leaves/new">
-              <PlusIcon />
-            </Link>
-          </ResponsiveIconButton>
-        }
-        backButton={
-          <div className="flex items-center gap-4">
-            <Button asChild variant="ghost">
-              <Link to="/app/leaves/me">Mes congés</Link>
-            </Button>
-            <Button asChild variant="ghost">
-              <Link to="/app/leaves/review">Congés à review</Link>
-            </Button>
-          </div>
-        }
-      />
+      <PageLayoutTopBar>
+        <PageLayoutTopBarTitle>Consultation des congés</PageLayoutTopBarTitle>
+      </PageLayoutTopBar>
 
       <PageLayoutContent className="pb-20">
         <Button

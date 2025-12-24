@@ -34,6 +34,7 @@ export const ReviewModal = (props: {
   confirmVariant?: ComponentProps<typeof Button>['variant'];
   leaveId: string;
   isApproved: boolean;
+  isFinal?: boolean;
 }) => {
   const [isPending, setIsPending] = useState(false);
   const { close, open, isOpen } = useDisclosure();
@@ -41,13 +42,29 @@ export const ReviewModal = (props: {
   const approveLeave = useMutation(
     orpc.leave.review.mutationOptions({
       onSuccess: async () => {
-        toast.success(
-          props.isApproved
-            ? 'Demande de congés acceptée'
-            : 'Demande de congés refusée'
-        );
+        if (props.isApproved && props.isFinal) {
+          toast.success('Demande de acceptée');
+        }
+
+        if (props.isApproved && !props.isFinal) {
+          toast.success('Vous avez donné votre accord pour cette demande');
+        }
+
+        if (!props.isApproved) {
+          toast.success('Demande de congé refusée');
+        }
+
         await queryClient.invalidateQueries({
           queryKey: orpc.leave.getAllReview.key(),
+          type: 'all',
+        });
+
+        await queryClient.invalidateQueries({
+          queryKey: orpc.leave.getById.key({
+            input: {
+              id: props.leaveId,
+            },
+          }),
           type: 'all',
         });
       },
@@ -89,6 +106,7 @@ export const ReviewModal = (props: {
               id: props.leaveId,
               isApproved: props.isApproved,
               reason: values.reason,
+              isFinal: props.isFinal,
             });
             setIsPending(false);
             close();
