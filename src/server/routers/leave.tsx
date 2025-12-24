@@ -2,6 +2,8 @@ import { ORPCError } from '@orpc/client';
 import dayjs from 'dayjs';
 import { z } from 'zod';
 
+import TemplateLeaveDecision from '@/emails/templates/leave-decision';
+import TemplateLeaveRequest from '@/emails/templates/leave-request';
 import {
   zFormFieldsLeave,
   zLeave,
@@ -10,6 +12,7 @@ import {
 } from '@/features/leave/schema';
 import { db } from '@/server/db';
 import { Prisma } from '@/server/db/generated/client';
+import { sendEmail } from '@/server/email';
 import { protectedProcedure } from '@/server/orpc';
 
 const tags = ['leaves'];
@@ -255,15 +258,12 @@ export default {
               },
             },
           },
-          {
-            status: {
-              notIn: [
-                zLeaveStatus.enum.approved,
-                zLeaveStatus.enum.cancelled,
-                zLeaveStatus.enum.refused,
-              ],
-            },
-          },
+          // TODO: Decommenter
+          // {
+          //   status: {
+          //     equals: zLeaveStatus.enum.pending,
+          //   },
+          // },
         ],
       } satisfies Prisma.LeaveWhereInput;
 
@@ -416,10 +416,26 @@ export default {
               : zLeaveStatus.enum.refused,
             statusReason: input.reason,
           },
-          include: { reviewers: true },
+          include: { reviewers: true, user: true },
         });
 
-        return zLeave().parse(leave);
+        console.log(leave);
+
+        const parsedLeave = zLeave().parse(leave);
+        if (input.isFinal || !input.isApproved) {
+          await sendEmail({
+            to: leave.user.email,
+            subject: `Demande de congés ${input.isApproved ? 'Acceptée' : 'Refusée'}`,
+            template: (
+              <TemplateLeaveDecision
+                requesterName={context.user.name}
+                decision={input.isApproved ? 'approved' : 'refused'}
+                {...parsedLeave}
+              />
+            ),
+          });
+        }
+        return parsedLeave;
       } catch (error: unknown) {
         console.log(error);
         if (
@@ -480,6 +496,7 @@ export default {
         throw new ORPCError('INTERNAL_SERVER_ERROR');
       }
     }),
+
   create: protectedProcedure({
     permission: {
       leave: ['create'],
@@ -515,8 +532,20 @@ export default {
           },
         });
 
-        // TODO: Envoie mail de confirmation / demande
-        return zLeave().parse(leave);
+        const parsedLeave = zLeave().parse(leave);
+
+        await sendEmail({
+          to: context.user.email,
+          subject: 'Demande de congés',
+          template: (
+            <TemplateLeaveRequest
+              requesterName={context.user.name}
+              {...parsedLeave}
+            />
+          ),
+        });
+
+        return parsedLeave;
       } catch (error: unknown) {
         if (
           error instanceof Prisma.PrismaClientKnownRequestError &&

@@ -113,6 +113,7 @@ export const ReviewModal = (props: {
           {...form}
           onSubmit={(values) => {
             setIsPending(true);
+
             approveLeave.mutate({
               id: props.leaveId,
               isApproved: props.isApproved,
@@ -154,7 +155,12 @@ export const ReviewModal = (props: {
               className="max-sm:w-full"
               loading={isPending}
               type="submit"
-              onClick={() => form.reset()}
+              onClick={() => {
+                // DONT DO THIS AT HOME KIDS
+                setTimeout(() => {
+                  form.reset();
+                }, 500);
+              }}
             >
               Confirmer
             </Button>

@@ -8,20 +8,25 @@ import { LEAVE_TYPES, TIME_SLOTS } from '@/features/leave/constants';
 import type { Leave } from '@/features/leave/schema';
 import { DateRangeDisplay, DISPLAY_DATE_FORMAT } from '@/utils/dates';
 
-export const TemplateLeaveRequest = (
+type LeaveDecision = 'approved' | 'refused';
+
+export const TemplateLeaveDecision = (
   props: Leave & {
     requesterName: string;
-    managerName?: string;
+    decision: LeaveDecision;
+    decisionReason?: string; // useful especially for refusal, optional for approval
   }
 ) => {
   const {
     requesterName,
+    decision,
     type,
     fromDate,
     toDate,
     timeSlot,
     projects,
     projectDeadlines,
+    statusReason,
   } = props;
 
   const leaveTypeLabel = LEAVE_TYPES.find((t) => t.id === type)?.label ?? type;
@@ -29,8 +34,6 @@ export const TemplateLeaveRequest = (
   const startDate = dayjs(fromDate).format(DISPLAY_DATE_FORMAT);
   const endDate = dayjs(toDate).format(DISPLAY_DATE_FORMAT);
 
-  // Note: diff is exclusive of the start date in "day" units for most cases.
-  // Your special-case handles same-day full-day as 1.
   const rawDays = dayjs(toDate).diff(dayjs(fromDate), 'day');
   const isSameDay = rawDays === 0;
 
@@ -40,22 +43,36 @@ export const TemplateLeaveRequest = (
   const timeSlotLabel =
     TIME_SLOTS.find((t) => t.id === timeSlot)?.label ?? timeSlot ?? '';
 
-  const preview = `Demande de congés (${leaveTypeLabel}) du ${startDate} au ${endDate}`;
-
   const projectsLine =
     Array.isArray(projects) && projects.length > 0
       ? projects.join(', ')
       : projects;
 
+  const isApproved = decision === 'approved';
+
+  const title = isApproved ? 'Congés validés' : 'Congés refusés';
+  const preview = isApproved
+    ? `Votre demande de congés a été validée (${leaveTypeLabel})`
+    : `Votre demande de congés a été refusée (${leaveTypeLabel})`;
+
+  const intro = isApproved
+    ? `Votre demande de congés a été validée.`
+    : `Votre demande de congés a été refusée.`;
+
+  console.log(projects);
+  console.log(projectsLine);
+  console.log('test');
   return (
     <EmailLayout preview={preview} language="fr">
       <Container style={styles.container}>
-        <Heading style={styles.h1}>Demande de congés</Heading>
+        <Heading style={styles.h1}>{title}</Heading>
 
         <Section style={styles.section}>
+          <Text style={styles.text}>Bonjour {requesterName},</Text>
+
+          <Text style={styles.text}>{intro}</Text>
+
           <Text style={styles.text}>
-            <strong>Collaborateur :</strong> {requesterName}
-            <br />
             <strong>Type :</strong> {leaveTypeLabel}
             <br />
             <strong>Période :</strong>{' '}
@@ -72,7 +89,6 @@ export const TemplateLeaveRequest = (
             {durationDays !== 1 ? 's' : ''}
             {timeSlotLabel ? (
               <>
-                {' '}
                 <span style={styles.textMuted}>({timeSlotLabel})</span>
               </>
             ) : null}
@@ -89,6 +105,12 @@ export const TemplateLeaveRequest = (
               <strong>Échéances / continuité :</strong> {projectDeadlines}
             </Text>
           ) : null}
+
+          {statusReason ? (
+            <Text style={styles.textMuted}>
+              <strong>Commentaire (demande) :</strong> {statusReason}
+            </Text>
+          ) : null}
         </Section>
 
         <EmailFooter />
@@ -97,4 +119,4 @@ export const TemplateLeaveRequest = (
   );
 };
 
-export default TemplateLeaveRequest;
+export default TemplateLeaveDecision;

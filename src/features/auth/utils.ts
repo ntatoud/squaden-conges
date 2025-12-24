@@ -46,7 +46,7 @@ export const useRedirectAfterLogin = () => {
       ) {
         router.navigate({
           replace: true,
-          to: '/manager',
+          to: '/app/leaves',
         });
         return;
       }
