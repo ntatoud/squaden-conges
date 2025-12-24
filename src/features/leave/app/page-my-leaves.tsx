@@ -79,7 +79,7 @@ export const PageMyLeaves = () => {
         actions={
           <ResponsiveIconButton
             asChild
-            label={'Nouveau'}
+            label={'Faire une demande'}
             variant="secondary"
             size="sm"
           >
