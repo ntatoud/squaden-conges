@@ -2,12 +2,11 @@
 
 import { Link } from '@tanstack/react-router';
 import {
-  BookOpenIcon,
   ChevronsUpDownIcon,
   CircleUserIcon,
   LogOutIcon,
-  MonitorSmartphoneIcon,
   MoonIcon,
+  Settings,
   SunIcon,
   SunMoonIcon,
 } from 'lucide-react';
@@ -37,8 +36,6 @@ import { themes } from '@/components/ui/theme-switcher';
 import { authClient } from '@/features/auth/client';
 import { ConfirmSignOut } from '@/features/auth/confirm-signout';
 import { WithPermissions } from '@/features/auth/with-permission';
-import { BuildInfoDrawer } from '@/features/build-info/build-info-drawer';
-import { BuildInfoVersion } from '@/features/build-info/build-info-version';
 import { UserAvatar } from '@/features/user/avatar';
 import { User } from '@/features/user/schema';
 
@@ -65,6 +62,7 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <UserAvatar className="size-8" user={user as unknown as User} />
+
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">{user.name}</span>
               </div>
@@ -80,7 +78,6 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <UserAvatar className="size-8" user={user as unknown as User} />
-
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
                   <span className="truncate text-xs text-muted-foreground">
@@ -92,10 +89,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
-                <Link
-                  to="/manager/account"
-                  onClick={() => setOpenMobile(false)}
-                >
+                <Link to="/app/account" onClick={() => setOpenMobile(false)}>
                   <CircleUserIcon />
                   {t('layout:nav.account')}
                 </Link>
@@ -128,27 +122,17 @@ export function NavUser() {
               <WithPermissions
                 permissions={[
                   {
-                    apps: ['app'],
+                    apps: ['manager'],
                   },
                 ]}
               >
                 <DropdownMenuItem asChild>
                   <Link to="/app">
-                    <MonitorSmartphoneIcon />
-                    {t('layout:nav.openApp')}
+                    <Settings />
+                    Open Admin
                   </Link>
                 </DropdownMenuItem>
               </WithPermissions>
-              <DropdownMenuItem asChild>
-                <a
-                  href="/api/openapi/app"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                >
-                  <BookOpenIcon />
-                  {t('layout:nav.apiDocumentation')}
-                </a>
-              </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <ConfirmSignOut>
@@ -162,16 +146,6 @@ export function NavUser() {
               </DropdownMenuItem>
             </ConfirmSignOut>
             <DropdownMenuSeparator />
-            <BuildInfoDrawer>
-              <DropdownMenuItem
-                onSelect={(e) => {
-                  e.preventDefault();
-                }}
-                className="py-1 text-xs text-muted-foreground"
-              >
-                <BuildInfoVersion />
-              </DropdownMenuItem>
-            </BuildInfoDrawer>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

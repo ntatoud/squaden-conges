@@ -57,7 +57,7 @@ export const PageMyLeaves = () => {
   return (
     <PageLayout>
       <PageLayoutTopBar
-        rightActions={
+        actions={
           <ResponsiveIconButton
             asChild
             label={'Nouveau'}
@@ -69,7 +69,7 @@ export const PageMyLeaves = () => {
             </Link>
           </ResponsiveIconButton>
         }
-        leftActions={
+        backButton={
           <div className="flex items-center gap-4">
             <Button asChild variant="ghost">
               <Link to="/app/leaves">Tous les congés</Link>

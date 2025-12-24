@@ -65,7 +65,7 @@ export const PageLeavesReview = (props: { search: TODO }) => {
   return (
     <PageLayout>
       <PageLayoutTopBar
-        leftActions={
+        backButton={
           <div className="flex items-center gap-4">
             <Button asChild variant="ghost">
               <Link to="/app/leaves">Tous les congés</Link>
@@ -149,7 +149,7 @@ export const PageLeavesReview = (props: { search: TODO }) => {
                         {item.reviewers.map((reviewer, index) => (
                           <UserAvatar
                             key={reviewer.id}
-                            user={item.user}
+                            user={reviewer}
                             className={cn('size-6', index !== 0 && '-ml-2')}
                           />
                         ))}

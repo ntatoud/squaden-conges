@@ -84,8 +84,8 @@ export const PageLeaveEdit = (props: { params: { id: string } }) => {
       >
         <PageLayout>
           <PageLayoutTopBar
-            leftActions={<BackButton />}
-            rightActions={
+            backButton={<BackButton />}
+            actions={
               <Button
                 size="sm"
                 type="submit"

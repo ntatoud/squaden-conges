@@ -80,8 +80,8 @@ export const PageLeaveNew = () => {
       >
         <PageLayout>
           <PageLayoutTopBar
-            leftActions={<BackButton />}
-            rightActions={
+            backButton={<BackButton />}
+            actions={
               <>
                 <Button
                   size="sm"

@@ -3,6 +3,8 @@ import { ReactNode } from 'react';
 import { cn } from '@/lib/tailwind/utils';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
 
 export const PageLayoutContainer = (props: {
   children?: ReactNode;
@@ -11,7 +13,7 @@ export const PageLayoutContainer = (props: {
   return (
     <div
       className={cn(
-        'mx-auto flex w-full max-w-4xl min-w-0 flex-1 flex-col px-4',
+        'mx-auto flex w-full max-w-7xl min-w-0 flex-1 flex-col px-4',
         props.className
       )}
     >
@@ -26,34 +28,49 @@ const TOPBAT_HEIGHT =
 export const PageLayoutTopBar = (props: {
   children?: ReactNode;
   className?: string;
-  leftActions?: ReactNode;
-  rightActions?: ReactNode;
   containerClassName?: string;
+  actions?: ReactNode;
+  backButton?: ReactNode;
 }) => {
+  const { open, isMobile } = useSidebar();
   return (
-    <div
+    <header
       className={cn(
-        'z-10 flex min-w-0 flex-col items-center justify-end overflow-hidden border-b border-b-neutral-200 bg-white pt-safe-top md:-mt-px md:[--page-layout-topbar-height:48px] dark:border-b-neutral-800 dark:bg-neutral-900',
+        'flex shrink-0 items-end border-b bg-white px-4 dark:bg-neutral-900',
         props.className
       )}
-      style={{
-        height: TOPBAT_HEIGHT,
-      }}
+      style={{ height: TOPBAT_HEIGHT }}
     >
-      <PageLayoutContainer
-        className={cn('justify-end py-2', props.containerClassName)}
-      >
-        <div className="flex h-10 w-full min-w-0 items-center justify-center gap-4 pt-2">
-          {!!props.leftActions && (
-            <div className="flex items-center gap-2">{props.leftActions}</div>
+      <div className="flex h-14 min-w-0 flex-1 items-center gap-4 rtl:h-11">
+        {(!open || (isMobile && !props.backButton) || !!props.backButton) && (
+          <div className="flex items-center gap-3">
+            {(!open || (isMobile && !props.backButton)) && (
+              <>
+                <SidebarTrigger className="-mx-1" />
+                <Separator orientation="vertical" className="h-4" />
+              </>
+            )}
+            {!!props.backButton && (
+              <>
+                <div className="-mx-1">{props.backButton}</div>
+                <Separator orientation="vertical" className="h-4" />
+              </>
+            )}
+          </div>
+        )}
+        <div
+          className={cn(
+            'flex min-w-24 flex-1 items-center gap-4',
+            props.containerClassName
           )}
-          <div className="min-w-0 flex-1">{props.children}</div>
-          {!!props.rightActions && (
-            <div className="flex items-center gap-2">{props.rightActions}</div>
-          )}
+        >
+          {props.children}
         </div>
-      </PageLayoutContainer>
-    </div>
+        {!!props.actions && (
+          <div className="flex min-w-0 items-center gap-2">{props.actions}</div>
+        )}
+      </div>
+    </header>
   );
 };
 

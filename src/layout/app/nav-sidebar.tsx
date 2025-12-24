@@ -1,16 +1,12 @@
 import { Link } from '@tanstack/react-router';
-import { PanelLeftIcon, UsersIcon, XIcon } from 'lucide-react';
+import { PanelLeftIcon, XIcon } from 'lucide-react';
 import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { Logo } from '@/components/brand/logo';
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
@@ -20,11 +16,11 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 
-import { WithPermissions } from '@/features/auth/with-permission';
-import { NavUser } from '@/layout/manager/nav-user';
+import { navLeaveConfig } from '@/layout/app/nav-leaves-config';
+import { NavMain } from '@/layout/app/nav-main';
+import { NavUser } from '@/layout/app/nav-user';
 
 export const NavSidebar = (props: { children?: ReactNode }) => {
-  const { t } = useTranslation(['layout']);
   return (
     <SidebarProvider>
       <Sidebar>
@@ -33,7 +29,7 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild className="h-auto">
-                  <Link to="/manager">
+                  <Link to="/app">
                     <span>
                       <Logo className="w-12 group-data-[collapsible=icon]:w-18" />
                     </span>
@@ -56,35 +52,7 @@ export const NavSidebar = (props: { children?: ReactNode }) => {
           </div>
         </SidebarHeader>
         <SidebarContent>
-          <WithPermissions
-            permissions={[
-              {
-                user: ['list'],
-              },
-            ]}
-          >
-            <SidebarGroup>
-              <SidebarGroupLabel>
-                {t('layout:nav.configuration')}
-              </SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <Link to="/manager/users">
-                      {({ isActive }) => (
-                        <SidebarMenuButton asChild isActive={isActive}>
-                          <span>
-                            <UsersIcon />
-                            <span>{t('layout:nav.users')}</span>
-                          </span>
-                        </SidebarMenuButton>
-                      )}
-                    </Link>
-                  </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </WithPermissions>
+          <NavMain items={navLeaveConfig} />
         </SidebarContent>
         <SidebarFooter>
           <NavUser />
