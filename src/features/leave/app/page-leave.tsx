@@ -2,7 +2,13 @@ import { getUiState } from '@bearstudio/ui-state';
 import { ORPCError } from '@orpc/client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { CheckIcon, PencilLineIcon, ThumbsDown, ThumbsUp } from 'lucide-react';
+import {
+  CheckIcon,
+  PencilLineIcon,
+  ThumbsDown,
+  ThumbsUp,
+  XIcon,
+} from 'lucide-react';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -83,6 +89,7 @@ export const PageLeave = (props: { params: { id: string } }) => {
               </>
             )}
             <WithPermissions permissions={[{ apps: ['manager'] }]}>
+              <Separator orientation="vertical" className="h-4" />
               <ReviewModal
                 data-action
                 title="Accepter le congé"
@@ -94,18 +101,31 @@ export const PageLeave = (props: { params: { id: string } }) => {
                   <CheckIcon /> Valider
                 </Button>
               </ReviewModal>
-              <Separator orientation="vertical" className="h-4" />
+              <ReviewModal
+                data-action
+                title="Refuser le congé"
+                leaveId={leaveQuery.data?.id ?? ''}
+                isApproved={false}
+              >
+                <Button data-action variant="destructive" size="sm">
+                  <XIcon /> Refuser
+                </Button>
+              </ReviewModal>
             </WithPermissions>
             {canEditLeave && (
-              <Button asChild size="sm" variant="secondary">
-                <Link
-                  to="/app/leaves/$id/edit"
-                  params={{ id: props.params.id }}
-                >
-                  <PencilLineIcon />
-                  Modifier
-                </Link>
-              </Button>
+              <>
+                <Separator orientation="vertical" className="h-4" />
+
+                <Button asChild size="sm" variant="secondary">
+                  <Link
+                    to="/app/leaves/$id/edit"
+                    params={{ id: props.params.id }}
+                  >
+                    <PencilLineIcon />
+                    Modifier
+                  </Link>
+                </Button>
+              </>
             )}
           </>
         }
