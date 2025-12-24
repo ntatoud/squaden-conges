@@ -7,6 +7,5 @@ export const Route = createFileRoute('/app/leaves/')({
 });
 
 function RouteComponent() {
-  const search = Route.useSearch();
-  return <PageLeaves search={search} />;
+  return <PageLeaves />;
 }

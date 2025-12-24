@@ -31,6 +31,8 @@ import {
 } from '@/layout/app/page-layout';
 import { DateRangeDisplay } from '@/utils/dates';
 
+import { LEAVE_STATUS, LEAVE_TYPES } from '../constants';
+
 export const PageLeavesReview = (props: { search: TODO }) => {
   const leavesQuery = useInfiniteQuery(
     orpc.leave.getAllReview.infiniteOptions({
@@ -105,91 +107,105 @@ export const PageLeavesReview = (props: { search: TODO }) => {
                   </DataListCell>
                   <DataListCell className="max-w-20"></DataListCell>
                 </DataListRow>
-                {items.map((item) => (
-                  <DataListRow
-                    withHover
-                    className="group relative"
-                    key={item.id}
-                  >
-                    <span className="absolute inset-0 left-0 isolate z-1 flex">
-                      <Link
-                        to="/app/leaves/$id"
-                        params={{ id: item.id }}
-                        className="flex-1"
-                      />
-                    </span>
-                    <DataListCell className="flex flex-row items-center justify-start gap-2">
-                      <UserAvatar user={item.user} />
-                      <DataListText>{item.user?.name ?? ''}</DataListText>
-                    </DataListCell>
-                    <DataListCell className="items-center text-sm font-medium">
-                      <DateRangeDisplay
-                        fromDate={item.fromDate}
-                        toDate={item.toDate}
-                        shouldBreak
-                      />
-                    </DataListCell>
-                    <DataListCell>
-                      <Badge variant="secondary" className="uppercase">
-                        {item.type}
-                      </Badge>
-                    </DataListCell>
-                    <DataListCell className="flex flex-row items-center">
-                      {item.reviewers.map((reviewer, index) => (
-                        <UserAvatar
-                          key={reviewer.id}
-                          user={item.user}
-                          className={cn('size-6', index !== 0 && '-ml-2')}
+                {items.map((item) => {
+                  const leaveStatusLabel =
+                    LEAVE_STATUS.find((s) => s.id === item.status)?.label ??
+                    item.status;
+
+                  const leaveTypeLabel =
+                    LEAVE_TYPES.find((t) => t.id === item.type)?.label ??
+                    item.type;
+
+                  return (
+                    <DataListRow
+                      withHover
+                      className="group relative"
+                      key={item.id}
+                    >
+                      <span className="absolute inset-0 left-0 isolate z-1 flex">
+                        <Link
+                          to="/app/leaves/$id"
+                          params={{ id: item.id }}
+                          className="flex-1"
                         />
-                      ))}
-                    </DataListCell>
-                    <DataListCell>
-                      <Badge
-                        className="uppercase"
-                        variant={match(item.status)
-                          .returnType<
-                            React.ComponentProps<typeof Badge>['variant']
-                          >()
-                          .with(
-                            P.union('pending', 'pending-manager'),
-                            () => 'warning'
-                          )
-                          .with('approved', () => 'positive')
-                          .with('refused', () => 'negative')
-                          .with('cancelled', () => 'secondary')
-                          .exhaustive()}
-                      >
-                        {item.status}
-                      </Badge>
-                    </DataListCell>
-                    <DataListCell className="z-10 flex max-w-20 flex-row items-center gap-1">
-                      <ReviewModal
-                        data-action
-                        title="Accepter le congé"
-                        leaveId={item.id}
-                        isApproved={true}
-                      >
-                        <Button data-action variant="secondary" size="icon-sm">
-                          <CheckIcon />
-                        </Button>
-                      </ReviewModal>
-                      <ReviewModal
-                        data-action
-                        title="Refuser le congé"
-                        leaveId={item.id}
-                        isApproved={false}
-                      >
-                        <Button
-                          data-action
-                          variant="destructive-secondary"
-                          size="icon-sm"
+                      </span>
+                      <DataListCell className="flex flex-row items-center justify-start gap-2">
+                        <UserAvatar user={item.user} />
+                        <DataListText>{item.user?.name ?? ''}</DataListText>
+                      </DataListCell>
+                      <DataListCell className="items-center text-sm font-medium">
+                        <DateRangeDisplay
+                          fromDate={item.fromDate}
+                          toDate={item.toDate}
+                          shouldBreak
+                        />
+                      </DataListCell>
+                      <DataListCell>
+                        <Badge variant="secondary" className="uppercase">
+                          {leaveTypeLabel}
+                        </Badge>
+                      </DataListCell>
+                      <DataListCell className="flex flex-row items-center">
+                        {item.reviewers.map((reviewer, index) => (
+                          <UserAvatar
+                            key={reviewer.id}
+                            user={item.user}
+                            className={cn('size-6', index !== 0 && '-ml-2')}
+                          />
+                        ))}
+                      </DataListCell>
+                      <DataListCell>
+                        <Badge
+                          className="uppercase"
+                          variant={match(item.status)
+                            .returnType<
+                              React.ComponentProps<typeof Badge>['variant']
+                            >()
+                            .with(
+                              P.union('pending', 'pending-manager'),
+                              () => 'warning'
+                            )
+                            .with('approved', () => 'positive')
+                            .with('refused', () => 'negative')
+                            .with('cancelled', () => 'secondary')
+                            .exhaustive()}
                         >
-                          <XIcon />
-                        </Button>
-                      </ReviewModal>
-                    </DataListCell>
-                  </DataListRow>
-                ))}
+                          {leaveStatusLabel}
+                        </Badge>
+                      </DataListCell>
+                      <DataListCell className="z-10 flex max-w-20 flex-row items-center gap-1">
+                        <ReviewModal
+                          data-action
+                          title="Accepter le congé"
+                          leaveId={item.id}
+                          isApproved={true}
+                        >
+                          <Button
+                            data-action
+                            variant="secondary"
+                            size="icon-sm"
+                          >
+                            <CheckIcon />
+                          </Button>
+                        </ReviewModal>
+                        <ReviewModal
+                          data-action
+                          title="Refuser le congé"
+                          leaveId={item.id}
+                          isApproved={false}
+                        >
+                          <Button
+                            data-action
+                            variant="destructive-secondary"
+                            size="icon-sm"
+                          >
+                            <XIcon />
+                          </Button>
+                        </ReviewModal>
+                      </DataListCell>
+                    </DataListRow>
+                  );
+                })}
                 <DataListRow>
                   <DataListCell>
                     <Button

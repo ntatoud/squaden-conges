@@ -28,6 +28,8 @@ import {
 } from '@/layout/app/page-layout';
 import { DateRangeDisplay } from '@/utils/dates';
 
+import { LEAVE_STATUS, LEAVE_TYPES } from '../constants';
+
 export const PageMyLeaves = () => {
   const leavesQuery = useInfiniteQuery(
     orpc.leave.getAllForUser.infiniteOptions({
@@ -102,45 +104,57 @@ export const PageMyLeaves = () => {
                     <DataListText>Statut</DataListText>
                   </DataListCell>
                 </DataListRow>
-                {items.map((item) => (
-                  <Link
-                    to="/app/leaves/$id"
-                    params={{ id: item.id }}
-                    key={item.id}
-                  >
-                    <DataListRow withHover className="min-h-12">
-                      <DataListCell className="max-w-20">
-                        <Badge
-                          variant="secondary"
-                          className="mr-auto uppercase"
-                        >
-                          {item.type}
-                        </Badge>
-                      </DataListCell>
-                      <DataListCell className="items-center">
-                        <DataListText className="font-medium">
-                          <DateRangeDisplay
-                            fromDate={item.fromDate}
-                            toDate={item.toDate}
+                {items.map((item) => {
+                  const leaveStatusLabel =
+                    LEAVE_STATUS.find((s) => s.id === item.status)?.label ??
+                    item.status;
+
+                  const leaveTypeLabel =
+                    LEAVE_TYPES.find((t) => t.id === item.type)?.label ??
+                    item.type;
+                  return (
+                    <Link
+                      to="/app/leaves/$id"
+                      params={{ id: item.id }}
+                      key={item.id}
+                    >
+                      <DataListRow withHover className="min-h-12">
+                        <DataListCell className="max-w-20">
+                          <Badge
+                            variant="secondary"
+                            className="mr-auto uppercase"
+                          >
+                            {leaveTypeLabel}
+                          </Badge>
+                        </DataListCell>
+                        <DataListCell className="items-center">
+                          <DataListText className="font-medium">
+                            <DateRangeDisplay
+                              fromDate={item.fromDate}
+                              toDate={item.toDate}
+                            />
+                          </DataListText>
+                          <DataListText className="font-medium"></DataListText>
+                        </DataListCell>
+                        <DataListCell className="flex flex-row items-center">
+                          {item.reviewers.map((reviewer, index) => (
+                            <UserAvatar
+                              key={reviewer.id}
+                              user={reviewer}
+                              className={cn('size-6', index !== 0 && '-ml-2')}
+                            />
+                          ))}
+                        </DataListCell>
+                        <DataListCell>
+                          <BadgeLeaveStatus
+                            status={item.status}
+                            statusLabel={leaveStatusLabel}
                           />
-                        </DataListText>
-                        <DataListText className="font-medium"></DataListText>
-                      </DataListCell>
-                      <DataListCell className="flex flex-row items-center">
-                        {item.reviewers.map((reviewer, index) => (
-                          <UserAvatar
-                            key={reviewer.id}
-                            user={reviewer}
-                            className={cn('size-6', index !== 0 && '-ml-2')}
-                          />
-                        ))}
-                      </DataListCell>
-                      <DataListCell>
-                        <BadgeLeaveStatus status={item.status} />
-                      </DataListCell>
-                    </DataListRow>
-                  </Link>
-                ))}
+                        </DataListCell>
+                      </DataListRow>
+                    </Link>
+                  );
+                })}
                 <DataListRow>
                   <DataListCell>
                     <Button
