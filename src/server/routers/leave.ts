@@ -255,12 +255,15 @@ export default {
               },
             },
           },
-          // TODO: Decommenter
-          // {
-          //   status: {
-          //     equals: zLeaveStatus.enum.pending,
-          //   },
-          // },
+          {
+            status: {
+              notIn: [
+                zLeaveStatus.enum.approved,
+                zLeaveStatus.enum.cancelled,
+                zLeaveStatus.enum.refused,
+              ],
+            },
+          },
         ],
       } satisfies Prisma.LeaveWhereInput;
 

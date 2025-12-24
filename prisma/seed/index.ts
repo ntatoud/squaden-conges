@@ -1,9 +1,11 @@
 import { db } from '@/server/db';
 
+import { createLeaves } from './leaves';
 import { createUsers } from './user';
 
 async function main() {
   await createUsers();
+  await createLeaves();
 }
 
 main()
