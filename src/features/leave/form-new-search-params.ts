@@ -35,4 +35,5 @@ export const leaveFilterSearchParams = {
   statuses: parseAsArrayOf<LeaveStatus>(
     parseAsStringEnum<LeaveStatus>(zLeaveStatus.options)
   ),
+  users: parseAsArrayOf<string>(parseAsString),
 };

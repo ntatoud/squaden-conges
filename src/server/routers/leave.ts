@@ -101,6 +101,17 @@ export default {
         };
       }
 
+      const users = input.filters?.user;
+
+      if (users?.length) {
+        where = {
+          ...where,
+          userId: {
+            in: users,
+          },
+        };
+      }
+
       const [total, items] = await Promise.all([
         context.db.leave.count({
           where,

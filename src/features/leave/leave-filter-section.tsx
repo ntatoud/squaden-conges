@@ -1,5 +1,8 @@
+import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useQueryStates } from 'nuqs';
+
+import { orpc } from '@/lib/orpc/client';
 
 import { DatePicker } from '@/components/ui/date-picker';
 import { MultiSelect } from '@/components/ui/multi-select';
@@ -15,8 +18,27 @@ export const LeaveFilterSection = () => {
     leaveFilterSearchParams
   );
 
+  const usersQuery = useQuery(orpc.user.getAll.queryOptions({}));
+
   return (
     <div className="mb-8 flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <label className="text-sm">Utilisateurs</label>
+        <MultiSelect
+          options={
+            usersQuery.data?.items.map((user) => ({
+              id: user.id,
+              label: user.name || user.email,
+            })) || []
+          }
+          withClearButton
+          onChange={(values) =>
+            setQueryStates({
+              users: values.map((value) => value.id),
+            })
+          }
+        />
+      </div>
       <div className="flex flex-col gap-2">
         <label className="text-sm">Types de congés</label>
         <MultiSelect

@@ -26,7 +26,7 @@ import {
 } from '@/layout/app/page-layout';
 
 export const PageLeaves = () => {
-  const [{ fromDate, toDate, types, statuses }, setQueryStates] =
+  const [{ fromDate, toDate, types, statuses, users }, setQueryStates] =
     useQueryStates(leaveFilterSearchParams);
 
   const leavesQuery = useInfiniteQuery(
@@ -39,6 +39,7 @@ export const PageLeaves = () => {
           fromDate: fromDate ? dayjs(fromDate).toDate() : undefined,
           toDate: toDate ? dayjs(toDate).toDate() : undefined,
           exactDates: true,
+          user: users ?? undefined,
         },
       }),
       initialPageParam: undefined,
