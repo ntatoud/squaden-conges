@@ -1,7 +1,7 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { CheckIcon, ThumbsDown, ThumbsUp } from 'lucide-react';
+import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import { match, P } from 'ts-pattern';
 
 import { orpc } from '@/lib/orpc/client';

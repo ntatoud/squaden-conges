@@ -4,6 +4,7 @@ import { useQueryStates } from 'nuqs';
 
 import { orpc } from '@/lib/orpc/client';
 
+import { Button } from '@/components/ui/button';
 import { DatePicker } from '@/components/ui/date-picker';
 import { MultiSelect } from '@/components/ui/multi-select';
 
@@ -20,8 +21,13 @@ export const LeaveFilterSection = () => {
 
   const usersQuery = useQuery(orpc.user.getAll.queryOptions({}));
 
+  const range = (from: dayjs.Dayjs, to: dayjs.Dayjs) => ({
+    fromDate: from.format(STANDARD_DATE_FORMAT),
+    toDate: to.format(STANDARD_DATE_FORMAT),
+  });
+
   return (
-    <div className="mb-8 flex flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
         <label className="text-sm">Utilisateurs</label>
         <MultiSelect
@@ -51,28 +57,118 @@ export const LeaveFilterSection = () => {
           }
         />
       </div>
-      <div className="flex gap-4">
-        <div className="flex flex-1 flex-col gap-2">
-          <label className="text-sm">Date de début</label>
-          <DatePicker
-            value={fromDate ? dayjs(fromDate).toDate() : null}
-            onChange={(value) =>
-              setQueryStates({
-                fromDate: dayjs(value).format(STANDARD_DATE_FORMAT),
-              })
-            }
-          />
+      <div className="flex flex-col gap-2">
+        <div className="flex gap-4">
+          <div className="flex flex-1 flex-col gap-2">
+            <label className="text-sm">Date de début</label>
+            <DatePicker
+              value={fromDate ? dayjs(fromDate).toDate() : null}
+              onChange={(value) =>
+                setQueryStates({
+                  fromDate: dayjs(value).format(STANDARD_DATE_FORMAT),
+                })
+              }
+            />
+          </div>
+          <div className="flex flex-1 flex-col gap-2">
+            <label className="text-sm">Date de fin</label>
+            <DatePicker
+              value={toDate ? dayjs(toDate).toDate() : null}
+              onChange={(value) =>
+                setQueryStates({
+                  toDate: dayjs(value).format(STANDARD_DATE_FORMAT),
+                })
+              }
+            />
+          </div>
         </div>
-        <div className="flex flex-1 flex-col gap-2">
-          <label className="text-sm">Date de fin</label>
-          <DatePicker
-            value={toDate ? dayjs(toDate).toDate() : null}
-            onChange={(value) =>
-              setQueryStates({
-                toDate: dayjs(value).format(STANDARD_DATE_FORMAT),
-              })
+
+        <div className="flex flex-wrap gap-2">
+          {/* Semaine */}
+          <Button
+            variant="secondary"
+            size="xs"
+            onClick={() =>
+              setQueryStates(
+                range(
+                  dayjs().subtract(1, 'week').startOf('week'),
+                  dayjs().subtract(1, 'week').endOf('week')
+                )
+              )
             }
-          />
+          >
+            Il y a une semaine
+          </Button>
+
+          <Button
+            variant="secondary"
+            size="xs"
+            onClick={() =>
+              setQueryStates(
+                range(dayjs().startOf('week'), dayjs().endOf('week'))
+              )
+            }
+          >
+            Semaine courante
+          </Button>
+
+          <Button
+            variant="secondary"
+            size="xs"
+            onClick={() =>
+              setQueryStates(
+                range(
+                  dayjs().add(1, 'week').startOf('week'),
+                  dayjs().add(1, 'week').endOf('week')
+                )
+              )
+            }
+          >
+            Dans une semaine
+          </Button>
+
+          {/* Mois */}
+          <Button
+            variant="secondary"
+            size="xs"
+            onClick={() =>
+              setQueryStates(
+                range(
+                  dayjs().subtract(1, 'month').startOf('month'),
+                  dayjs().subtract(1, 'month').endOf('month')
+                )
+              )
+            }
+          >
+            Il y a un mois
+          </Button>
+
+          <Button
+            variant="secondary"
+            size="xs"
+            onClick={() =>
+              setQueryStates(
+                range(dayjs().startOf('month'), dayjs().endOf('month'))
+              )
+            }
+          >
+            Mois courant
+          </Button>
+
+          <Button
+            variant="secondary"
+            size="xs"
+            onClick={() =>
+              setQueryStates(
+                range(
+                  dayjs().add(1, 'month').startOf('month'),
+                  dayjs().add(1, 'month').endOf('month')
+                )
+              )
+            }
+          >
+            Dans un mois
+          </Button>
         </div>
       </div>
       <div className="flex flex-col gap-2">

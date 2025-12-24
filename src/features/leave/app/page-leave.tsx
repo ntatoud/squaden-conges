@@ -13,7 +13,6 @@ import { Separator } from '@/components/ui/separator';
 import { Spinner } from '@/components/ui/spinner';
 
 import { authClient } from '@/features/auth/client';
-import { Role } from '@/features/auth/permissions';
 import { WithPermissions } from '@/features/auth/with-permission';
 import { CardLeaveDetail } from '@/features/leave/card-leave-detail';
 import { DataListLeavesForDateRange } from '@/features/leave/leaves-data-list-date-range';

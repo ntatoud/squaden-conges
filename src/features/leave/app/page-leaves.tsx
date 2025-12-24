@@ -1,7 +1,9 @@
 import { getUiState } from '@bearstudio/ui-state';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
+import { ChevronDown } from 'lucide-react';
 import { useQueryStates } from 'nuqs';
+import { Collapsible } from 'radix-ui';
 
 import { orpc } from '@/lib/orpc/client';
 
@@ -66,15 +68,35 @@ export const PageLeaves = () => {
       </PageLayoutTopBar>
 
       <PageLayoutContent className="pb-20">
-        <Button
-          variant="secondary"
-          onClick={() => setQueryStates(null)}
-          className="self-end"
-          size="sm"
-        >
-          Réinitialiser les filtres
-        </Button>
-        <LeaveFilterSection />
+        <Collapsible.Root className="flex flex-col gap-2 pb-4">
+          <Collapsible.Trigger asChild>
+            <Button
+              variant="link"
+              className="group self flex items-center gap-2"
+            >
+              <span className="group-data-[state=open]:hidden">
+                Afficher les filtres
+              </span>
+              <span className="group-data-[state=closed]:hidden">
+                Masquer les filtres
+              </span>
+
+              <ChevronDown className="transition-transform duration-200 group-data-[state=open]:rotate-180" />
+            </Button>
+          </Collapsible.Trigger>
+
+          <Collapsible.Content className="flex flex-col gap-2">
+            <Button
+              variant="secondary"
+              onClick={() => setQueryStates(null)}
+              className="-mt-10 self-end"
+              size="sm"
+            >
+              Réinitialiser les filtres
+            </Button>
+            <LeaveFilterSection />
+          </Collapsible.Content>
+        </Collapsible.Root>
 
         <DataList>
           {ui
