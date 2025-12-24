@@ -15,6 +15,7 @@ import {
   FormFieldController,
   FormFieldLabel,
 } from '@/components/form';
+import AnimatedBubbleParticles from '@/components/lightswind/animated-bubble-particles';
 import { Button } from '@/components/ui/button';
 import {
   ResponsiveDrawer,
@@ -94,6 +95,16 @@ export const ReviewModal = (props: {
         handleCancel();
       }}
     >
+      {isOpen && (
+        <div className="pointer-events-none fixed inset-0 z-40">
+          <AnimatedBubbleParticles
+            particleColor="#f7cae4"
+            particleSize={20}
+            spawnInterval={50}
+            blurStrength={25}
+          />
+        </div>
+      )}
       <ResponsiveDrawerTrigger asChild>
         {props.children}
       </ResponsiveDrawerTrigger>
