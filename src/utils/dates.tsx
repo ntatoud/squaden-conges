@@ -1,15 +1,21 @@
 import dayjs from 'dayjs';
 
+import { Badge } from '@/components/ui/badge';
+
+import { TIME_SLOTS } from '@/features/leave/constants';
+
 export const DISPLAY_DATE_FORMAT = 'DD MMM YYYY';
 export const STANDARD_DATE_FORMAT = 'YYYY-MM-DD';
 
 export function DateRangeDisplay({
   fromDate,
   toDate,
+  timeSlot,
   shouldBreak,
 }: {
   fromDate: Date;
   toDate: Date;
+  timeSlot?: string | null;
   shouldBreak?: boolean;
 }) {
   const from = dayjs(fromDate);
@@ -20,7 +26,16 @@ export function DateRangeDisplay({
 
   const diff = from.diff(to, 'days');
 
-  if (diff === 0) return `Le ${from.format(DISPLAY_DATE_FORMAT)}`;
+  const leaveTimeSlotLabel =
+    TIME_SLOTS.find((s) => s.id === timeSlot)?.label ?? timeSlot;
+
+  if (diff === 0)
+    return (
+      <>
+        <span>Le {from.format(DISPLAY_DATE_FORMAT)} </span>
+        <Badge variant="outline">{leaveTimeSlotLabel}</Badge>
+      </>
+    );
 
   if (shouldBreak)
     return (

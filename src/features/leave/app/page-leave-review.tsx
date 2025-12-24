@@ -137,6 +137,7 @@ export const PageLeavesReview = (props: { search: TODO }) => {
                         <DateRangeDisplay
                           fromDate={item.fromDate}
                           toDate={item.toDate}
+                          timeSlot={item.timeSlot}
                           shouldBreak
                         />
                       </DataListCell>

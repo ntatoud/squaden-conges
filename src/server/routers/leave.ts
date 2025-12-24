@@ -328,6 +328,7 @@ export default {
           data: {
             fromDate: input.fromDate,
             toDate: input.toDate,
+            timeSlot: input.timeSlot,
             projects: input.projects,
             status: zLeaveStatus.enum.pending,
             projectDeadlines: input.projectDeadlines,
@@ -416,8 +417,50 @@ export default {
       }
     }),
 
-  reviewAsManager: {},
+  cancel: protectedProcedure({
+    permission: {
+      leave: ['update'],
+    },
+  })
+    .route({
+      method: 'POST',
+      path: '/leaves/cancel/{id}',
+      tags,
+    })
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .output(zLeave())
+    .handler(async ({ context, input }) => {
+      context.logger.info('Update leave');
 
+      try {
+        const leave = await context.db.leave.update({
+          where: { id: input.id },
+          data: {
+            status: zLeaveStatus.enum.cancelled,
+          },
+          include: { reviewers: true },
+        });
+
+        return zLeave().parse(leave);
+      } catch (error: unknown) {
+        console.log(error);
+        if (
+          error instanceof Prisma.PrismaClientKnownRequestError &&
+          error.code === 'P2002'
+        ) {
+          throw new ORPCError('CONFLICT', {
+            data: {
+              target: error.meta?.target,
+            },
+          });
+        }
+        throw new ORPCError('INTERNAL_SERVER_ERROR');
+      }
+    }),
   create: protectedProcedure({
     permission: {
       leave: ['create'],

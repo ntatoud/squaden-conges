@@ -1,13 +1,17 @@
 import { getUiState } from '@bearstudio/ui-state';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
-import { PlusIcon } from 'lucide-react';
+import dayjs from 'dayjs';
+import { PlusIcon, Undo2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 import { orpc } from '@/lib/orpc/client';
 import { cn } from '@/lib/tailwind/utils';
+import { queryClient } from '@/lib/tanstack-query/query-client';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { ConfirmResponsiveDrawer } from '@/components/ui/confirm-responsive-drawer';
 import {
   DataList,
   DataListCell,
@@ -29,6 +33,7 @@ import {
 import { DateRangeDisplay } from '@/utils/dates';
 
 import { LEAVE_STATUS, LEAVE_TYPES } from '../constants';
+import { zLeaveStatus } from '../schema';
 
 export const PageMyLeaves = () => {
   const leavesQuery = useInfiniteQuery(
@@ -54,6 +59,19 @@ export const PageMyLeaves = () => {
     });
   });
 
+  const cancelLeave = useMutation(
+    orpc.leave.cancel.mutationOptions({
+      onSuccess: async () => {
+        toast.success('Demande de congés annulée');
+        await queryClient.invalidateQueries({
+          queryKey: orpc.leave.getAllForUser.key(),
+          type: 'all',
+        });
+      },
+      onError: () =>
+        toast.error("Une erreur est survenue lors de l'annulation du congé"),
+    })
+  );
   return (
     <PageLayout>
       <PageLayoutTopBar
@@ -91,7 +109,7 @@ export const PageMyLeaves = () => {
             .match('default', ({ items, total }) => (
               <>
                 <DataListRow>
-                  <DataListCell className="max-w-20 items-center">
+                  <DataListCell className="items-center">
                     <DataListText>Type</DataListText>
                   </DataListCell>
                   <DataListCell className="items-center">
@@ -100,9 +118,10 @@ export const PageMyLeaves = () => {
                   <DataListCell className="items-center">
                     <DataListText>Reviewers</DataListText>
                   </DataListCell>
-                  <DataListCell className="items-end">
+                  <DataListCell className="items-center">
                     <DataListText>Statut</DataListText>
                   </DataListCell>
+                  <DataListCell className="max-w-10"></DataListCell>
                 </DataListRow>
                 {items.map((item) => {
                   const leaveStatusLabel =
@@ -113,46 +132,70 @@ export const PageMyLeaves = () => {
                     LEAVE_TYPES.find((t) => t.id === item.type)?.label ??
                     item.type;
                   return (
-                    <Link
-                      to="/app/leaves/$id"
-                      params={{ id: item.id }}
+                    <DataListRow
+                      withHover
+                      className="relative min-h-12"
                       key={item.id}
                     >
-                      <DataListRow withHover className="min-h-12">
-                        <DataListCell className="max-w-20">
-                          <Badge
-                            variant="secondary"
-                            className="mr-auto uppercase"
-                          >
-                            {leaveTypeLabel}
-                          </Badge>
-                        </DataListCell>
-                        <DataListCell className="items-center">
-                          <DataListText className="font-medium">
-                            <DateRangeDisplay
-                              fromDate={item.fromDate}
-                              toDate={item.toDate}
-                            />
-                          </DataListText>
-                          <DataListText className="font-medium"></DataListText>
-                        </DataListCell>
-                        <DataListCell className="flex flex-row items-center">
-                          {item.reviewers.map((reviewer, index) => (
-                            <UserAvatar
-                              key={reviewer.id}
-                              user={reviewer}
-                              className={cn('size-6', index !== 0 && '-ml-2')}
-                            />
-                          ))}
-                        </DataListCell>
-                        <DataListCell>
-                          <BadgeLeaveStatus
-                            status={item.status}
-                            statusLabel={leaveStatusLabel}
+                      <span className="absolute inset-0 left-0 isolate z-1 flex">
+                        <Link
+                          to="/app/leaves/$id"
+                          params={{ id: item.id }}
+                          className="flex-1"
+                        />
+                      </span>
+
+                      <DataListCell>
+                        <Badge
+                          variant="secondary"
+                          className="mr-auto uppercase"
+                        >
+                          {leaveTypeLabel}
+                        </Badge>
+                      </DataListCell>
+                      <DataListCell className="items-center text-sm font-medium">
+                        <DateRangeDisplay
+                          fromDate={item.fromDate}
+                          toDate={item.toDate}
+                          timeSlot={item.timeSlot}
+                          shouldBreak
+                        />
+                      </DataListCell>
+                      <DataListCell className="flex flex-row items-center">
+                        {item.reviewers.map((reviewer, index) => (
+                          <UserAvatar
+                            key={reviewer.id}
+                            user={reviewer}
+                            className={cn('size-6', index !== 0 && '-ml-2')}
                           />
-                        </DataListCell>
-                      </DataListRow>
-                    </Link>
+                        ))}
+                      </DataListCell>
+                      <DataListCell className="items-center">
+                        <BadgeLeaveStatus
+                          status={item.status}
+                          statusLabel={leaveStatusLabel}
+                          className="ml-0"
+                        />
+                      </DataListCell>
+                      <DataListCell className="z-10 max-w-10">
+                        {dayjs(item.toDate).isAfter(dayjs()) ||
+                          (item.status === zLeaveStatus.enum.cancelled && (
+                            <ConfirmResponsiveDrawer
+                              onConfirm={() =>
+                                cancelLeave.mutate({ id: item.id })
+                              }
+                              description="Êtes vous sur de vouloir annuler ce congé ?"
+                              confirmText="Confirmer"
+                              cancelText="Annuler"
+                              confirmVariant="destructive-secondary"
+                            >
+                              <Button variant="secondary" size="icon-sm">
+                                <Undo2 />
+                              </Button>
+                            </ConfirmResponsiveDrawer>
+                          ))}
+                      </DataListCell>
+                    </DataListRow>
                   );
                 })}
                 <DataListRow>

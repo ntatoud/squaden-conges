@@ -42,6 +42,7 @@ export const PageLeaveEdit = (props: { params: { id: string } }) => {
     values: {
       fromDate: leaveQuery.data?.fromDate ?? new Date(),
       toDate: leaveQuery.data?.toDate ?? new Date(),
+      timeSlot: leaveQuery.data?.timeSlot ?? null,
       projects: leaveQuery.data?.projects ?? [],
       projectDeadlines: leaveQuery.data?.projectDeadlines ?? '',
       reviewers:

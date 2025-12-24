@@ -76,6 +76,7 @@ export const LeavesDataList = ({
                 <DateRangeDisplay
                   fromDate={item.fromDate}
                   toDate={item.toDate}
+                  timeSlot={item.timeSlot}
                   shouldBreak
                 />
               </DataListCell>

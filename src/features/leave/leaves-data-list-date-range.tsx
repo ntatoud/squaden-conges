@@ -89,6 +89,7 @@ export function DataListLeavesForDateRange({
                           <DateRangeDisplay
                             fromDate={item.fromDate}
                             toDate={item.toDate}
+                            timeSlot={item.timeSlot}
                           />
                         </DataListText>
                       </DataListCell>
